@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Next.js build artifacts
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# User uploads (Backend)
+backend/uploads/
+# Actually, if we want to keep one placeholder or something, but usually uploads are excluded.
+# If they are important for local dev, we keep them, but for production push we usually ignore.
+
+# Environment variables
+.env
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Brain / Artifacts (Antigravity data)
+.gemini/
+.agent/
+brain/
+*.md
+# Wait, I shouldn't ignore all .md files, only brain ones.
+# Actually brain is usually outside the project root in <appDataDir>, but since I'm agentic I should be careful.
+# The user's metadata says c:\laragon\www\Official Website is the workspace.
+# The artifacts are in C:\Users\user\.gemini\antigravity\brain\... which is OUTSIDE. So no need to ignore.
