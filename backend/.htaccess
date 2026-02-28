@@ -1,0 +1,15 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/endrisus/repositories/osza/backend"
+PassengerBaseURI "/"
+PassengerNodejs "/home/endrisus/nodevenv/repositories/osza/backend/20/bin/node"
+PassengerAppType node
+PassengerStartupFile app.js
+PassengerEnabled on
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+
+Options -MultiViews
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ app.js [L]
