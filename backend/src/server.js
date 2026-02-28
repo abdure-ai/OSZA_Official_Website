@@ -107,10 +107,8 @@ app.use('/uploads', (req, res, next) => {
 }, express.static(path.join(__dirname, '../uploads')));
 
 // Start Server
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-}
+app.listen(process.env.PORT || PORT, () => {
+    console.log(`Server running on port ${process.env.PORT || PORT}`);
+});
 
 module.exports = app;
