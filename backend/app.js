@@ -9,7 +9,13 @@ app.get('/api/passenger-check', (req, res) => {
         time: new Date().toISOString(),
         node_version: process.version,
         cwd: process.cwd(),
-        env: process.env.NODE_ENV
+        env: {
+            NODE_ENV: process.env.NODE_ENV,
+            DB_USER: process.env.DB_USER,
+            DB_NAME: process.env.DB_NAME,
+            has_password: !!process.env.DB_PASSWORD,
+            pass_length: process.env.DB_PASSWORD ? process.env.DB_PASSWORD.length : 0
+        }
     });
 });
 

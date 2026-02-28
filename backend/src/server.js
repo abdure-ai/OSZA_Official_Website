@@ -1,4 +1,8 @@
-require('dotenv').config();
+try {
+    require('dotenv').config();
+} catch (e) {
+    console.log('dotenv not found, skipping (using system env)');
+}
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -9,7 +13,15 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // DIAGNOSTIC ROUTES (MUST BE AT THE TOP)
-app.get('/', (req, res) => res.send(`OSZA Backend is Running - Diagnostic v1.2 (${new Date().toISOString()}) - ENV: ${process.env.NODE_ENV}`));
+app.get('/', (req, res) => {
+    const dbConfig = {
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        database: process.env.DB_NAME,
+        has_password: !!process.env.DB_PASSWORD
+    };
+    res.send(`OSZA Backend is Running - Diagnostic v1.4 (${new Date().toISOString()}) - DB Config: ${JSON.stringify(dbConfig)}`);
+});
 
 app.get('/api/health', async (req, res) => {
     try {
