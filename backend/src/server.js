@@ -68,6 +68,8 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/admin-message', adminMessageRoutes);
 
+app.get('/', (req, res) => res.send(`OSZA Backend is Running - Diagnostic v1.1 (${new Date().toISOString()})`));
+
 // Health Check / Diagnostics
 app.get('/api/health', async (req, res) => {
     try {
