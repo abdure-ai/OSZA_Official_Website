@@ -31,7 +31,7 @@ export default function Hero() {
         media_url: '',
         media_type: 'image',
         cta_text: t('our_services', 'Our Services'),
-        cta_url: '/services',
+        cta_url: '/news',
         sort_order: 0,
         is_active: true,
     };

@@ -32,11 +32,11 @@ export default function Footer() {
                 <div>
                     <h3 className="text-xl font-bold mb-4 text-accent">{t('quick_links')}</h3>
                     <ul className="space-y-2 text-gray-300">
-                        <li><Link href="/strategic-plan" className="hover:text-primary transition-colors">{t('strategic_plan', 'Strategic Plan 2025')}</Link></li>
+                        <li><Link href="/about" className="hover:text-primary transition-colors">{t('strategic_plan', 'Strategic Plan 2025')}</Link></li>
                         <li><Link href="/tenders" className="hover:text-primary transition-colors">{t('tenders')}</Link></li>
                         <li><Link href="/vacancies" className="hover:text-primary transition-colors">{t('vacancies')}</Link></li>
                         <li><Link href="/directory" className="hover:text-primary transition-colors">{t('contact_directory')}</Link></li>
-                        <li><Link href="/feedback" className="hover:text-primary transition-colors">{t('feedback', 'Public Feedback')}</Link></li>
+                        <li><Link href="/contact" className="hover:text-primary transition-colors">{t('feedback', 'Public Feedback')}</Link></li>
                     </ul>
                 </div>
 

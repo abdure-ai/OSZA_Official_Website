@@ -67,6 +67,31 @@ const settingsRoutes = require('./routes/settingsRoutes');
 app.use('/api/contact', contactRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/admin-message', adminMessageRoutes);
+
+// Health Check / Diagnostics
+app.get('/api/health', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT 1 as connected');
+        res.json({
+            status: 'ok',
+            database: 'connected',
+            db_name: process.env.DB_NAME,
+            env: process.env.NODE_ENV
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            database: 'failed',
+            error: error.message,
+            db_config: {
+                host: process.env.DB_HOST,
+                user: process.env.DB_USER,
+                database: process.env.DB_NAME
+            }
+        });
+    }
+});
+
 app.get('/api/stats', statsController.getStats);
 
 // Serve static files (uploads)
