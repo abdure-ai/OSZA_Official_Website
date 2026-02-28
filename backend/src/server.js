@@ -8,6 +8,33 @@ const db = require('./config/db');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// DIAGNOSTIC ROUTES (MUST BE AT THE TOP)
+app.get('/', (req, res) => res.send(`OSZA Backend is Running - Diagnostic v1.2 (${new Date().toISOString()}) - ENV: ${process.env.NODE_ENV}`));
+
+app.get('/api/health', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT 1 as connected');
+        res.json({
+            status: 'ok',
+            database: 'connected',
+            db_name: process.env.DB_NAME,
+            env: process.env.NODE_ENV,
+            version: 'v1.2'
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            database: 'failed',
+            message: error.message,
+            db_config: {
+                host: process.env.DB_HOST,
+                user: process.env.DB_USER,
+                database: process.env.DB_NAME
+            }
+        });
+    }
+});
+
 // Middleware
 app.use(helmet({
     crossOriginResourcePolicy: false,
@@ -32,7 +59,6 @@ db.getConnection()
         console.error('Database connection failed:', err);
     });
 
-// Routes
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const newsRoutes = require('./routes/newsRoutes');
@@ -67,32 +93,6 @@ const settingsRoutes = require('./routes/settingsRoutes');
 app.use('/api/contact', contactRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/admin-message', adminMessageRoutes);
-
-app.get('/', (req, res) => res.send(`OSZA Backend is Running - Diagnostic v1.1 (${new Date().toISOString()})`));
-
-// Health Check / Diagnostics
-app.get('/api/health', async (req, res) => {
-    try {
-        const [rows] = await db.query('SELECT 1 as connected');
-        res.json({
-            status: 'ok',
-            database: 'connected',
-            db_name: process.env.DB_NAME,
-            env: process.env.NODE_ENV
-        });
-    } catch (error) {
-        res.status(500).json({
-            status: 'error',
-            database: 'failed',
-            error: error.message,
-            db_config: {
-                host: process.env.DB_HOST,
-                user: process.env.DB_USER,
-                database: process.env.DB_NAME
-            }
-        });
-    }
-});
 
 app.get('/api/stats', statsController.getStats);
 
