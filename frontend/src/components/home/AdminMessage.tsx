@@ -31,53 +31,72 @@ export default function AdminMessageSection() {
     return (
         <section className="py-20 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
-                <div className="max-w-6xl mx-auto">
-                    <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
-                        {/* Image Side */}
-                        <div className="w-full md:w-1/3 lg:w-2/5">
-                            <div className="relative">
-                                {/* Decorative elements */}
-                                <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary/10 rounded-3xl -z-10" />
-                                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary-light/20 rounded-full -z-10 blur-xl" />
-
+                <div className="bg-gradient-to-br from-primary/5 to-white border border-primary/10 rounded-[2rem] p-8 md:p-16 relative">
+                    <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center lg:items-start text-center lg:text-left">
+                        {/* Admin Photo */}
+                        <div className="flex-shrink-0 relative w-full lg:w-1/3 flex justify-center lg:justify-start">
+                            <div className="w-64 h-64 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] rounded-3xl overflow-hidden border-8 border-white shadow-2xl relative z-10 bg-gray-100 transform -rotate-2 hover:rotate-0 transition-transform duration-500">
                                 {msg.photo_url ? (
                                     <img
                                         src={getFileUrl(msg.photo_url)}
                                         alt={msg.name}
-                                        className="w-full h-auto aspect-square object-cover rounded-[2.5rem] shadow-2xl border-8 border-white transform hover:scale-[1.02] transition-transform duration-500"
+                                        className="w-full h-full object-cover"
                                     />
                                 ) : (
-                                    <div className="w-full aspect-square bg-gray-100 rounded-[2.5rem] flex items-center justify-center border-8 border-white shadow-xl">
-                                        <span className="text-6xl text-gray-200">📷</span>
+                                    <div className="w-full h-full flex items-center justify-center bg-gray-50 text-primary">
+                                        <span className="text-6xl">📷</span>
                                     </div>
                                 )}
+                            </div>
+                            {/* Decorative Background Elements */}
+                            <div className="absolute -bottom-8 -right-8 w-48 h-48 bg-accent/10 rounded-full blur-3xl -z-0" />
+                            <div className="absolute -top-8 -left-8 w-48 h-48 bg-primary/10 rounded-full blur-3xl -z-0" />
+                        </div>
 
-                                <div className="absolute bottom-6 -right-4 bg-primary text-white p-4 rounded-2xl shadow-xl flex items-center justify-center">
-                                    <FaQuoteLeft className="text-2xl" />
+                        {/* Message Content */}
+                        <div className="lg:w-2/3 py-4">
+                            <div className="inline-flex items-center gap-3 mb-6">
+                                <span className="bg-primary text-white text-xs font-bold uppercase tracking-[0.2em] px-5 py-2 rounded-full shadow-lg shadow-primary/20">
+                                    Official Communication
+                                </span>
+                            </div>
+
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-2 leading-tight">
+                                {msg.name}
+                            </h2>
+                            <p className="text-primary font-bold text-lg md:text-xl mb-10 pb-6 border-b-2 border-dashed border-primary/10 inline-block">
+                                {msg.title_position}
+                            </p>
+
+                            <div className="relative max-w-3xl">
+                                <FaQuoteLeft className="absolute -top-10 -left-12 text-8xl text-primary/5 rotate-180 hidden md:block" />
+                                <div className="text-gray-700 leading-relaxed text-xl md:text-2xl font-medium italic relative z-10 antialiased">
+                                    "{(msg as any)[`message_${currentLang}`] || msg.message_en}"
+                                </div>
+                            </div>
+
+                            <div className="mt-12 flex justify-center lg:justify-end">
+                                <div className="text-right">
+                                    <div className="h-24 w-48 relative flex items-center justify-center">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Signature_of_Barack_Obama.svg"
+                                            alt="Signature"
+                                            className="h-16 opacity-30 grayscale contrast-200 absolute rotate-[-5deg]"
+                                        />
+                                        <div className="w-full h-[2px] bg-gray-200/50 mt-12" />
+                                    </div>
+                                    <div className="text-[10px] font-black text-gray-300 tracking-[0.3em] uppercase italic mt-2">
+                                        Electronic Verification
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        {/* Content Side */}
-                        <div className="flex-1 text-center md:text-left">
-                            <h2 className="text-sm font-bold text-primary uppercase tracking-[0.2em] mb-4">{t('admin_message')}</h2>
-                            <h3 className="text-3xl lg:text-4xl font-black text-gray-900 mb-8 leading-tight">
-                                {t('admin_message_tagline', 'Dedication to Excellence & Community Service')}
-                            </h3>
-
-                            <div className="relative">
-                                <p className="text-lg lg:text-xl text-gray-600 italic leading-relaxed mb-10 relative z-10">
-                                    "{(msg as any)[`message_${currentLang}`] || msg.message_en}"
-                                </p>
-                            </div>
-
-                            <div className="flex flex-col items-center md:items-start">
-                                <h4 className="text-xl font-bold text-gray-900">{msg.name}</h4>
-                                <p className="text-primary font-medium">{msg.title_position}</p>
-                            </div>
-
-                            <div className="mt-10 h-1 w-20 bg-primary/20 rounded-full hidden md:block" />
-                        </div>
+                    {/* Large Decorative Icon */}
+                    <div className="absolute bottom-0 right-0 p-12 opacity-[0.03] pointer-events-none hidden lg:block">
+                        <FaQuoteLeft className="w-64 h-64 text-primary" />
                     </div>
                 </div>
             </div>

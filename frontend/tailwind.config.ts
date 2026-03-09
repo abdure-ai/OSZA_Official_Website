@@ -21,7 +21,7 @@ const config: Config = {
                 md: '768px',
                 lg: '1024px',
                 xl: '1280px',
-                '2xl': '1280px', // cap at 1280px even on huge screens
+                '2xl': '1440px', // increased from 1280px for a wider look
             },
         },
         extend: {

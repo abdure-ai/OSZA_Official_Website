@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { fetchWoredas, WoredaItem } from '@/lib/api';
+import { fetchWoredas, WoredaItem, getFileUrl } from '@/lib/api';
 import { FaMapMarkerAlt, FaUsers, FaArrowRight } from 'react-icons/fa';
 
 export default function WoredaGrid() {
@@ -36,52 +36,37 @@ export default function WoredaGrid() {
                 </div>
 
                 {/* Woreda Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {woredas.map(w => (
                         <Link
                             key={w.id}
                             href={`/woreda/${w.slug}`}
-                            className="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition p-6 flex flex-col gap-3"
+                            className="group relative rounded-2xl overflow-hidden border border-gray-100 hover:border-primary/30 shadow-sm hover:shadow-md transition-all bg-white flex flex-col items-center p-5 text-center"
                         >
-                            {/* Icon + Name */}
-                            <div className="flex items-center gap-3">
-                                <div className="w-11 h-11 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 group-hover:bg-green-200 transition">
-                                    <FaMapMarkerAlt className="text-green-700 text-lg" />
+                            {/* Logo/Icon */}
+                            {w.logo_url ? (
+                                <img
+                                    src={getFileUrl(w.logo_url)}
+                                    alt={(w as any)[`name_${currentLang}`] || w.name_en}
+                                    className="w-14 h-14 rounded-full object-cover mb-3 border-2 border-white shadow"
+                                />
+                            ) : (
+                                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3 border-2 border-white shadow">
+                                    <span className="text-primary font-bold text-xl">
+                                        {((w as any)[`name_${currentLang}`] || w.name_en).substring(0, 1).toUpperCase()}
+                                    </span>
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-gray-900 text-lg leading-tight group-hover:text-green-700 transition">
-                                        {(w as any)[`name_${currentLang}`] || w.name_en}
-                                    </h3>
-                                    {((w as any)[`capital_${currentLang}`] || w.capital_en) && (
-                                        <p className="text-xs text-gray-400 mt-0.5">{(w as any)[`capital_${currentLang}`] || w.capital_en}</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Description */}
-                            {((w as any)[`description_${currentLang}`] || w.description_en) && (
-                                <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
-                                    {(w as any)[`description_${currentLang}`] || w.description_en}
-                                </p>
                             )}
 
-                            {/* Stats row */}
-                            <div className="flex gap-4 text-xs text-gray-400 border-t border-gray-50 pt-3 mt-auto">
-                                {w.population && (
-                                    <span className="flex items-center gap-1">
-                                        <FaUsers className="text-gray-300" />
-                                        {w.population}
-                                    </span>
-                                )}
-                                {w.area_km2 && (
-                                    <span>📐 {w.area_km2} km²</span>
-                                )}
-                            </div>
+                            <span className="font-semibold text-sm text-gray-800 group-hover:text-primary transition-colors leading-tight">
+                                {(w as any)[`name_${currentLang}`] || w.name_en}
+                            </span>
 
-                            {/* CTA */}
-                            <div className="flex items-center gap-1 text-green-600 text-sm font-semibold group-hover:gap-2 transition-all">
-                                {t('visit_official_page', 'Visit Official Page')} <FaArrowRight size={12} />
-                            </div>
+                            {((w as any)[`capital_${currentLang}`] || w.capital_en) && (
+                                <span className="text-xs text-gray-400 mt-1">
+                                    {(w as any)[`capital_${currentLang}`] || w.capital_en}
+                                </span>
+                            )}
                         </Link>
                     ))}
                 </div>

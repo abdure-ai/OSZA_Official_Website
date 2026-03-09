@@ -44,7 +44,7 @@ const EMPTY: FormState = {
     established_year: '', is_active: true,
 };
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export default function AdminWoredas() {
     const [woredas, setWoredas] = useState<WoredaItem[]>([]);
@@ -94,11 +94,12 @@ export default function AdminWoredas() {
         setEditing(w);
         setForm({ ...w });
         setAdminPhotoFile(null);
-        setAdminPhotoPreview(w.administrator_photo_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}${w.administrator_photo_url}` : '');
+        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+        setAdminPhotoPreview(w.administrator_photo_url ? `${baseUrl}${w.administrator_photo_url}` : '');
         setBannerFile(null);
-        setBannerPreview(w.banner_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}${w.banner_url}` : '');
+        setBannerPreview(w.banner_url ? `${baseUrl}${w.banner_url}` : '');
         setLogoFile(null);
-        setLogoPreview(w.logo_url ? `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}${w.logo_url}` : '');
+        setLogoPreview(w.logo_url ? `${baseUrl}${w.logo_url}` : '');
         setError('');
         setShowModal(true);
     };
@@ -123,7 +124,9 @@ export default function AdminWoredas() {
             if (logoFile) fd.append('logo', logoFile);
 
             const url = editing ? `${API_URL}/woredas/${editing.id}` : `${API_URL}/woredas`;
-            const method = editing ? 'PUT' : 'POST';
+            const method = editing ? 'POST' : 'POST'; // Laravel usually expects POST for file uploads with spoofing
+            if (editing) fd.append('_method', 'PUT');
+
             const res = await fetch(url, {
                 method,
                 headers: { Authorization: `Bearer ${token}` },
@@ -150,260 +153,294 @@ export default function AdminWoredas() {
 
     return (
         <AdminLayout>
-            <div className="flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Woredas</h1>
-                    <p className="text-sm text-gray-500 mt-1">Manage woreda sub-sites and their information</p>
+            <div className="mb-10">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div>
+                        <div className="flex items-center gap-3 mb-2">
+                            <span className="h-1 w-12 bg-indigo-600 rounded-full"></span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-600">Regional Administration</span>
+                        </div>
+                        <h1 className="text-4xl font-black text-slate-900 tracking-tight italic">
+                            Governance <span className="text-indigo-600">Hub</span>
+                        </h1>
+                        <p className="text-slate-500 mt-2 text-sm font-medium">Manage jurisdictional profiles, administrative leadership, and public portals.</p>
+                    </div>
+                    <button
+                        onClick={openAdd}
+                        className="group bg-slate-900 text-white px-8 py-4 rounded-2xl flex items-center gap-3 hover:bg-slate-800 transition-all shadow-2xl shadow-slate-200 active:scale-95"
+                    >
+                        <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center group-hover:rotate-90 transition-transform">
+                            <FaPlus className="text-xs" />
+                        </div>
+                        <span className="font-black text-[10px] uppercase tracking-widest">Register New Woreda</span>
+                    </button>
                 </div>
-                <button
-                    onClick={openAdd}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
-                >
-                    <FaPlus /> Add Woreda
-                </button>
             </div>
 
-            {/* Table */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                <table className="w-full text-sm">
-                    <thead className="bg-gray-50 border-b border-gray-100">
-                        <tr>
-                            <th className="text-left px-6 py-3 font-semibold text-gray-500 uppercase text-xs tracking-wide">Woreda</th>
-                            <th className="text-left px-6 py-3 font-semibold text-gray-500 uppercase text-xs tracking-wide">Capital</th>
-                            <th className="text-left px-6 py-3 font-semibold text-gray-500 uppercase text-xs tracking-wide">Population</th>
-                            <th className="text-left px-6 py-3 font-semibold text-gray-500 uppercase text-xs tracking-wide">Administrator</th>
-                            <th className="text-left px-6 py-3 font-semibold text-gray-500 uppercase text-xs tracking-wide">Status</th>
-                            <th className="text-right px-6 py-3 font-semibold text-gray-500 uppercase text-xs tracking-wide">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50">
-                        {loading
-                            ? Array.from({ length: 4 }).map((_, i) => (
-                                <tr key={i} className="animate-pulse">
-                                    <td className="px-6 py-4"><div className="h-4 bg-gray-200 rounded w-32" /></td>
-                                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-24" /></td>
-                                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-16" /></td>
-                                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-28" /></td>
-                                    <td className="px-6 py-4"><div className="h-4 bg-gray-100 rounded w-12" /></td>
-                                    <td className="px-6 py-4" />
+            <div className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-slate-900">
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Administrative Unit</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Regional Capital</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Demographics</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Portal Health</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Operations</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50">
+                            {loading ? (
+                                Array.from({ length: 5 }).map((_, i) => (
+                                    <tr key={i} className="animate-pulse">
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-slate-100 rounded-xl" />
+                                                <div className="space-y-2">
+                                                    <div className="h-4 bg-slate-100 rounded w-40" />
+                                                    <div className="h-3 bg-slate-50 rounded w-24" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6"><div className="h-4 bg-slate-100 rounded w-24" /></td>
+                                        <td className="px-8 py-6"><div className="h-4 bg-slate-100 rounded w-16" /></td>
+                                        <td className="px-8 py-6"><div className="h-6 bg-slate-100 rounded-full w-20" /></td>
+                                        <td className="px-8 py-6" />
+                                    </tr>
+                                ))
+                            ) : woredas.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="px-8 py-24 text-center">
+                                        <div className="flex flex-col items-center gap-4 opacity-30">
+                                            <FaMapMarkerAlt className="text-6xl text-slate-300" />
+                                            <p className="text-slate-400 font-bold tracking-tight">Governance registry is empty.</p>
+                                        </div>
+                                    </td>
                                 </tr>
-                            ))
-                            : woredas.map(w => (
-                                <tr key={w.id} className="hover:bg-gray-50 transition">
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
-                                            <FaMapMarkerAlt className="text-blue-400 flex-shrink-0" />
+                            ) : woredas.map(w => (
+                                <tr key={w.id} className="hover:bg-indigo-50/30 transition-all group">
+                                    <td className="px-8 py-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 border border-slate-200 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
+                                                {w.logo_url ? (
+                                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}${w.logo_url}`} alt="" className="w-8 h-8 object-contain" />
+                                                ) : <FaMapMarkerAlt size={20} />}
+                                            </div>
                                             <div>
-                                                <p className="font-semibold text-gray-900">{w.name_en}</p>
-                                                <p className="text-xs text-gray-400 font-mono">/woreda/{w.slug}</p>
+                                                <p className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{w.name_en}</p>
+                                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.1em] mt-0.5 italic">/{w.slug}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-gray-700">{w.capital_en || '—'}</td>
-                                    <td className="px-6 py-4 text-gray-700">{w.population || '—'}</td>
-                                    <td className="px-6 py-4 text-gray-700">{w.administrator_name || '—'}</td>
-                                    <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${w.is_active
-                                            ? 'bg-green-100 text-green-700'
-                                            : 'bg-gray-100 text-gray-500'}`}>
-                                            {w.is_active ? <FaEye size={10} /> : <FaEyeSlash size={10} />}
-                                            {w.is_active ? 'Active' : 'Hidden'}
+                                    <td className="px-8 py-6 text-slate-500 font-bold text-xs italic">
+                                        {w.capital_en || '—'}
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-xs font-bold text-slate-900">{w.population || 'N/A'}</span>
+                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{w.area_km2 || '0'} km²</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-sm ${w.is_active
+                                            ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                            : 'bg-slate-100 text-slate-500 border border-slate-200'
+                                            }`}>
+                                            {w.is_active ? <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" /> : <div className="w-1.5 h-1.5 bg-slate-400 rounded-full" />}
+                                            {w.is_active ? 'Public' : 'Hidden'}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-8 py-6 text-right">
                                         <div className="flex justify-end gap-2">
                                             <a
                                                 href={`/woreda/${w.slug}`}
                                                 target="_blank"
-                                                className="text-xs px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
+                                                className="w-10 h-10 flex items-center justify-center bg-white text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all shadow-sm border border-slate-100"
+                                                title="View Portal"
                                             >
-                                                Preview
+                                                <FaEye size={14} />
                                             </a>
                                             <button
                                                 onClick={() => openEdit(w)}
-                                                className="text-xs px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition flex items-center gap-1"
+                                                className="w-10 h-10 flex items-center justify-center bg-white text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all shadow-sm border border-slate-100"
+                                                title="Modify Profile"
                                             >
-                                                <FaEdit size={11} /> Edit
+                                                <FaEdit size={14} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(w.id, w.name_en)}
-                                                className="text-xs px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition flex items-center gap-1"
+                                                className="w-10 h-10 flex items-center justify-center bg-white text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all shadow-sm border border-slate-100"
+                                                title="Decommission"
                                             >
-                                                <FaTrash size={11} /> Delete
+                                                <FaTrash size={14} />
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
-                {!loading && woredas.length === 0 && (
-                    <div className="p-12 text-center">
-                        <FaMapMarkerAlt className="text-4xl text-gray-300 mx-auto mb-3" />
-                        <p className="text-gray-400 font-medium">No woredas yet</p>
-                    </div>
-                )}
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Modal */}
             {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
-                            <h2 className="text-xl font-bold text-gray-800">
-                                {editing ? `Edit: ${editing.name_en}` : 'Add New Woreda'}
-                            </h2>
-                            <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600">
-                                <FaTimes size={20} />
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-slate-100">
+                        <div className="flex items-center justify-between p-8 border-b bg-slate-50/50">
+                            <div>
+                                <h2 className="text-3xl font-black text-slate-900 tracking-tight italic">
+                                    Jurisdiction <span className="text-indigo-600">Composer</span>
+                                </h2>
+                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1">Configure Woreda Sub-site & Metadata</p>
+                            </div>
+                            <button onClick={() => setShowModal(false)} className="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm">
+                                <FaTimes size={18} />
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                            {error && <p className="text-red-600 bg-red-50 border border-red-200 p-3 rounded-lg text-sm">{error}</p>}
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Woreda Name (EN) <span className="text-red-500">*</span></label>
-                                    <input
-                                        value={form.name_en}
-                                        onChange={e => { set('name_en', e.target.value); if (!editing) set('slug', autoSlug(e.target.value)); }}
-                                        className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="e.g. Dawa Chefa"
-                                        required
-                                    />
+                        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-8 space-y-10 scrollbar-thin scrollbar-thumb-slate-200">
+                            {error && (
+                                <div className="bg-rose-50 border-2 border-rose-100 p-4 rounded-2xl text-rose-600 text-xs font-black uppercase tracking-widest flex items-center gap-3 animate-pulse">
+                                    <div className="w-6 h-6 bg-rose-600 text-white rounded-full flex items-center justify-center text-[10px]">!</div>
+                                    {error}
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Slug (URL) <span className="text-red-500">*</span></label>
-                                    <input
-                                        value={form.slug}
-                                        onChange={e => set('slug', autoSlug(e.target.value))}
-                                        className="w-full border rounded-lg px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="dawa-chefa"
-                                        required
-                                    />
-                                </div>
-                            </div>
+                            )}
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Name (Amharic)</label>
-                                    <input value={form.name_am} onChange={e => set('name_am', e.target.value)} className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ዳዋ ጨፋ" />
+                            {/* Section: Primary Identity */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="h-6 w-1.5 bg-indigo-600 rounded-full" />
+                                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Primary Identity</h3>
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Name (Afaan Oromo)</label>
-                                    <input value={form.name_or} onChange={e => set('name_or', e.target.value)} className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Dawaa Caffee" />
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Description (EN)</label>
-                                    <textarea value={form.description_en} onChange={e => set('description_en', e.target.value)} rows={2} className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Description (AM)</label>
-                                        <textarea value={form.description_am} onChange={e => set('description_am', e.target.value)} rows={2} className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Woreda Name (EN) <span className="text-rose-500">*</span></label>
+                                        <input
+                                            value={form.name_en}
+                                            onChange={e => { set('name_en', e.target.value); if (!editing) set('slug', autoSlug(e.target.value)); }}
+                                            className="w-full border-2 border-slate-100 bg-slate-50/50 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-sm font-bold text-slate-900"
+                                            placeholder="e.g. Dawa Chefa"
+                                            required
+                                        />
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Description (OR)</label>
-                                        <textarea value={form.description_or} onChange={e => set('description_or', e.target.value)} rows={2} className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Universal Slug <span className="text-rose-500">*</span></label>
+                                        <input
+                                            value={form.slug}
+                                            onChange={e => set('slug', autoSlug(e.target.value))}
+                                            className="w-full border-2 border-slate-100 bg-slate-50/50 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-sm font-mono text-slate-400"
+                                            placeholder="dawa-chefa"
+                                            required
+                                        />
                                     </div>
                                 </div>
-                            </div>
-
-                            {/* Images Section */}
-                            <div className="grid grid-cols-2 gap-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">Hero Banner (Required for Unique Look)</label>
-                                    {bannerPreview && (
-                                        // eslint-disable-next-line @next/next/no-img-element
-                                        <img src={bannerPreview} alt="Banner" className="w-full h-24 object-cover rounded-lg mb-2 border border-gray-200" />
-                                    )}
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={e => {
-                                            const f = e.target.files?.[0];
-                                            if (!f) return;
-                                            setBannerFile(f);
-                                            setBannerPreview(URL.createObjectURL(f));
-                                        }}
-                                        className="text-xs w-full"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">Woreda Logo</label>
-                                    {logoPreview && (
-                                        // eslint-disable-next-line @next/next/no-img-element
-                                        <img src={logoPreview} alt="Logo" className="w-16 h-16 object-cover rounded-lg mb-2 border border-gray-200" />
-                                    )}
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={e => {
-                                            const f = e.target.files?.[0];
-                                            if (!f) return;
-                                            setLogoFile(f);
-                                            setLogoPreview(URL.createObjectURL(f));
-                                        }}
-                                        className="text-xs w-full"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Capital (EN)</label>
-                                    <input value={form.capital_en} onChange={e => set('capital_en', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Capital (AM)</label>
-                                    <input value={form.capital_am} onChange={e => set('capital_am', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Capital (OR)</label>
-                                    <input value={form.capital_or} onChange={e => set('capital_or', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Population</label>
-                                    <input value={form.population} onChange={e => set('population', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Area (km²)</label>
-                                    <input value={form.area_km2} onChange={e => set('area_km2', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Established</label>
-                                    <input value={form.established_year} onChange={e => set('established_year', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                </div>
-                            </div>
-
-                            {/* Administrator Photo & Details */}
-                            <div className="flex gap-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-                                <div className="space-y-4 flex-1">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Admin Name</label>
-                                            <input value={form.administrator_name} onChange={e => set('administrator_name', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Admin Title</label>
-                                            <input value={form.administrator_title} onChange={e => set('administrator_title', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                        </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Name (Amharic)</label>
+                                        <input value={form.name_am} onChange={e => set('name_am', e.target.value)} className="w-full border-2 border-slate-100 bg-slate-50/50 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-sm font-bold text-slate-900" placeholder="ዳዋ ጨፋ" />
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Admin Photo</label>
-                                        <div className="flex items-center gap-4">
-                                            {adminPhotoPreview ? (
-                                                // eslint-disable-next-line @next/next/no-img-element
-                                                <img src={adminPhotoPreview} alt="Admin" className="w-20 h-28 rounded-xl object-cover border-2 border-white shadow-sm" />
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Name (Oromo)</label>
+                                        <input value={form.name_or} onChange={e => set('name_or', e.target.value)} className="w-full border-2 border-slate-100 bg-slate-50/50 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all text-sm font-bold text-slate-900" placeholder="Dawaa Caffee" />
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Section: Visual Assets */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="h-6 w-1.5 bg-indigo-600 rounded-full" />
+                                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Visual Assets</h3>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="bg-slate-50/80 rounded-[2rem] p-6 border-2 border-dashed border-slate-100 hover:border-indigo-200 transition-all group">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 block">Hero Banner Reveal</label>
+                                        <div className="relative aspect-video rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-inner group-hover:shadow-md transition-all">
+                                            {bannerPreview ? (
+                                                <img src={bannerPreview} alt="" className="w-full h-full object-cover" />
                                             ) : (
-                                                <div className="w-20 h-28 rounded-xl bg-blue-100 flex items-center justify-center border-2 border-dashed border-blue-200">
-                                                    <FaUserTie className="text-blue-300 text-xl" />
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-300">
+                                                    <FaPlus size={32} className="mb-2" />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest">Upload Banner</span>
+                                                </div>
+                                            )}
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={e => {
+                                                    const f = e.target.files?.[0];
+                                                    if (!f) return;
+                                                    setBannerFile(f);
+                                                    setBannerPreview(URL.createObjectURL(f));
+                                                }}
+                                                className="absolute inset-0 opacity-0 cursor-pointer"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="bg-slate-50/80 rounded-[2rem] p-6 border-2 border-dashed border-slate-100 hover:border-indigo-200 transition-all group">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 block">Woreda Emblem (Logo)</label>
+                                        <div className="relative w-32 h-32 mx-auto rounded-3xl overflow-hidden bg-white border border-slate-100 shadow-inner group-hover:shadow-md transition-all flex items-center justify-center">
+                                            {logoPreview ? (
+                                                <img src={logoPreview} alt="" className="w-24 h-24 object-contain" />
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center text-slate-300 text-center p-4">
+                                                    <FaPlus size={24} className="mb-1" />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest leading-tight">Drop Logo</span>
+                                                </div>
+                                            )}
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={e => {
+                                                    const f = e.target.files?.[0];
+                                                    if (!f) return;
+                                                    setLogoFile(f);
+                                                    setLogoPreview(URL.createObjectURL(f));
+                                                }}
+                                                className="absolute inset-0 opacity-0 cursor-pointer"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Section: Regional Data */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="h-6 w-1.5 bg-indigo-600 rounded-full" />
+                                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Regional Metadata</h3>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Capital City</label>
+                                        <input value={form.capital_en} onChange={e => set('capital_en', e.target.value)} className="w-full border-2 border-slate-100 bg-slate-50/50 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500" placeholder="e.g. Kemise" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Population</label>
+                                        <input value={form.population} onChange={e => set('population', e.target.value)} className="w-full border-2 border-slate-100 bg-slate-50/50 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500" placeholder="e.g. 150,000" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Area (km²)</label>
+                                        <input value={form.area_km2} onChange={e => set('area_km2', e.target.value)} className="w-full border-2 border-slate-100 bg-slate-50/50 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500" placeholder="e.g. 1,200" />
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Section: Administration */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="h-6 w-1.5 bg-indigo-600 rounded-full" />
+                                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Leadership Profile</h3>
+                                </div>
+                                <div className="bg-indigo-50/50 rounded-[2.5rem] p-8 space-y-8 border-2 border-indigo-100/30">
+                                    <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                                        <div className="relative w-32 h-44 rounded-3xl overflow-hidden bg-white shadow-xl shadow-indigo-200/50 group border-4 border-white">
+                                            {adminPhotoPreview ? (
+                                                <img src={adminPhotoPreview} alt="" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center text-indigo-200">
+                                                    <FaUserTie size={40} />
                                                 </div>
                                             )}
                                             <input
@@ -415,50 +452,61 @@ export default function AdminWoredas() {
                                                     setAdminPhotoFile(f);
                                                     setAdminPhotoPreview(URL.createObjectURL(f));
                                                 }}
-                                                className="text-xs"
+                                                className="absolute inset-0 opacity-0 cursor-pointer"
                                             />
+                                        </div>
+                                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Administrator Name</label>
+                                                <input value={form.administrator_name} onChange={e => set('administrator_name', e.target.value)} className="w-full border-2 border-white bg-white/80 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 text-sm font-bold shadow-sm" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Official Title</label>
+                                                <input value={form.administrator_title} onChange={e => set('administrator_title', e.target.value)} className="w-full border-2 border-white bg-white/80 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 text-sm font-bold shadow-sm" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Protocol Phone</label>
+                                                <input value={form.contact_phone} onChange={e => set('contact_phone', e.target.value)} className="w-full border-2 border-white bg-white/80 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 text-sm font-bold shadow-sm" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Domain Email</label>
+                                                <input value={form.contact_email} onChange={e => set('contact_email', e.target.value)} className="w-full border-2 border-white bg-white/80 rounded-2xl px-6 py-4 focus:outline-none focus:border-indigo-500 text-sm font-bold shadow-sm" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </section>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact Phone</label>
-                                    <input value={form.contact_phone} onChange={e => set('contact_phone', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
+                            <div className="flex items-center gap-4 bg-slate-900 p-8 rounded-[2rem] border border-slate-800 shadow-2xl shadow-indigo-100">
+                                <div className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={form.is_active}
+                                        onChange={(e) => set('is_active', e.target.checked)}
+                                    />
+                                    <div className="w-14 h-8 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-500 shadow-inner"></div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact Email</label>
-                                    <input type="email" value={form.contact_email} onChange={e => set('contact_email', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
+                                    <p className="text-xs font-black text-white uppercase tracking-widest italic">Live Governance Portal</p>
+                                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Activate public-facing sub-site and API routes.</p>
                                 </div>
                             </div>
 
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Address (EN)</label>
-                                    <input value={form.address_en} onChange={e => set('address_en', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Address (AM)</label>
-                                        <input value={form.address_am} onChange={e => set('address_am', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Address (OR)</label>
-                                        <input value={form.address_or} onChange={e => set('address_or', e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-2 pt-1 font-bold text-gray-700">
-                                <input type="checkbox" id="woreda-active" checked={!!form.is_active} onChange={e => set('is_active', e.target.checked)} className="w-4 h-4 rounded border-gray-300" />
-                                <label htmlFor="woreda-active" className="cursor-pointer">Active (Visible)</label>
-                            </div>
-
-                            <div className="flex justify-end gap-3 pt-4 border-t sticky bottom-0 bg-white">
-                                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2 text-gray-600 border rounded-lg hover:bg-gray-50 transition">Cancel</button>
-                                <button type="submit" disabled={saving} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50">
-                                    {saving ? 'Saving...' : editing ? 'Save Changes' : 'Add Woreda'}
+                            <div className="flex justify-end gap-3 pt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowModal(false)}
+                                    className="px-10 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 border-2 border-slate-100 rounded-[1.5rem] hover:bg-slate-50 transition-all font-bold"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={saving}
+                                    className="px-12 py-5 bg-indigo-600 text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all disabled:opacity-50 shadow-2xl shadow-indigo-200 italic"
+                                >
+                                    {saving ? 'Synchronizing Intelligence...' : editing ? 'Commit Changes' : 'Initialize Jurisdisction'}
                                 </button>
                             </div>
                         </form>

@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { fetchGalleryCategories, GalleryCategory } from '@/lib/api';
+import { fetchGalleryCategories, GalleryCategory, getFileUrl } from '@/lib/api';
 import { FaImages, FaArrowRight } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 export default function HomeGallery() {
     const { t } = useTranslation();
@@ -50,35 +50,32 @@ export default function HomeGallery() {
                 </div>
 
                 {/* Album Cards Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {visible.map((cat) => (
                         <Link
                             key={cat.category}
-                            href={`/gallery`}
-                            className="group relative rounded-2xl overflow-hidden aspect-square bg-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            href={`/gallery?category=${encodeURIComponent(cat.category)}`}
+                            className="group relative rounded-xl overflow-hidden h-44 bg-gray-200 shadow-sm hover:shadow-lg transition-all duration-300"
                         >
                             {cat.cover_url ? (
                                 // eslint-disable-next-line @next/next/no-img-element
                                 <img
-                                    src={`${BACKEND_URL}${cat.cover_url}`}
+                                    src={getFileUrl(cat.cover_url)}
                                     alt={cat.category}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
                             ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-green-700 to-green-500 flex items-center justify-center">
-                                    <FaImages className="text-white/30 text-4xl" />
+                                <div className="w-full h-full bg-blue-900 flex items-center justify-center">
+                                    <FaImages className="text-white/30 text-3xl" />
                                 </div>
                             )}
 
                             {/* Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-
-                            {/* Labels */}
-                            <div className="absolute bottom-0 left-0 right-0 p-3">
-                                <p className="text-white font-bold text-sm leading-tight truncate">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                                <p className="text-white font-bold text-xs truncate">
                                     {cat.category}
                                 </p>
-                                <p className="text-white/60 text-xs mt-0.5">
+                                <p className="text-white/80 text-[10px]">
                                     {cat.count} {Number(cat.count) === 1 ? t('photo') : t('photos')}
                                 </p>
                             </div>
@@ -99,3 +96,4 @@ export default function HomeGallery() {
         </section>
     );
 }
+

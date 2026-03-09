@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { fetchProjects, Project, getFileUrl } from '@/lib/api';
-import { FaMapMarkerAlt, FaCalendarAlt, FaBuilding, FaMoneyBillWave, FaSpinner, FaFilter } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaCalendarAlt, FaBuilding, FaMoneyBillWave, FaSpinner, FaFilter, FaArrowLeft } from 'react-icons/fa';
+import Link from 'next/link';
 
 const STATUS_COLORS: Record<string, { bg: string; text: string; bar: string }> = {
     'Planning': { bg: 'bg-purple-100', text: 'text-purple-700', bar: 'bg-purple-500' },
-    'In Progress': { bg: 'bg-blue-100', text: 'text-blue-700', bar: 'bg-blue-500' },
+    'Ongoing': { bg: 'bg-blue-100', text: 'text-blue-700', bar: 'bg-blue-500' },
     'On Hold': { bg: 'bg-yellow-100', text: 'text-yellow-700', bar: 'bg-yellow-500' },
     'Completed': { bg: 'bg-green-100', text: 'text-green-700', bar: 'bg-green-500' },
-    'Cancelled': { bg: 'bg-red-100', text: 'text-red-700', bar: 'bg-red-500' },
 };
 
-const STATUSES = ['All', 'Planning', 'In Progress', 'On Hold', 'Completed', 'Cancelled'];
+const STATUSES = ['All', 'Planning', 'Ongoing', 'On Hold', 'Completed'];
 
 export default function ProjectsPage() {
     const [projects, setProjects] = useState<Project[]>([]);
@@ -136,7 +136,7 @@ export default function ProjectsPage() {
                                             {p.budget && (
                                                 <div className="flex items-center gap-2 text-gray-500 col-span-2">
                                                     <FaMoneyBillWave className="text-gray-400 flex-shrink-0" />
-                                                    <span className="font-semibold">Budget: {Number(p.budget).toLocaleString()} {p.budget_currency}</span>
+                                                    <span className="font-semibold">Budget: {Number(p.budget).toLocaleString()} ETB</span>
                                                 </div>
                                             )}
                                             {p.contractor && (
@@ -145,6 +145,16 @@ export default function ProjectsPage() {
                                                     <span className="truncate">{p.contractor}</span>
                                                 </div>
                                             )}
+                                        </div>
+
+                                        <div className="mt-6 pt-6 border-t">
+                                            <Link
+                                                href={`/projects/${p.id}`}
+                                                className="w-full inline-flex items-center justify-center gap-2 bg-gray-50 text-primary font-bold py-3 rounded-xl hover:bg-primary hover:text-white transition-all group/btn"
+                                            >
+                                                View Detailed Information
+                                                <FaArrowLeft className="rotate-180 group-hover/btn:translate-x-1 transition-transform" />
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

@@ -2,7 +2,7 @@
 import { useEffect, useCallback } from 'react';
 import { FaTimes, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 interface GalleryImage {
     id: number;
@@ -103,3 +103,4 @@ export default function GallerySlideshow({ images, currentIndex, onClose, onNext
         </div>
     );
 }
+

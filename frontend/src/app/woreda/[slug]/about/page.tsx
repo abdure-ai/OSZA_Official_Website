@@ -2,7 +2,7 @@ import { fetchWoredaBySlug } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import { FaMapMarkerAlt, FaUsers, FaRulerCombined, FaCalendarAlt, FaUserTie, FaBuilding } from 'react-icons/fa';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
     const woreda = await fetchWoredaBySlug(params.slug);

@@ -1,5 +1,5 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
 
@@ -21,6 +21,8 @@ export interface NewsItem {
 export interface DocumentItem {
     id: number;
     title_en: string;
+    title_am?: string;
+    title_or?: string;
     file_url: string;
     file_type: string;
     category: string;
@@ -56,6 +58,8 @@ export interface Vacancy {
     department: string;
     vacancy_type: 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
     location_en: string;
+    location_am?: string;
+    location_or?: string;
     deadline: string;
     is_active: boolean;
     created_at: string;
@@ -221,6 +225,18 @@ export async function uploadDocument(formData: FormData, token: string): Promise
     return res.json();
 }
 
+export async function updateDocument(id: number, formData: FormData, token: string): Promise<any> {
+    const res = await fetch(`${API_URL}/documents/${id}`, {
+        method: 'POST', // Using POST with _method spoofing if needed, but the controller handles it. 
+        // Actually, for file uploads in Laravel via multipart/form-data, POST is safer unless we spoof.
+        // Let's check the controller route definition.
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+    });
+    if (!res.ok) throw new Error((await res.json()).message || 'Update failed');
+    return res.json();
+}
+
 export async function deleteDocument(id: number, token: string): Promise<void> {
     const res = await fetch(`${API_URL}/documents/${id}`, {
         method: 'DELETE',
@@ -364,6 +380,8 @@ export interface WoredaItem {
 export interface GalleryItem {
     id: number;
     title: string;
+    title_am?: string;
+    title_or?: string;
     image_url: string;
     category: string;
     woreda_id?: number | null;
@@ -378,6 +396,27 @@ export interface GalleryCategory {
     category: string;
     count: number;
     cover_url?: string;
+}
+
+export interface Leadership {
+    id: number;
+    name_en: string;
+    name_am?: string;
+    name_or?: string;
+    position_en: string;
+    position_am?: string;
+    position_or?: string;
+    bio_en?: string;
+    bio_am?: string;
+    bio_or?: string;
+    photo_url?: string;
+    rank_order?: number;
+}
+
+export async function fetchLeadership(): Promise<Leadership[]> {
+    const res = await fetch(`${API_URL}/leadership`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    return res.json();
 }
 
 /** Public: all active woredas */
@@ -635,13 +674,16 @@ export async function deleteTender(id: number, token: string): Promise<void> {
 export interface Project {
     id: number;
     title_en: string;
+    title_am?: string;
+    title_or?: string;
     description_en: string;
+    description_am?: string;
+    description_or?: string;
     location_en: string;
     start_date: string;
     end_date: string | null;
-    status: 'Planning' | 'In Progress' | 'On Hold' | 'Completed' | 'Cancelled';
+    status: 'Planning' | 'Ongoing' | 'Completed' | 'On Hold';
     budget: number | null;
-    budget_currency: string;
     progress: number;
     contractor: string | null;
     funding_source: string | null;
@@ -649,6 +691,17 @@ export interface Project {
     cover_image_url: string | null;
     created_at: string;
     updated_at: string;
+}
+
+export async function fetchProjectById(id: string): Promise<Project | null> {
+    try {
+        const res = await fetch(`${API_URL}/projects/${id}`, { cache: 'no-store' });
+        if (!res.ok) return null;
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching project:', error);
+        return null;
+    }
 }
 
 export async function fetchProjects(status?: string): Promise<Project[]> {
@@ -735,25 +788,30 @@ export async function updateAdminMessage(formData: FormData, token: string): Pro
 // Directory
 // ─────────────────────────────────────────
 
-export interface DirectoryContact {
+export interface DirectoryItem {
     id: number;
+    woreda_id?: number | null;
     name_en: string;
     name_am?: string;
     name_or?: string;
-    position_en: string;
+    position_en?: string;
     position_am?: string;
     position_or?: string;
     department_en?: string;
+    department_am?: string;
+    department_or?: string;
     phone?: string;
     email?: string;
     office_location?: string;
     photo_url?: string;
     category: string;
     sort_order: number;
-    created_at: string;
+    is_active: boolean;
+    created_at?: string;
+    updated_at?: string;
 }
 
-export async function fetchDirectory(category?: string): Promise<DirectoryContact[]> {
+export async function fetchDirectory(category?: string): Promise<DirectoryItem[]> {
     const params = category && category !== 'All' ? `?category=${category}` : '';
     const res = await fetch(`${API_URL}/directory${params}`, { cache: 'no-store' });
     if (!res.ok) return [];
@@ -802,6 +860,8 @@ export interface InvestmentOpportunity {
     description_or?: string;
     category?: string;
     location?: string;
+    location_am?: string;
+    location_or?: string;
     budget?: string;
     incentives_en?: string;
     incentives_am?: string;
@@ -811,7 +871,8 @@ export interface InvestmentOpportunity {
     contact_email?: string;
     thumbnail_url?: string;
     status: 'Open' | 'In Progress' | 'Closed';
-    created_at: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export async function fetchInvestments(category?: string): Promise<InvestmentOpportunity[]> {
@@ -898,7 +959,11 @@ export interface OfficeSettings {
     phone: string;
     email: string;
     address: string;
+    address_am?: string;
+    address_or?: string;
     working_hours?: string;
+    working_hours_am?: string;
+    working_hours_or?: string;
     map_url?: string;
     facebook_url?: string;
     twitter_url?: string;
@@ -929,4 +994,95 @@ export async function updateOfficeSettings(data: Partial<OfficeSettings>, token:
     });
     if (!res.ok) throw new Error((await res.json()).message || 'Failed to update settings');
     return res.json();
+}
+
+// ─────────────────────────────────────────
+// Tourism
+// ─────────────────────────────────────────
+
+export interface TouristSite {
+    id: number;
+    name_en: string;
+    name_am?: string;
+    name_or?: string;
+    slug: string;
+    description_en: string;
+    description_am?: string;
+    description_or?: string;
+    category?: string;
+    woreda_id?: number;
+    woreda?: WoredaItem;
+    location_name_en?: string;
+    cover_image_url?: string;
+    gallery_urls?: string[];
+    latitude?: number;
+    longitude?: number;
+    sort_order?: number;
+    is_active: boolean;
+    created_at: string;
+}
+
+export async function fetchTourismSites(params?: { category?: string, search?: string }): Promise<TouristSite[]> {
+    try {
+        const url = new URL(`${API_URL}/tourism`);
+        if (params?.category && params.category !== 'All') url.searchParams.append('category', params.category);
+        if (params?.search) url.searchParams.append('search', params.search);
+
+        const res = await fetch(url.toString(), { cache: 'no-store' });
+        if (!res.ok) return [];
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching tourism sites:', error);
+        return [];
+    }
+}
+
+export async function fetchTourismCategories(): Promise<string[]> {
+    try {
+        const res = await fetch(`${API_URL}/tourism/categories`, { cache: 'no-store' });
+        if (!res.ok) return [];
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching tourism categories:', error);
+        return [];
+    }
+}
+
+export async function fetchTourismSiteBySlug(slug: string): Promise<{ site: TouristSite, related: TouristSite[] } | null> {
+    try {
+        const res = await fetch(`${API_URL}/tourism/${slug}`, { cache: 'no-store' });
+        if (!res.ok) return null;
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching tourism site:', error);
+        return null;
+    }
+}
+
+export async function createTourismSite(formData: FormData, token: string): Promise<any> {
+    const res = await fetch(`${API_URL}/tourism`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+    });
+    if (!res.ok) throw new Error((await res.json()).message || 'Failed to create tourism site');
+    return res.json();
+}
+
+export async function updateTourismSite(id: number, formData: FormData, token: string): Promise<any> {
+    const res = await fetch(`${API_URL}/tourism/${id}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+    });
+    if (!res.ok) throw new Error((await res.json()).message || 'Failed to update tourism site');
+    return res.json();
+}
+
+export async function deleteTourismSite(id: number, token: string): Promise<void> {
+    const res = await fetch(`${API_URL}/tourism/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error((await res.json()).message || 'Failed to delete tourism site');
 }

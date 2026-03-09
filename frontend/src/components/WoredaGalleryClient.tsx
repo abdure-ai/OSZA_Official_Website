@@ -4,7 +4,7 @@ import { GalleryCategory, GalleryItem, fetchGallery } from '@/lib/api';
 import GallerySlideshow from '@/components/GallerySlideshow';
 import { FaImages } from 'react-icons/fa';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 interface Props {
     categories: GalleryCategory[];
@@ -87,3 +87,4 @@ export default function WoredaGalleryClient({ categories, woredaId }: Props) {
         </>
     );
 }
+

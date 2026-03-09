@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { FaEdit, FaTrash, FaPlus, FaTimes, FaImage } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaTimes, FaImage, FaEye, FaEyeSlash, FaNewspaper } from 'react-icons/fa';
 import {
     fetchAllNewsAdmin,
     createNews,
@@ -13,16 +13,24 @@ import {
 
 type FormData = {
     title_en: string;
+    title_am: string;
+    title_or: string;
     category: string;
     status: string;
     content_en: string;
+    content_am: string;
+    content_or: string;
 };
 
 const EMPTY_FORM: FormData = {
     title_en: '',
+    title_am: '',
+    title_or: '',
     category: 'news',
     status: 'draft',
     content_en: '',
+    content_am: '',
+    content_or: '',
 };
 
 export default function AdminNewsPage() {
@@ -32,14 +40,18 @@ export default function AdminNewsPage() {
     const [editingItem, setEditingItem] = useState<NewsItem | null>(null);
     const [form, setForm] = useState<FormData>(EMPTY_FORM);
     const [image, setImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState('');
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
 
     const loadNews = useCallback(async () => {
         setLoading(true);
-        const data = await fetchAllNewsAdmin();
-        setNews(data);
-        setLoading(false);
+        try {
+            const data = await fetchAllNewsAdmin();
+            setNews(data);
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
     useEffect(() => { loadNews(); }, [loadNews]);
@@ -48,6 +60,7 @@ export default function AdminNewsPage() {
         setEditingItem(null);
         setForm(EMPTY_FORM);
         setImage(null);
+        setImagePreview('');
         setError('');
         setShowModal(true);
     };
@@ -56,14 +69,22 @@ export default function AdminNewsPage() {
         setEditingItem(item);
         setForm({
             title_en: item.title_en,
+            title_am: item.title_am || '',
+            title_or: item.title_or || '',
             category: item.category,
             status: item.status,
             content_en: item.content_en,
+            content_am: item.content_am || '',
+            content_or: item.content_or || '',
         });
         setImage(null);
+        setImagePreview(item.thumbnail_url ? getFileUrl(item.thumbnail_url) : '');
         setError('');
         setShowModal(true);
     };
+
+    const set = (k: keyof FormData, v: string) =>
+        setForm(prev => ({ ...prev, [k]: v }));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -91,8 +112,8 @@ export default function AdminNewsPage() {
         }
     };
 
-    const handleDelete = async (id: number) => {
-        if (!confirm('Are you sure you want to delete this news post?')) return;
+    const handleDelete = async (id: number, title: string) => {
+        if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
         const token = localStorage.getItem('adminToken') || '';
         try {
             await deleteNews(id, token);
@@ -104,199 +125,352 @@ export default function AdminNewsPage() {
 
     return (
         <AdminLayout>
-            <div className="flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-800">News Management</h1>
-                    <p className="text-gray-500 text-sm">Create and manage official news posts and announcements.</p>
+            <div className="mb-10">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div>
+                        <div className="flex items-center gap-3 mb-2">
+                            <span className="h-1 w-12 bg-blue-600 rounded-full"></span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Press Center</span>
+                        </div>
+                        <h1 className="text-4xl font-black text-slate-900 tracking-tight italic">
+                            Editorial <span className="text-blue-600">Archive</span>
+                        </h1>
+                        <p className="text-slate-500 mt-2 text-sm font-medium">Draft, publish, and manage official news stories and media releases.</p>
+                    </div>
+                    <button
+                        onClick={openAdd}
+                        className="group bg-slate-900 text-white px-8 py-4 rounded-2xl flex items-center gap-3 hover:bg-slate-800 transition-all shadow-2xl shadow-slate-200 active:scale-95"
+                    >
+                        <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center group-hover:rotate-90 transition-transform">
+                            <FaPlus className="text-xs" />
+                        </div>
+                        <span className="font-black text-[10px] uppercase tracking-widest">Compose New Story</span>
+                    </button>
                 </div>
-                <button
-                    onClick={openAdd}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
-                >
-                    <FaPlus /> Add New Post
-                </button>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-gray-50 border-b">
-                        <tr>
-                            <th className="px-6 py-4 font-semibold text-gray-600">Thumbnail</th>
-                            <th className="px-6 py-4 font-semibold text-gray-600">Title</th>
-                            <th className="px-6 py-4 font-semibold text-gray-600">Category</th>
-                            <th className="px-6 py-4 font-semibold text-gray-600">Status</th>
-                            <th className="px-6 py-4 font-semibold text-gray-600 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {loading ? (
-                            <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-400">Loading...</td></tr>
-                        ) : news.length === 0 ? (
-                            <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-400">No news posts found.</td></tr>
-                        ) : news.map((item) => (
-                            <tr key={item.id} className="hover:bg-gray-50 transition">
-                                <td className="px-6 py-4">
-                                    {item.thumbnail_url ? (
-                                        <img
-                                            src={getFileUrl(item.thumbnail_url)}
-                                            alt=""
-                                            className="w-12 h-12 object-cover rounded-md border"
-                                        />
-                                    ) : (
-                                        <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center text-gray-400">
-                                            <FaImage />
-                                        </div>
-                                    )}
-                                </td>
-                                <td className="px-6 py-4 font-medium text-gray-900 max-w-xs truncate">{item.title_en}</td>
-                                <td className="px-6 py-4 text-gray-600 capitalize">{item.category}</td>
-                                <td className="px-6 py-4 text-gray-500">
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${item.status === 'published'
-                                        ? 'bg-green-100 text-green-700'
-                                        : 'bg-yellow-100 text-yellow-700'
-                                        }`}>
-                                        {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                    <button
-                                        onClick={() => openEdit(item)}
-                                        className="text-blue-500 hover:text-blue-700 mx-2"
-                                        title="Edit"
-                                    >
-                                        <FaEdit />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(item.id)}
-                                        className="text-red-500 hover:text-red-700 mx-2"
-                                        title="Delete"
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                </td>
+            <div className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-slate-900">
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Story Manifest</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Classification</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Visibility</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Timestamp</th>
+                                <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Control</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50">
+                            {loading ? (
+                                Array.from({ length: 6 }).map((_, i) => (
+                                    <tr key={i} className="animate-pulse">
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-16 h-12 bg-slate-100 rounded-xl" />
+                                                <div className="space-y-2">
+                                                    <div className="h-4 bg-slate-100 rounded w-48" />
+                                                    <div className="h-3 bg-slate-50 rounded w-24" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6"><div className="h-4 bg-slate-100 rounded w-20" /></td>
+                                        <td className="px-8 py-6"><div className="h-6 bg-slate-100 rounded-full w-16" /></td>
+                                        <td className="px-8 py-6"><div className="h-4 bg-slate-100 rounded w-24" /></td>
+                                        <td className="px-8 py-6" />
+                                    </tr>
+                                ))
+                            ) : news.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="px-8 py-24 text-center">
+                                        <div className="flex flex-col items-center gap-4">
+                                            <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center">
+                                                <FaNewspaper className="text-4xl text-slate-200" />
+                                            </div>
+                                            <p className="text-slate-400 font-bold tracking-tight">No editorial records found in the archive.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : news.map((item) => (
+                                <tr key={item.id} className="hover:bg-blue-50/30 transition-all group">
+                                    <td className="px-8 py-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="relative">
+                                                {item.thumbnail_url ? (
+                                                    <img
+                                                        src={getFileUrl(item.thumbnail_url)}
+                                                        alt=""
+                                                        className="w-16 h-12 object-cover rounded-xl border-2 border-white shadow-md group-hover:scale-110 transition-transform"
+                                                    />
+                                                ) : (
+                                                    <div className="w-16 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-300 border border-slate-200 italic text-[8px] font-black uppercase">
+                                                        No Img
+                                                    </div>
+                                                )}
+                                                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 text-[8px] font-mono font-black text-slate-300">
+                                                    {item.id}
+                                                </div>
+                                            </div>
+                                            <div className="max-w-xs xl:max-w-md">
+                                                <p className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">{item.title_en}</p>
+                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 italic">
+                                                    {item.content_en.substring(0, 40)}...
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <span className="bg-slate-100 text-slate-500 px-3 py-1 rounded-lg text-[9px] uppercase font-black tracking-widest border border-slate-200 shadow-sm">
+                                            {item.category.replace('_', ' ')}
+                                        </span>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-sm ${item.status === 'published'
+                                            ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                            : 'bg-amber-100 text-amber-700 border border-amber-200'
+                                            }`}>
+                                            {item.status === 'published' ? <FaEye size={8} /> : <FaEyeSlash size={8} />}
+                                            {item.status}
+                                        </span>
+                                    </td>
+                                    <td className="px-8 py-6 text-slate-500 font-bold text-xs italic">
+                                        {new Date(item.published_at || item.created_at).toLocaleDateString(undefined, {
+                                            month: 'short',
+                                            day: 'numeric',
+                                            year: 'numeric'
+                                        })}
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <div className="flex justify-end gap-2">
+                                            <button
+                                                onClick={() => openEdit(item)}
+                                                className="w-10 h-10 flex items-center justify-center bg-white text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all shadow-sm border border-slate-100"
+                                                title="Refine Story"
+                                            >
+                                                <FaEdit size={14} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(item.id, item.title_en)}
+                                                className="w-10 h-10 flex items-center justify-center bg-white text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all shadow-sm border border-slate-100"
+                                                title="Remove Story"
+                                            >
+                                                <FaTrash size={14} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Modal */}
             {showModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
-                            <h2 className="text-xl font-bold text-gray-800">
-                                {editingItem ? 'Edit Post' : 'Add New Post'}
-                            </h2>
-                            <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600">
-                                <FaTimes size={20} />
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+                        <div className="flex items-center justify-between p-6 border-b bg-gray-50/50">
+                            <div>
+                                <h2 className="text-xl font-black text-gray-900 tracking-tight">
+                                    {editingItem ? `Editing: ${editingItem.title_en}` : 'Compose New Post'}
+                                </h2>
+                                <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">Editorial Dashboard</p>
+                            </div>
+                            <button onClick={() => setShowModal(false)} className="bg-white p-2 rounded-full border shadow-sm text-gray-400 hover:text-red-500 hover:border-red-500 transition-all">
+                                <FaTimes size={18} />
                             </button>
                         </div>
-                        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+
+                        <form onSubmit={handleSubmit} className="flex-grow overflow-y-auto p-8 space-y-8 scrollbar-thin scrollbar-thumb-gray-200">
                             {error && (
-                                <p className="text-red-600 bg-red-50 border border-red-200 p-3 rounded-lg text-sm">{error}</p>
+                                <div className="text-red-600 bg-red-50 border-2 border-red-100 p-4 rounded-xl text-sm font-bold flex items-center gap-3">
+                                    <FaTimes className="bg-red-600 text-white p-1 rounded-full" />
+                                    {error}
+                                </div>
                             )}
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-4 col-span-2 md:col-span-1">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Title (English)</label>
+                            {/* Section 1: Titles & Meta */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-4 mb-2">
+                                    <div className="h-4 w-1 bg-blue-600 rounded-full" />
+                                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-400">Basic Information</h3>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="col-span-2">
+                                        <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Title (English) <span className="text-red-500">*</span></label>
                                         <input
                                             type="text"
                                             required
                                             value={form.title_en}
-                                            onChange={(e) => setForm({ ...form, title_en: e.target.value })}
-                                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder="Enter title..."
+                                            onChange={(e) => set('title_en', e.target.value)}
+                                            className="w-full border-2 border-gray-100 bg-gray-50/30 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-bold text-gray-900"
+                                            placeholder="Enter compelling headline..."
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                        <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Category</label>
                                         <select
                                             value={form.category}
-                                            onChange={(e) => setForm({ ...form, category: e.target.value })}
-                                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            onChange={(e) => set('category', e.target.value)}
+                                            className="w-full border-2 border-gray-100 bg-gray-50/30 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-bold text-gray-900 appearance-none"
                                         >
-                                            <option value="news">News</option>
+                                            <option value="news">Local News</option>
                                             <option value="press_release">Press Release</option>
-                                            <option value="update">Update</option>
-                                            <option value="announcement">Announcement</option>
+                                            <option value="update">Project Update</option>
+                                            <option value="announcement">Official Announcement</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                                        <select
-                                            value={form.status}
-                                            onChange={(e) => setForm({ ...form, status: e.target.value })}
-                                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        >
-                                            <option value="draft">Draft</option>
-                                            <option value="published">Published</option>
-                                            <option value="archived">Archived</option>
-                                        </select>
+                                        <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Publication Status</label>
+                                        <div className="flex gap-2">
+                                            {['draft', 'published', 'archived'].map((s) => (
+                                                <button
+                                                    key={s}
+                                                    type="button"
+                                                    onClick={() => set('status', s)}
+                                                    className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${form.status === s
+                                                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
+                                                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                                                        }`}
+                                                >
+                                                    {s}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-4 col-span-2 md:col-span-1">
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Thumbnail Image</label>
-                                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center">
-                                        {(image || editingItem?.thumbnail_url) ? (
-                                            <div className="relative inline-block">
-                                                <img
-                                                    src={image ? URL.createObjectURL(image) : getFileUrl(editingItem!.thumbnail_url!)}
-                                                    className="max-h-32 rounded-lg mx-auto"
-                                                    alt="Preview"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setImage(null)}
-                                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg"
-                                                >
-                                                    <FaTimes size={12} />
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <div className="py-4">
-                                                <FaImage className="mx-auto text-4xl text-gray-300 mb-2" />
-                                                <p className="text-xs text-gray-500">JPEG, PNG, WEBP (Max 5MB)</p>
-                                            </div>
-                                        )}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Title (Amharic)</label>
                                         <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => setImage(e.target.files?.[0] || null)}
-                                            className="mt-3 block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                            type="text"
+                                            value={form.title_am}
+                                            onChange={(e) => set('title_am', e.target.value)}
+                                            className="w-full border-2 border-gray-100 bg-gray-50/30 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-medium"
+                                            placeholder="አርዕስት በዐማርኛ..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Title (Afaan Oromo)</label>
+                                        <input
+                                            type="text"
+                                            value={form.title_or}
+                                            onChange={(e) => set('title_or', e.target.value)}
+                                            className="w-full border-2 border-gray-100 bg-gray-50/30 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-medium"
+                                            placeholder="Mataduree..."
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Content (English)</label>
-                                <textarea
-                                    required
-                                    rows={8}
-                                    value={form.content_en}
-                                    onChange={(e) => setForm({ ...form, content_en: e.target.value })}
-                                    className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                                    placeholder="Write content here..."
-                                />
+                            {/* Section 2: Media */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-4 mb-2">
+                                    <div className="h-4 w-1 bg-[#f5a623] rounded-full" />
+                                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-400">Featured Media</h3>
+                                </div>
+                                <div className="border-2 border-dashed border-gray-200 rounded-3xl p-8 bg-gray-50/50 group hover:border-[#f5a623] transition-all">
+                                    <div className="flex flex-col md:flex-row items-center gap-8">
+                                        <div className="w-full md:w-1/3">
+                                            {imagePreview ? (
+                                                <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                                                    <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => { setImage(null); setImagePreview(''); }}
+                                                        className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-2 shadow-lg hover:scale-110 transition-transform"
+                                                    >
+                                                        <FaTimes size={14} />
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="aspect-video bg-white rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-gray-200 text-gray-300">
+                                                    <FaImage size={40} className="mb-3 opacity-20" />
+                                                    <p className="text-[10px] uppercase font-black tracking-widest">No Image selected</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className="text-lg font-black text-gray-800 mb-2">Upload Cover</h4>
+                                            <p className="text-sm text-gray-500 mb-4 font-medium italic">High-resolution cinematic images work best for premium government storytelling.</p>
+                                            <label className="inline-block bg-white border-2 border-gray-100 px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest cursor-pointer hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm">
+                                                Select Image
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    onChange={(e) => {
+                                                        const f = e.target.files?.[0];
+                                                        if (f) {
+                                                            setImage(f);
+                                                            setImagePreview(URL.createObjectURL(f));
+                                                        }
+                                                    }}
+                                                />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="flex justify-end gap-3 pt-6 border-t mt-6">
+                            {/* Section 3: Content */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-4 mb-2">
+                                    <div className="h-4 w-1 bg-green-500 rounded-full" />
+                                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-400">Narrative Content</h3>
+                                </div>
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Main Content (English) <span className="text-red-500">*</span></label>
+                                        <textarea
+                                            required
+                                            rows={8}
+                                            value={form.content_en}
+                                            onChange={(e) => set('content_en', e.target.value)}
+                                            className="w-full border-2 border-gray-100 bg-gray-50/30 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-medium leading-relaxed"
+                                            placeholder="Write the full story here..."
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Content (Amharic)</label>
+                                            <textarea
+                                                rows={6}
+                                                value={form.content_am}
+                                                onChange={(e) => set('content_am', e.target.value)}
+                                                className="w-full border-2 border-gray-100 bg-gray-50/30 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-medium leading-relaxed"
+                                                placeholder="የዜና ይዘት..."
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Content (Afaan Oromo)</label>
+                                            <textarea
+                                                rows={6}
+                                                value={form.content_or}
+                                                onChange={(e) => set('content_or', e.target.value)}
+                                                className="w-full border-2 border-gray-100 bg-gray-50/30 rounded-2xl px-6 py-4 focus:outline-none focus:border-blue-500 focus:bg-white transition-all font-medium leading-relaxed"
+                                                placeholder="Qabiyyee..."
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end gap-3 pt-8 border-t sticky bottom-0 bg-white/80 backdrop-blur-md pb-4">
                                 <button
                                     type="button"
                                     onClick={() => setShowModal(false)}
-                                    className="px-4 py-2 text-gray-600 border rounded-lg hover:bg-gray-50 transition"
+                                    className="px-8 py-3 text-[10px] font-black uppercase tracking-widest text-gray-500 border-2 border-gray-100 rounded-xl hover:bg-gray-50 transition-all"
                                 >
-                                    Cancel
+                                    Discard
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={saving}
-                                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-bold"
+                                    className="px-10 py-3 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-all disabled:opacity-50 shadow-xl shadow-blue-200"
                                 >
-                                    {saving ? 'Saving...' : editingItem ? 'Update Post' : 'Publish Post'}
+                                    {saving ? 'Processing...' : editingItem ? 'Save Updates' : 'Publish Story'}
                                 </button>
                             </div>
                         </form>

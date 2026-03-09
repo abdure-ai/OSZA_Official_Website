@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { fetchWoredaBySlug, WoredaItem } from '@/lib/api';
 import { FaHome, FaInfoCircle, FaConciergeBell, FaPhone, FaMapMarkerAlt, FaImages } from 'react-icons/fa';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 const NAV_LINKS = (slug: string) => [
     { href: `/woreda/${slug}`, label: 'Home', icon: FaHome },

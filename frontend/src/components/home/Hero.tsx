@@ -4,17 +4,23 @@ import Link from 'next/link';
 import { FaChevronLeft, FaChevronRight, FaCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 const SLIDE_INTERVAL = 8000; // 8 seconds for image slides
 
 interface HeroSlide {
     id: number;
     title_en: string;
     subtitle_en: string;
+    title_am?: string;
+    subtitle_am?: string;
+    title_or?: string;
+    subtitle_or?: string;
     media_url: string;
     media_type: 'image' | 'video';
     cta_text: string;
+    cta_text_am?: string;
+    cta_text_or?: string;
     cta_url: string;
     sort_order: number;
     is_active: boolean;
@@ -81,16 +87,19 @@ export default function Hero() {
         <div className="relative bg-primary text-white overflow-hidden" style={{ minHeight: '600px' }}>
             {/* Background: media or gradient */}
             <div className="absolute inset-0">
-                {hasMedia && slide.media_type === 'video' ? (
+                {hasMedia && (slide.media_type === 'video' || (slide.media_url && slide.media_url.match(/\.(mp4|webm|ogg|mov)$/i))) ? (
                     <video
                         key={slide.id}
-                        src={`${BACKEND_URL}${slide.media_url}`}
                         className="w-full h-full object-cover"
                         autoPlay
                         muted
+                        loop
                         playsInline
                         onEnded={() => slides.length > 1 && next()}
-                    />
+                    >
+                        <source src={slide.media_url.startsWith('http') ? slide.media_url : `${BACKEND_URL}${slide.media_url.startsWith('/') ? '' : '/'}${slide.media_url}`} />
+                        Your browser does not support the video tag.
+                    </video>
                 ) : hasMedia ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -105,12 +114,15 @@ export default function Hero() {
             </div>
 
             {/* Slide Content */}
-            <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
+            <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
                 <div
                     key={slide.id}
-                    className={`max-w-3xl transition-all duration-500 ${isAnimating ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}
+                    className={`max-w-4xl transition-all duration-700 ${isAnimating ? 'opacity-0 translate-y-8' : 'opacity-100 translate-y-0'}`}
                 >
-                    <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                    <span className="inline-block px-4 py-1.5 bg-accent text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6 shadow-xl">
+                        Zone Updates
+                    </span>
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 leading-[1.1] drop-shadow-2xl antialiased italic tracking-tight">
                         {(() => {
                             const title = (slide as any)[`title_${currentLang}`] || slide.title_en;
                             if (title.includes('&')) {
@@ -126,20 +138,20 @@ export default function Hero() {
                             return title;
                         })()}
                     </h1>
-                    <p className="text-lg md:text-xl mb-8 text-gray-200 leading-relaxed">
+                    <p className="text-xl md:text-2xl mb-10 text-gray-100/90 leading-relaxed font-medium drop-shadow-lg max-w-2xl">
                         {(slide as any)[`subtitle_${currentLang}`] || slide.subtitle_en}
                     </p>
                     {slide.cta_text && slide.cta_url && (
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-5">
                             <Link
                                 href={slide.cta_url}
-                                className="bg-accent text-blue-900 font-bold py-3 px-8 rounded-full hover:bg-yellow-400 transition transform hover:scale-105 shadow-lg"
+                                className="bg-accent text-blue-900 font-black py-4 px-10 rounded-full hover:bg-yellow-400 transition transform hover:scale-105 shadow-2xl uppercase tracking-widest text-xs"
                             >
                                 {(slide as any)[`cta_text_${currentLang}`] || slide.cta_text}
                             </Link>
                             <Link
                                 href="/about"
-                                className="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-full hover:bg-white hover:text-blue-900 transition transform hover:scale-105"
+                                className="bg-white/10 border-2 border-white/40 text-white font-black py-4 px-10 rounded-full hover:bg-white hover:text-blue-900 transition transform hover:scale-105 backdrop-blur-md uppercase tracking-widest text-xs"
                             >
                                 {t('learn_more', 'Learn More')}
                             </Link>
@@ -192,3 +204,4 @@ export default function Hero() {
         </div>
     );
 }
+
