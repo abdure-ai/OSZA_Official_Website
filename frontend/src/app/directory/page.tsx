@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { fetchDirectory, DirectoryContact, getFileUrl } from '@/lib/api';
+import { fetchDirectory, DirectoryItem, getFileUrl } from '@/lib/api';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaSearch, FaUser, FaShieldAlt, FaAmbulance, FaFireExtinguisher } from 'react-icons/fa';
 
 const CATEGORIES = ['All', 'Leadership', 'Department', 'Woreda Head', 'Security', 'Health', 'Education', 'Finance'];
 
 export default function DirectoryPage() {
-    const [contacts, setContacts] = useState<DirectoryContact[]>([]);
+    const [contacts, setContacts] = useState<DirectoryItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [category, setCategory] = useState('All');
@@ -23,12 +23,12 @@ export default function DirectoryPage() {
 
     const filteredContacts = contacts.filter(c =>
         c.name_en.toLowerCase().includes(search.toLowerCase()) ||
-        c.position_en.toLowerCase().includes(search.toLowerCase()) ||
+        (c.position_en && c.position_en.toLowerCase().includes(search.toLowerCase())) ||
         (c.department_en && c.department_en.toLowerCase().includes(search.toLowerCase()))
     );
 
     // Grouping by department
-    const groupedContacts = filteredContacts.reduce((acc: { [key: string]: DirectoryContact[] }, contact) => {
+    const groupedContacts = filteredContacts.reduce((acc: { [key: string]: DirectoryItem[] }, contact) => {
         const dept = contact.department_en || 'General Administration';
         if (!acc[dept]) acc[dept] = [];
         acc[dept].push(contact);
