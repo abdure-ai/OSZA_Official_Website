@@ -47,3 +47,4 @@ brain/
 # Actually brain is usually outside the project root in <appDataDir>, but since I'm agentic I should be careful.
 # The user's metadata says c:\laragon\www\Official Website is the workspace.
 # The artifacts are in C:\Users\user\.gemini\antigravity\brain\... which is OUTSIDE. So no need to ignore.
+.implementation_plan.md.resolved

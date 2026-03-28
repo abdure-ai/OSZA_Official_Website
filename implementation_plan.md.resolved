@@ -1,0 +1,71 @@
+# Deployment Plan: Laravel Backend to cPanel
+
+This document outlines the step-by-step process for deploying the Laravel backend to your cPanel hosting environment.
+
+## Step 1: Create the Subdomain in cPanel
+1.  Login to your **cPanel**.
+2.  Navigate to **Subdomains** (or **Domains** > **Create A New Domain**).
+3.  Enter `osz` for the subdomain and select `endrismedicalcenter.com`.
+4.  **Important:** Set the **Document Root** to `/public_html/osz/public`. (Laravel needs its `public` folder to be the web entry point).
+
+## Step 2: Set up MySQL Database
+1.  Go to **MySQL Database Wizard** in cPanel.
+2.  Create a database (e.g., `endrismed_osza`).
+3.  Create a user and generate a strong password.
+4.  Assign the user to the database with **All Privileges**.
+
+## Step 3: Pull the Repository to cPanel
+1.  In cPanel, open **Git™ Version Control**.
+2.  Click **Create**.
+3.  Enter the URL: `https://github.com/abdure-ai/OSZA_Official_Website.git`.
+4.  Set the **Repository Path** to `/public_html/osz`.
+5.  Click **Create**. (If you have SSH access, it's faster to run `git clone` via terminal).
+
+## Step 4: Install Dependencies & Build Assets
+This is the most technical part of the deployment. You have two ways to handle the `vendor` folder (PHP dependencies):
+
+### Option A: If you HAVE SSH Access (Recommended)
+1.  Login to your cPanel terminal or use an SSH client like PuTTY.
+2.  Navigate to the project folder: `cd public_html/osz`
+3.  Run the production install:
+    ```bash
+    composer install --optimize-autoloader --no-dev
+    ```
+
+### Option B: If you DO NOT HAVE SSH Access
+1.  On your **local computer**, open the `backend` folder.
+2.  Compress the `vendor` folder into a `.zip` file.
+3.  In cPanel **File Manager**, upload `vendor.zip` to `/public_html/osz/`.
+4.  Right-click the file and select **Extract**.
+
+### What about Vite Assets?
+I have already simplified this for you! 
+- I ran `npm run build` locally.
+- I updated the [.gitignore](file:///c:/laragon/www/Official%20Website/.gitignore) to allow the `/public/build` folder.
+- I pushed these to GitHub.
+- **Result:** When you pull the repository on cPanel (Step 3), the assets will already be there. You **do not** need to run `npm` on the server.
+
+## Step 5: Configure [.env](file:///c:/laragon/www/Official%20Website/backend/.env) on cPanel
+1.  Open **File Manager** in cPanel.
+2.  Navigate to `/public_html/osz`.
+3.  Create or edit the [.env](file:///c:/laragon/www/Official%20Website/backend/.env) file with these production settings:
+    ```env
+    APP_ENV=production
+    APP_DEBUG=false
+    APP_URL=https://osz.endrismedicalcenter.com
+
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=your_cpanel_db_name
+    DB_USERNAME=your_cpanel_db_user
+    DB_PASSWORD=your_cpanel_db_password
+    ```
+
+## Step 6: Finalize Laravel
+If you have SSH access, run these commands in `/public_html/osz`:
+- `php artisan migrate --force`
+- `php artisan key:generate` (if not already set)
+- `php artisan storage:link`
+- `php artisan config:cache`
+- `php artisan route:cache`
