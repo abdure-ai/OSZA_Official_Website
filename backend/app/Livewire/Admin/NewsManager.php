@@ -15,7 +15,7 @@ class NewsManager extends Component
     public $editingId = null;
     public $title_en, $title_am, $title_or;
     public $content_en, $content_am, $content_or;
-    public $category = 'General';
+    public $category = 'news';
     public $status = 'published';
     public $published_at;
     public $thumbnail;
@@ -28,7 +28,7 @@ class NewsManager extends Component
         'content_en' => 'required|string',
         'content_am' => 'nullable|string',
         'content_or' => 'nullable|string',
-        'category' => 'required|string',
+        'category' => 'required|string|in:news,press_release,update',
         'status' => 'required|in:published,draft',
         'thumbnail' => 'nullable|image|max:4096',
     ];
@@ -41,7 +41,7 @@ class NewsManager extends Component
     public function openCreate()
     {
         $this->reset(['editingId', 'title_en', 'title_am', 'title_or', 'content_en', 'content_am', 'content_or', 'category', 'status', 'thumbnail', 'published_at']);
-        $this->category = 'General';
+        $this->category = 'news';
         $this->status = 'published';
         $this->showModal = true;
     }

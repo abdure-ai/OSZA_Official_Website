@@ -127,9 +127,14 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-sm font-semibold text-gray-700 block mb-1">Category</label><input
-                                wire:model="category"
-                                class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db]">
+                        <div><label class="text-sm font-semibold text-gray-700 block mb-1">Category</label>
+                            <select wire:model="category"
+                                class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db] bg-white">
+                                <option value="">Select Category</option>
+                                <option value="news">News</option>
+                                <option value="press_release">Press Release</option>
+                                <option value="update">Update</option>
+                            </select>
                         </div>
                         <div><label class="text-sm font-semibold text-gray-700 block mb-1">Status</label>
                             <select wire:model="status"
