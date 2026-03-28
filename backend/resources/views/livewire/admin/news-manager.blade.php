@@ -144,9 +144,17 @@
                                     wire:model="title_en"
                                     class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db]">@error('title_en')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror</div>
-                            <div><label class="text-sm font-semibold text-gray-700 block mb-1">Content (EN)
-                                    *</label><textarea wire:model="content_en" rows="8"
-                                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db] resize-none"></textarea>
+                            <div wire:ignore x-data="{
+                                content: @entangle('content_en'),
+                                init() {
+                                    let q = new Quill($refs.editor, { theme: 'snow', placeholder: 'Write article content here...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                    q.on('text-change', () => { this.content = q.root.innerHTML });
+                                    $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
+                                    setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
+                                }
+                            }">
+                                <label class="text-sm font-semibold text-gray-700 block mb-1">Content (EN) *</label>
+                                <div x-ref="editor" class="bg-white min-h-[250px] text-gray-700"></div>
                             </div>
                         </div>
                         <div x-show="tab==='am'" class="space-y-4">
@@ -154,9 +162,17 @@
                                     wire:model="title_am"
                                     class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db]">
                             </div>
-                            <div><label class="text-sm font-semibold text-gray-700 block mb-1">Content (AM)</label><textarea
-                                    wire:model="content_am" rows="8"
-                                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db] resize-none"></textarea>
+                            <div wire:ignore x-data="{
+                                content: @entangle('content_am'),
+                                init() {
+                                    let q = new Quill($refs.editor, { theme: 'snow', placeholder: 'የጽሁፉን ይዘት እዚህ ያስገቡ...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                    q.on('text-change', () => { this.content = q.root.innerHTML });
+                                    $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
+                                    setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
+                                }
+                            }">
+                                <label class="text-sm font-semibold text-gray-700 block mb-1">Content (AM)</label>
+                                <div x-ref="editor" class="bg-white min-h-[250px] text-gray-700" style="font-family: 'Noto Sans Ethiopic', sans-serif;"></div>
                             </div>
                         </div>
                         <div x-show="tab==='or'" class="space-y-4">
@@ -164,9 +180,17 @@
                                     wire:model="title_or"
                                     class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db]">
                             </div>
-                            <div><label class="text-sm font-semibold text-gray-700 block mb-1">Content (OR)</label><textarea
-                                    wire:model="content_or" rows="8"
-                                    class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db] resize-none"></textarea>
+                            <div wire:ignore x-data="{
+                                content: @entangle('content_or'),
+                                init() {
+                                    let q = new Quill($refs.editor, { theme: 'snow', placeholder: 'Qabiyyee barreeffamaa asitti barreessi...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                    q.on('text-change', () => { this.content = q.root.innerHTML });
+                                    $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
+                                    setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
+                                }
+                            }">
+                                <label class="text-sm font-semibold text-gray-700 block mb-1">Content (OR)</label>
+                                <div x-ref="editor" class="bg-white min-h-[250px] text-gray-700"></div>
                             </div>
                         </div>
                     </div>

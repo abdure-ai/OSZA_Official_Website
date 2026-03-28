@@ -35,7 +35,7 @@
 
             {{-- Content --}}
             <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed mb-12">
-                {!! nl2br(e($post->{'content_' . $locale} ?? $post->content_en)) !!}
+                {!! $post->{'content_' . $locale} ?? $post->content_en !!}
             </div>
 
             {{-- Related --}}
