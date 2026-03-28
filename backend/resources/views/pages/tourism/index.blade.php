@@ -3,12 +3,18 @@
 @section('title', __('Visit Oromo Special Zone') . ' — Tourism')
 
 @section('content')
-    @php $locale = session('locale', 'en'); @endphp
+    @php 
+        $locale = session('locale', 'en'); 
+        $heroSlidesData = $heroSlides->map(function($s) {
+            $s->media_url = $s->media_url ? asset($s->media_url) : null;
+            return $s;
+        });
+    @endphp
 
     {{-- ═══════════════════════════════════════════ TOURISM HERO SLIDESHOW ══ --}}
     <div class="relative bg-[#1a56db] text-white overflow-hidden" style="min-height:600px" x-data="{
                                                         current: 0,
-                                                        slides: {{ $heroSlides->isNotEmpty() ? $heroSlides->toJson() : '[{}]' }},
+                                                        slides: {{ $heroSlidesData->isNotEmpty() ? $heroSlidesData->toJson() : '[{}]' }},
                                                         isAnimating: false,
                                                         timer: null,
                                                         goTo(i) {
@@ -30,14 +36,11 @@
                 :class="isAnimating ? 'opacity-0' : 'opacity-100'">
                 <template
                     x-if="slide.media_url && (slide.media_type === 'video' || slide.media_url.match(/\.(mp4|webm|ogg|mov)$/i))">
-                    <video
-                        :src="slide.media_url.startsWith('http') ? slide.media_url : (slide.media_url.startsWith('/') ? slide.media_url : '/' + slide.media_url)"
-                        class="w-full h-full object-cover" autoplay muted loop playsinline @ended="next()"></video>
+                    <video :src="slide.media_url" class="w-full h-full object-cover" autoplay muted loop playsinline @ended="next()"></video>
                 </template>
                 <template
                     x-if="slide.media_url && slide.media_type !== 'video' && !slide.media_url.match(/\.(mp4|webm|ogg|mov)$/i)">
-                    <img :src="slide.media_url.startsWith('http') ? slide.media_url : (slide.media_url.startsWith('/') ? slide.media_url : '/' + slide.media_url)"
-                        :alt="slide.title_en" class="w-full h-full object-cover">
+                    <img :src="slide.media_url" :alt="slide.title_en" class="w-full h-full object-cover">
                 </template>
                 <template x-if="!slide.media_url">
                     <div class="absolute inset-0 bg-blue-900">
