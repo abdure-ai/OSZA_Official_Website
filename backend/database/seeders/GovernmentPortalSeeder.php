@@ -129,6 +129,8 @@ class GovernmentPortalSeeder extends Seeder
                 'status' => 'published',
                 'thumbnail_url' => '/storage/posts/portal_launch.jpg',
                 'published_at' => $now->copy()->subDays(2),
+                'created_at' => $now->copy()->subDays(2),
+                'updated_at' => $now->copy()->subDays(2),
             ],
             [
                 'title_en' => 'Annual Bati Cultural Festival Dates Announced',
@@ -141,6 +143,8 @@ class GovernmentPortalSeeder extends Seeder
                 'status' => 'published',
                 'thumbnail_url' => '/storage/posts/bati_festival.jpg',
                 'published_at' => $now->copy()->subDays(5),
+                'created_at' => $now->copy()->subDays(5),
+                'updated_at' => $now->copy()->subDays(5),
             ],
             [
                 'title_en' => 'New Agricultural Guidelines Released for Farmers',
@@ -153,6 +157,8 @@ class GovernmentPortalSeeder extends Seeder
                 'status' => 'published',
                 'thumbnail_url' => '/storage/posts/agriculture_guide.jpg',
                 'published_at' => $now->copy()->subDays(10),
+                'created_at' => $now->copy()->subDays(10),
+                'updated_at' => $now->copy()->subDays(10),
             ],
             [
                 'title_en' => 'Youth Entrepreneurship Training Completed',
@@ -161,10 +167,12 @@ class GovernmentPortalSeeder extends Seeder
                 'content_en' => 'Over 500 youths from Jile Timuga and Senbete woredas have successfully completed a three-week training program on digital entrepreneurship and business management.',
                 'content_am' => 'ከጅሌ ጥሙጋ እና ሰንበቴ ወረዳዎች የተውጣጡ ከ500 በላይ ወጣቶች በዲጂታል ስራ ፈጠራ እና ቢዝነስ አስተዳደር ላይ የተሰጠውን የሶስት ሳምንት ስልጠና በስኬት አጠናቀቁ።',
                 'content_or' => 'Dargaggoonni 500 ol aanaalee Jillee Dhummuugaa fi Sanbateerraa walitti babba\'an leenjii torbee sadiif uumuu hojii dijitaalaa fi bulchiinsa daldalaa irratti kenname milkiin xumuraniiru.',
-                'category' => 'News',
+                'category' => 'news',
                 'status' => 'published',
                 'thumbnail_url' => '/storage/posts/youth_training.jpg',
                 'published_at' => $now->copy()->subDays(15),
+                'created_at' => $now->copy()->subDays(15),
+                'updated_at' => $now->copy()->subDays(15),
             ],
             [
                 'title_en' => 'Notice: Scheduled System Maintenance',
@@ -177,6 +185,8 @@ class GovernmentPortalSeeder extends Seeder
                 'status' => 'draft',
                 'thumbnail_url' => '/storage/posts/maintenance.jpg',
                 'published_at' => null,
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
         ]);
 

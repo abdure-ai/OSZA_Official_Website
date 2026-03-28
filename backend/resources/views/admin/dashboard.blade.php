@@ -54,7 +54,7 @@
                         <div class="w-2 h-2 rounded-full bg-[#1a56db] flex-shrink-0"></div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-800 truncate">{{ $post->title_en }}</p>
-                            <p class="text-xs text-gray-400">{{ $post->created_at->diffForHumans() }}</p>
+                            <p class="text-xs text-gray-400">{{ $post->created_at?->diffForHumans() ?? 'N/A' }}</p>
                         </div>
                         <span
                             class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-medium">{{ $post->category }}</span>
@@ -81,7 +81,7 @@
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-800">{{ $msg->name }}</p>
                             <p class="text-xs text-gray-500 truncate">{{ $msg->message }}</p>
-                            <p class="text-xs text-gray-400 mt-0.5">{{ $msg->created_at->diffForHumans() }}</p>
+                            <p class="text-xs text-gray-400 mt-0.5">{{ $msg->created_at?->diffForHumans() ?? 'N/A' }}</p>
                         </div>
                     </div>
                 @empty
