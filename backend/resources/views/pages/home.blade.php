@@ -7,22 +7,22 @@
     {{-- ═══════════════════════════════════════════ HERO SLIDESHOW ══ --}}
     @php $locale = session('locale', 'en'); @endphp
     <div class="relative bg-[#1a56db] text-white overflow-hidden" style="min-height:600px" x-data="{
-                                                        current: 0,
-                                                        slides: {{ $heroSlides->isNotEmpty() ? $heroSlides->toJson() : '[{}]' }},
-                                                        isAnimating: false,
-                                                        timer: null,
-                                                        goTo(i) {
-                                                            if(this.isAnimating) return;
-                                                            this.isAnimating = true;
-                                                            this.current = (i + this.slides.length) % this.slides.length;
-                                                            setTimeout(() => this.isAnimating = false, 500);
-                                                            this.resetTimer();
-                                                        },
-                                                        next() { this.goTo(this.current + 1); },
-                                                        prev() { this.goTo(this.current - 1); },
-                                                        resetTimer() { clearTimeout(this.timer); this.timer = setTimeout(() => this.next(), 8000); },
-                                                        init() { if(this.slides.length > 1) this.resetTimer(); }
-                                                     }">
+                                                            current: 0,
+                                                            slides: @js($heroSlides->isNotEmpty() ? $heroSlides : [[]]),
+                                                            isAnimating: false,
+                                                            timer: null,
+                                                            goTo(i) {
+                                                                if(this.isAnimating) return;
+                                                                this.isAnimating = true;
+                                                                this.current = (i + this.slides.length) % this.slides.length;
+                                                                setTimeout(() => this.isAnimating = false, 500);
+                                                                this.resetTimer();
+                                                            },
+                                                            next() { this.goTo(this.current + 1); },
+                                                            prev() { this.goTo(this.current - 1); },
+                                                            resetTimer() { clearTimeout(this.timer); this.timer = setTimeout(() => this.next(), 8000); },
+                                                            init() { if(this.slides.length > 1) this.resetTimer(); }
+                                                         }">
 
         {{-- Background media --}}
         <template x-for="(slide, i) in slides" :key="i">
