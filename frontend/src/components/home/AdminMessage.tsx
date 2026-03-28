@@ -75,28 +75,7 @@ export default function AdminMessageSection() {
                                 </div>
                             </div>
 
-                            <div className="mt-12 flex justify-center lg:justify-end">
-                                <div className="text-right">
-                                    <div className="h-24 w-48 relative flex items-center justify-center">
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Signature_of_Barack_Obama.svg"
-                                            alt="Signature"
-                                            className="h-16 opacity-30 grayscale contrast-200 absolute rotate-[-5deg]"
-                                        />
-                                        <div className="w-full h-[2px] bg-gray-200/50 mt-12" />
-                                    </div>
-                                    <div className="text-[10px] font-black text-gray-300 tracking-[0.3em] uppercase italic mt-2">
-                                        Electronic Verification
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-
-                    {/* Large Decorative Icon */}
-                    <div className="absolute bottom-0 right-0 p-12 opacity-[0.03] pointer-events-none hidden lg:block">
-                        <FaQuoteLeft className="w-64 h-64 text-primary" />
                     </div>
                 </div>
             </div>
