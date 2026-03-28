@@ -74,7 +74,7 @@
                             <div class="relative mb-8">
                                 <div class="absolute inset-0 bg-[#1a56db] rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
                                 @if($leader->photo_url)
-                                    <img src="{{ config('app.url') . $leader->photo_url }}"
+                                    <img src="{{ asset($leader->photo_url) }}"
                                         alt="{{ $leader->{'name_' . $locale} ?? $leader->name_en }}"
                                         class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-xl relative z-10 grayscale group-hover:grayscale-0 transition-all duration-500">
                                 @else
