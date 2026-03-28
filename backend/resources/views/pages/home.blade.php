@@ -209,57 +209,41 @@
     @if($adminMessage && $adminMessage->is_active)
         <section class="py-20 bg-white overflow-hidden">
             <div class="max-w-[1440px] mx-auto px-4">
-                <div
-                    class="bg-gradient-to-br from-[#1a56db]/5 to-white border border-[#1a56db]/10 rounded-[2rem] p-8 md:p-16 relative">
-                    <div
-                        class="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center lg:items-start text-center lg:text-left">
-                        {{-- Admin Photo --}}
-                        <div class="flex-shrink-0 relative w-full lg:w-1/3 flex justify-center lg:justify-start">
-                            <div
-                                class="w-64 h-64 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] rounded-3xl overflow-hidden border-8 border-white shadow-2xl relative z-10 bg-gray-100 transform -rotate-2 hover:rotate-0 transition-transform duration-500">
-                                @if($adminMessage->photo_url)
-                                    <img src="{{ config('app.url') . $adminMessage->photo_url }}" alt="{{ $adminMessage->name }}"
-                                        class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center bg-gray-100 text-[#1a56db]">
-                                        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                clip-rule="evenodd" />
                 <div class="bg-gray-50 border border-gray-100 rounded-2xl p-8 md:p-12 mb-20 shadow-sm relative overflow-hidden">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center relative z-10">
-                <div class="md:col-span-4 text-center">
-                    <div class="relative inline-block mb-4">
-                        @if($adminMessage && $adminMessage->photo_url)
-                            <img src="{{ asset($adminMessage->photo_url) }}"
-                                class="w-48 h-48 md:w-56 md:h-56 rounded-full object-cover border-4 border-white shadow-xl mx-auto">
-                        @else
-                            <div
-                                class="w-48 h-48 md:w-56 md:h-56 rounded-full bg-blue-100 border-4 border-white shadow-xl mx-auto flex items-center justify-center">
-                                <span class="text-blue-300 text-5xl">O</span>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center relative z-10">
+                        <div class="md:col-span-4 text-center">
+                            <div class="relative inline-block mb-4">
+                                @if($adminMessage->photo_url)
+                                    <img src="{{ asset($adminMessage->photo_url) }}"
+                                        class="w-48 h-48 md:w-56 md:h-56 rounded-full object-cover border-4 border-white shadow-xl mx-auto">
+                                @else
+                                    <div
+                                        class="w-48 h-48 md:w-56 md:h-56 rounded-full bg-blue-100 border-4 border-white shadow-xl mx-auto flex items-center justify-center">
+                                        <span class="text-blue-300 text-5xl">O</span>
+                                    </div>
+                                @endif
+                                <div
+                                    class="absolute -bottom-2 -right-2 bg-[#f5a623] text-blue-900 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-2 border-white">
+                                    ✓</div>
                             </div>
-                        @endif
-                        <div
-                            class="absolute -bottom-2 -right-2 bg-[#f5a623] text-blue-900 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-2 border-white">
-                            ✓</div>
-                    </div>
-                    <h3 class="text-xl md:text-2xl font-black text-gray-900 leading-tight">
-                        {{ $adminMessage->{'name_' . $locale} ?? $adminMessage->name_en ?? ($adminMessage->name ?? 'Leadership') }}
-                    </h3>
-                    <p class="text-[#1a56db] font-bold text-sm uppercase tracking-wider mt-1">
-                        {{ $adminMessage->{'title_position_' . $locale} ?? $adminMessage->title_position_en ?? ($adminMessage->title_position ?? 'Administrator') }}
-                    </p>
-                </div>
-                <div class="md:col-span-8">
-                    <svg class="w-12 h-12 text-[#1a56db]/20 mb-4" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                    </svg>
-                    <div class="text-gray-600 text-lg md:text-xl leading-relaxed italic prose max-w-none font-medium">
-                        {!! nl2br(e($adminMessage->{'message_' . $locale} ?? $adminMessage->message_en ?? '')) !!}
+                            <h3 class="text-xl md:text-2xl font-black text-gray-900 leading-tight">
+                                {{ $adminMessage->{'name_' . $locale} ?? $adminMessage->name_en ?? ($adminMessage->name ?? 'Leadership') }}
+                            </h3>
+                            <p class="text-[#1a56db] font-bold text-sm uppercase tracking-wider mt-1">
+                                {{ $adminMessage->{'title_position_' . $locale} ?? $adminMessage->title_position_en ?? ($adminMessage->title_position ?? 'Administrator') }}
+                            </p>
+                        </div>
+                        <div class="md:col-span-8">
+                            <svg class="w-12 h-12 text-[#1a56db]/20 mb-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                            </svg>
+                            <div class="text-gray-600 text-lg md:text-xl leading-relaxed italic prose max-w-none font-medium">
+                                {!! nl2br(e($adminMessage->{'message_' . $locale} ?? $adminMessage->message_en ?? '')) !!}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
             </div>
         </section>
     @endif
