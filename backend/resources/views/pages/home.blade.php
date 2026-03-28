@@ -286,7 +286,7 @@
                         class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col">
                         <div class="h-48 bg-gray-100 relative overflow-hidden">
                             @if($post->thumbnail_url)
-                                <img src="{{ config('app.url') . $post->thumbnail_url }}"
+                                <img src="{{ asset($post->thumbnail_url) }}"
                                     alt="{{ $post->{'title_' . $locale} ?? $post->title_en }}"
                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             @else

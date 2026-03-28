@@ -26,10 +26,9 @@
                     {{ $post->{'title_' . $locale} ?? $post->title_en }}</h1>
             </div>
 
-            {{-- Thumbnail --}}
             @if($post->thumbnail_url)
                 <div class="mb-8 rounded-2xl overflow-hidden h-72 md:h-96">
-                    <img src="{{ config('app.url') . $post->thumbnail_url }}"
+                    <img src="{{ asset($post->thumbnail_url) }}"
                         alt="{{ $post->{'title_' . $locale} ?? $post->title_en }}" class="w-full h-full object-cover">
                 </div>
             @endif
@@ -48,7 +47,7 @@
                             <a href="{{ route('news.show', $r->id) }}"
                                 class="group flex flex-col bg-gray-50 rounded-xl border border-gray-100 hover:border-[#1a56db]/30 hover:shadow-sm transition overflow-hidden">
                                 @if($r->thumbnail_url)
-                                    <img src="{{ config('app.url') . $r->thumbnail_url }}"
+                                    <img src="{{ asset($r->thumbnail_url) }}"
                                         alt="{{ $r->{'title_' . $locale} ?? $r->title_en }}"
                                         class="h-32 w-full object-cover group-hover:scale-105 transition duration-300">
                                 @endif

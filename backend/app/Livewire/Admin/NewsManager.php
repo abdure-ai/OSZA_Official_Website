@@ -87,12 +87,14 @@ class NewsManager extends Component
         }
         $this->showModal = false;
         session()->flash('success', 'News article saved.');
+        $this->dispatch('notify', message: 'Article saved successfully!', type: 'success');
     }
 
     public function delete($id)
     {
         Post::findOrFail($id)->delete();
         session()->flash('success', 'Article deleted.');
+        $this->dispatch('notify', message: 'Article deleted.', type: 'success');
     }
 
     public function render()

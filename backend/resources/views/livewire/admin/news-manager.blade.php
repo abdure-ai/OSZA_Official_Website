@@ -1,4 +1,43 @@
-<div>
+<div x-data="{ showToast: false, toastMessage: '', toastType: 'success' }" 
+     @notify.window="showToast = true; toastMessage = $event.detail.message; toastType = $event.detail.type; setTimeout(() => showToast = false, 3000)">
+    
+    {{-- Toast Notification --}}
+    <div x-show="showToast" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 translate-y-2 sm:translate-y-0 sm:translate-x-2"
+         x-transition:enter-end="opacity-100 translate-y-0 sm:translate-x-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 translate-y-0 sm:translate-x-0"
+         x-transition:leave-end="opacity-0 translate-y-2 sm:translate-y-0 sm:translate-x-2"
+         class="fixed top-5 right-5 z-[100] w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-xl ring-1 ring-black ring-opacity-5"
+         style="display: none;">
+        <div class="p-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <template x-if="toastType === 'success'">
+                        <svg class="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </template>
+                    <template x-if="toastType === 'error'">
+                        <svg class="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </template>
+                </div>
+                <div class="ml-3 w-0 flex-1 pt-0.5">
+                    <p x-text="toastMessage" class="text-sm font-medium text-gray-900"></p>
+                </div>
+                <div class="ml-4 flex flex-shrink-0">
+                    <button @click="showToast = false" type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="flex items-center justify-between mb-6">
         <div>
             <h2 class="text-xl font-bold text-gray-900">News Articles</h2>
@@ -35,11 +74,17 @@
                 @forelse($news as $post)
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-4 py-3">
-                            @if($post->thumbnail_url)
-                                <img src="{{ config('app.url') . $post->thumbnail_url }}"
-                                    class="w-8 h-8 rounded object-cover inline-block mr-2 align-middle border">
-                            @endif
-                            <span class="font-medium text-gray-800">{{ Str::limit($post->title_en, 55) }}</span>
+                            <div class="flex items-center space-x-3">
+                                @if($post->thumbnail_url)
+                                    <img src="{{ asset($post->thumbnail_url) }}"
+                                        class="w-10 h-10 rounded-lg object-cover border border-gray-100 shadow-sm flex-shrink-0">
+                                @else
+                                    <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200 flex-shrink-0">
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                @endif
+                                <span class="font-medium text-gray-800 leading-snug">{{ Str::limit($post->title_en, 55) }}</span>
+                            </div>
                         </td>
                         <td class="px-4 py-3"><span
                                 class="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 rounded font-medium">{{ $post->category }}</span>
@@ -161,6 +206,7 @@
                         Article</button>
                 </div>
             </div>
+        </div>
         </div>
     @endif
 </div>
