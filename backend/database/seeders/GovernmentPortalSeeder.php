@@ -24,6 +24,7 @@ class GovernmentPortalSeeder extends Seeder
         DB::table('vacancies')->truncate();
         DB::table('woredas')->truncate();
         DB::table('tourist_sites')->truncate();
+        DB::table('hero_slides')->truncate();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -498,6 +499,64 @@ class GovernmentPortalSeeder extends Seeder
                 'description_or' => 'Sululoota lagaa mulkii bareedaa qaban kan miilaan deemuuf, suuraa kaasuu fi hawaasa qonnaa aadaa qarqara lagaatti argaman daawwachuuf mijaawaa ta\'an.',
                 'location_name_en' => 'Borders of Kemise and Dawa Chefa',
                 'is_active' => true,
+            ],
+        ]);
+
+        // 7. Hero Slides
+        DB::table('hero_slides')->insert([
+            [
+                'title_en' => 'Welcome to Oromo Special Zone',
+                'title_am' => 'እንኳን ወደ ኦሮሞ ብሔረሰብ አስተዳደር ዞን በደህና መጡ',
+                'title_or' => 'Baga Gara Godina Addaa Oromoo Nagaan Dhuftan',
+                'subtitle_en' => 'Discover the rich history, diverse culture, and rapid development of our growing region.',
+                'subtitle_am' => 'የዞናችንን የበለፀገ ታሪክ፣ የተለያዩ ባህሎች እና ፈጣን እድገት ያግኙ።',
+                'subtitle_or' => 'Seenaa badhaadhaa, aadaa adda addaa fi guddina saffisaa naannoo keenyaa daawwadhaa.',
+                'media_url' => '/storage/hero/slide_1.jpg',
+                'media_type' => 'image',
+                'cta_text' => 'Read More',
+                'cta_text_am' => 'ተጨማሪ ያንብቡ',
+                'cta_text_or' => 'Dabalata Dubbisi',
+                'page' => 'home',
+                'sort_order' => 1,
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title_en' => 'Cultivating Sustainable Growth',
+                'title_am' => 'ዘላቂ የኢኮኖሚ እና የግብርና ልማት',
+                'title_or' => 'Guddina Itti Fufiinsa Qabu Fiduu',
+                'subtitle_en' => 'Investing in modern agriculture and infrastructure to build a prosperous future for all residents.',
+                'subtitle_am' => 'ለሁሉም ነዋሪዎች የበለፀገ የወደፊት ጊዜን ለመገንባት በዘመናዊ ግብርና እና መሠረተ ልማት ላይ ኢንቨስት ማድረግ።',
+                'subtitle_or' => 'Jiraattota hundaaf egeree badhaadhaa ijaaruuf qonna ammayyaa fi bu\'uura misoomaa irratti invast gochuu.',
+                'media_url' => '/storage/hero/slide_2.jpg',
+                'media_type' => 'image',
+                'cta_text' => 'Our Projects',
+                'cta_text_am' => 'ፕሮጀክቶቻችን',
+                'cta_text_or' => 'Pirojektoota Keenya',
+                'page' => 'home',
+                'sort_order' => 2,
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title_en' => 'Experience Our Heritage',
+                'title_am' => 'ቅርሳችንን ይጎብኙ',
+                'title_or' => 'Hambaalee Keenya Daawwadhaa',
+                'subtitle_en' => 'From the historic Bati market to breathtaking landscapes, explore the tourism heart of the region.',
+                'subtitle_am' => 'ከታሪካዊው የባቲ ገበያ እስከ አስደናቂ የተፈጥሮ ገጽታዎች፣ የክልሉን የቱሪዝም ማዕከል ያስሱ።',
+                'subtitle_or' => 'Gabaa seena qabeessa Baatii irraa kaasee hanga uumama dinqisiisaatti, wiirtuu tuuriziimii naannichaa daawwadhaa.',
+                'media_url' => '/storage/hero/slide_3.jpg',
+                'media_type' => 'image',
+                'cta_text' => 'Explore Tourism',
+                'cta_text_am' => 'ቱሪዝምን ያስሱ',
+                'cta_text_or' => 'Tuuriziimii Daawwadhaa',
+                'page' => 'home',
+                'sort_order' => 3,
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
         ]);
     }
