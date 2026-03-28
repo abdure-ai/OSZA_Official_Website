@@ -147,7 +147,7 @@
                             <div wire:ignore x-data="{
                                 content: @entangle('content_en'),
                                 init() {
-                                    let q = new Quill($refs.editor, { theme: 'snow', placeholder: 'Write article content here...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                    let q = new Quill(this.$refs.editor, { theme: 'snow', placeholder: 'Write article content here...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
                                     q.on('text-change', () => { this.content = q.root.innerHTML });
                                     $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
                                     setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
@@ -165,7 +165,7 @@
                             <div wire:ignore x-data="{
                                 content: @entangle('content_am'),
                                 init() {
-                                    let q = new Quill($refs.editor, { theme: 'snow', placeholder: 'የጽሁፉን ይዘት እዚህ ያስገቡ...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                    let q = new Quill(this.$refs.editor, { theme: 'snow', placeholder: 'የጽሁፉን ይዘት እዚህ ያስገቡ...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
                                     q.on('text-change', () => { this.content = q.root.innerHTML });
                                     $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
                                     setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
@@ -183,7 +183,7 @@
                             <div wire:ignore x-data="{
                                 content: @entangle('content_or'),
                                 init() {
-                                    let q = new Quill($refs.editor, { theme: 'snow', placeholder: 'Qabiyyee barreeffamaa asitti barreessi...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                    let q = new Quill(this.$refs.editor, { theme: 'snow', placeholder: 'Qabiyyee barreeffamaa asitti barreessi...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
                                     q.on('text-change', () => { this.content = q.root.innerHTML });
                                     $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
                                     setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
