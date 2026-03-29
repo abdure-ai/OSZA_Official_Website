@@ -39,6 +39,7 @@
     {{-- Footer --}}
     @include('components.footer')
 
+    @stack('modals')
     @livewireScripts
     @stack('scripts')
 </body>

@@ -94,7 +94,8 @@
         </div>
     </div>
 
-    {{-- Sliding Detail View (Modal Slider) - MOVED OUTSIDE FOR STACKING CONTEXT --}}
+    @push('modals')
+    {{-- Sliding Detail View (Modal Slider) - MOVED TO TOP-LEVEL STACK FOR STACKING CONTEXT --}}
     <div x-data="{ 
         selectedAlbum: null,
         imageIndex: 0,
@@ -132,7 +133,7 @@
                     </button>
 
                     {{-- Active Image with Transition --}}
-                    <div class="relative w-full h-full flex flex-col items-center justify-center px-2 md:px-20">
+                    <div class="relative w-full h-full flex flex-col items-center justify-center px-4 md:px-20">
                         <div class="relative w-full h-full flex items-center justify-center transition-all duration-700 ease-in-out">
                             <img :src="'{{ asset('') }}' + selectedAlbum.items[imageIndex].image_url" 
                                 class="max-w-full max-h-full object-contain rounded-3xl shadow-[0_0_120px_rgba(0,0,0,0.5)] animate-zoom-in"
@@ -165,4 +166,5 @@
             </div>
         </template>
     </div>
+    @endpush
 @endsection
