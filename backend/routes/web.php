@@ -57,6 +57,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/woredas', fn() => view('admin.woredas.index'))->name('woredas.index');
         Route::get('/service-sectors', fn() => view('admin.service-sectors.index'))->name('service-sectors.index');
         Route::get('/gallery', fn() => view('admin.gallery.index'))->name('gallery.index');
+        Route::get('/albums', fn() => view('admin.albums.index'))->name('albums.index');
         Route::get('/hero', fn() => view('admin.hero.index'))->name('hero.index');
         Route::get('/tenders', fn() => view('admin.tenders.index'))->name('tenders.index');
         Route::get('/vacancies', fn() => view('admin.vacancies.index'))->name('vacancies.index');

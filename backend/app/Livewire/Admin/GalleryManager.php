@@ -14,15 +14,16 @@ class GalleryManager extends Component
 
     public $showModal = false;
     public $editingId = null;
-    public $title_en, $title_am, $title_or, $category, $woreda_id, $sort_order = 0, $is_active = true;
+    public $title_en, $title_am, $title_or, $category, $album_id, $woreda_id, $sort_order = 0, $is_active = true;
     public $image;
     public $filterWoreda = '';
 
     protected $rules = [
-        'title_en' => 'required|string|max:255',
+        'title_en' => 'nullable|string|max:255',
         'title_am' => 'nullable|string|max:255',
         'title_or' => 'nullable|string|max:255',
         'category' => 'nullable|string',
+        'album_id' => 'nullable|exists:albums,id',
         'woreda_id' => 'nullable|exists:woredas,id',
         'sort_order' => 'integer|min:0',
         'is_active' => 'boolean',
@@ -36,7 +37,7 @@ class GalleryManager extends Component
 
     public function openCreate()
     {
-        $this->reset(['editingId', 'title_en', 'title_am', 'title_or', 'category', 'woreda_id', 'image']);
+        $this->reset(['editingId', 'title_en', 'title_am', 'title_or', 'category', 'album_id', 'woreda_id', 'image']);
         $this->sort_order = 0;
         $this->is_active = true;
         $this->showModal = true;
@@ -50,6 +51,7 @@ class GalleryManager extends Component
         $this->title_am = $item->title_am;
         $this->title_or = $item->title_or;
         $this->category = $item->category;
+        $this->album_id = $item->album_id;
         $this->woreda_id = $item->woreda_id;
         $this->sort_order = $item->sort_order;
         $this->is_active = (bool) $item->is_active;
@@ -64,6 +66,7 @@ class GalleryManager extends Component
             'title_am' => $this->title_am,
             'title_or' => $this->title_or,
             'category' => $this->category,
+            'album_id' => $this->album_id ?: null,
             'woreda_id' => $this->woreda_id ?: null,
             'sort_order' => $this->sort_order,
             'is_active' => $this->is_active ? 1 : 0
@@ -95,6 +98,7 @@ class GalleryManager extends Component
     {
         $items = GalleryItem::when($this->filterWoreda, fn($q) => $q->where('woreda_id', $this->filterWoreda))->orderBy('sort_order')->paginate(12);
         $woredas = Woreda::orderBy('name_en')->get();
-        return view('livewire.admin.gallery-manager', compact('items', 'woredas'));
+        $albums = \App\Models\Album::orderBy('title_en')->get();
+        return view('livewire.admin.gallery-manager', compact('items', 'woredas', 'albums'));
     }
 }

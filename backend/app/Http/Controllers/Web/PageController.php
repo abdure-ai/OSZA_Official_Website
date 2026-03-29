@@ -17,6 +17,7 @@ use App\Models\Project;
 use App\Models\DirectoryRecord;
 use App\Models\ContactMessage;
 use App\Models\TouristSite;
+use App\Models\Album;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -85,10 +86,16 @@ class PageController extends Controller
     // ── Gallery ───────────────────────────────────────────────────────────────
     public function gallery(Request $request)
     {
-        $categories = GalleryItem::where('is_active', 1)->select('category')->groupBy('category')->pluck('category');
-        $activeCategory = $request->get('category', $categories->first());
-        $items = GalleryItem::where('is_active', 1)->when($activeCategory, fn($q) => $q->where('category', $activeCategory))->orderBy('sort_order')->get();
-        return view('pages.gallery', compact('categories', 'activeCategory', 'items'));
+        $categories = Album::where('is_active', 1)->distinct()->pluck('category')->filter();
+        $activeCategory = $request->get('category');
+        
+        $albums = Album::where('is_active', 1)
+            ->when($activeCategory, fn($q) => $q->where('category', $activeCategory))
+            ->with(['items' => fn($q) => $q->where('is_active', 1)->orderBy('sort_order')])
+            ->orderBy('sort_order')
+            ->get();
+            
+        return view('pages.gallery', compact('categories', 'activeCategory', 'albums'));
     }
 
     // ── About ─────────────────────────────────────────────────────────────────

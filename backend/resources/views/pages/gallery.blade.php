@@ -46,69 +46,119 @@
             @endforeach
         </div>
 
-        {{-- Photo Grid with lightbox --}}
-        <div class="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3" x-data="{ lightbox: null }">
-            @forelse($items as $item)
+        {{-- Album Grid --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" x-data="{ 
+            selectedAlbum: null,
+            imageIndex: 0,
+            next() { if (this.selectedAlbum && this.imageIndex < this.selectedAlbum.items.length - 1) this.imageIndex++; else this.imageIndex = 0; },
+            prev() { if (this.selectedAlbum && this.imageIndex > 0) this.imageIndex--; else this.imageIndex = this.selectedAlbum.items.length - 1; }
+        }">
+            @forelse($albums as $album)
                 @php 
-                    $title = $item->{'title_' . $locale} ?? $item->title;
+                    $title = $album->{'title_' . $locale} ?? $album->title_en;
+                    $desc = $album->{'description_' . $locale} ?? $album->description_en;
                 @endphp
-                <div class="break-inside-avoid animate-fade-in" style="animation-delay: {{ $loop->index * 100 }}ms">
-                    <div class="relative group rounded-xl overflow-hidden cursor-pointer"
-                        @click="lightbox = { url: '{{ asset($item->image_url) }}', title: '{{ addslashes($title) }}', category: '{{ $item->category }}' }">
-                        <img src="{{ asset($item->image_url) }}" alt="{{ $title }}"
-                            class="w-full object-cover rounded-xl group-hover:scale-110 transition-all duration-700">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-xl flex items-center justify-center">
-                            <div class="text-center p-4">
-                                <svg class="w-10 h-10 text-white mx-auto mb-2 transform scale-50 group-hover:scale-100 transition duration-500" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                                </svg>
-                                <p class="text-white text-[10px] font-black uppercase tracking-[0.2em]">{{ __('view_full_image') }}</p>
+                <div class="group bg-white rounded-[2.5rem] border-2 border-gray-50 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer"
+                    @click="selectedAlbum = {{ json_encode($album->load('items')) }}; imageIndex = 0"
+                    data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    
+                    <div class="aspect-[4/3] relative overflow-hidden">
+                        <img src="{{ asset($album->cover_image_url) }}" alt="{{ $title }}"
+                            class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition duration-500"></div>
+                        <div class="absolute top-6 left-6">
+                            <span class="px-4 py-1.5 bg-white/20 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-full border border-white/30">
+                                {{ $album->category ?: 'General' }}
+                            </span>
+                        </div>
+                        <div class="absolute bottom-6 right-6">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-xl group-hover:bg-blue-900 group-hover:text-white transition duration-500">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
                             </div>
                         </div>
-                        @if($title)
-                            <div
-                                class="absolute inset-x-0 bottom-0 p-6 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 rounded-b-xl z-10">
-                                <span class="inline-block px-2 py-0.5 bg-[#f5a623] text-blue-900 text-[8px] font-black uppercase tracking-widest rounded mb-2">{{ $item->category }}</span>
-                                <p class="text-white text-sm font-bold leading-tight">{{ $title }}</p>
+                    </div>
+
+                    <div class="p-8">
+                        <h3 class="text-xl font-black text-gray-900 uppercase tracking-tight mb-3">{{ $title }}</h3>
+                        <p class="text-sm text-gray-500 font-medium line-clamp-2 leading-relaxed opacity-80 mb-6">{{ $desc }}</p>
+                        <div class="flex items-center justify-between pt-6 border-t border-gray-50">
+                            <span class="text-[10px] font-black text-blue-900 uppercase tracking-[0.2em]">{{ $album->items->count() }} Captured Moments</span>
+                            <div class="flex -space-x-3">
+                                @foreach($album->items->take(3) as $thumb)
+                                    <img src="{{ asset($thumb->image_url) }}" class="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm">
+                                @endforeach
                             </div>
-                        @endif
+                        </div>
                     </div>
                 </div>
             @empty
-                <p class="col-span-4 text-center text-gray-400 py-16">No photos in this category.</p>
+                <div class="col-span-full py-32 text-center bg-gray-50 rounded-[3rem] border-4 border-dashed border-gray-100">
+                    <p class="text-sm font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('no_albums_found') }}</p>
+                </div>
             @endforelse
 
-            {{-- Lightbox Modal Enhanced --}}
-            <div x-show="lightbox" x-transition.opacity
-                class="fixed inset-0 bg-gray-950/95 z-[100] flex items-center justify-center p-4 md:p-12" 
-                @keydown.escape.window="lightbox = null"
-                style="display:none">
-                
-                <div class="relative w-full h-full flex flex-col items-center justify-center" @click="lightbox = null">
-                    <div class="relative max-w-5xl w-full h-full flex flex-col" @click.stop>
-                        {{-- Image Control --}}
-                        <div class="flex-1 relative flex items-center justify-center overflow-hidden">
-                            <img :src="lightbox.url" class="max-w-full max-h-full rounded-2xl object-contain shadow-2xl animate-zoom-in">
+            {{-- Sliding Detail View (Modal Slider) --}}
+            <template x-if="selectedAlbum">
+                <div class="fixed inset-0 bg-gray-950/98 z-[200] flex flex-col items-center justify-center overflow-hidden"
+                    @keydown.escape.window="selectedAlbum = null"
+                    @keydown.right.window="next()"
+                    @keydown.left.window="prev()">
+                    
+                    {{-- Header / Navigation --}}
+                    <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-10 bg-gradient-to-b from-black/50 to-transparent">
+                        <div class="text-white">
+                            <p class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.3em] mb-1" x-text="selectedAlbum.category"></p>
+                            <h2 class="text-2xl md:text-3xl font-black tracking-tight" x-text="selectedAlbum['title_' + '{{ $locale }}'] || selectedAlbum.title_en"></h2>
+                        </div>
+                        <button @click="selectedAlbum = null" class="w-16 h-16 bg-white/10 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black hover:rotate-90 transition-all duration-500 group">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+
+                    {{-- Main Slider Content --}}
+                    <div class="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center p-4">
+                        {{-- Prev Button --}}
+                        <button @click.stop="prev()" class="absolute left-4 md:left-12 p-6 bg-white/5 text-white rounded-full hover:bg-white hover:text-black transition-all duration-300 z-10">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+
+                        {{-- Active Image with Transition --}}
+                        <div class="relative w-full h-full flex items-center justify-center overflow-hidden">
+                            <div class="w-full h-full flex items-center justify-center transition-all duration-700 ease-in-out">
+                                <img :src="'{{ asset('') }}' + selectedAlbum.items[imageIndex].image_url" 
+                                    class="max-w-full max-h-full object-contain rounded-2xl shadow-2xl animate-zoom-in"
+                                    :key="imageIndex">
+                            </div>
+
+                            {{-- Image Caption --}}
+                            <div class="absolute bottom-[-80px] x-show="true" class="text-center animate-slide-up bg-black/40 backdrop-blur-md px-8 py-4 rounded-2xl border border-white/10" :key="'cap-' + imageIndex">
+                                <p class="text-white text-lg font-bold tracking-tight" x-text="selectedAlbum.items[imageIndex]['title_' + '{{ $locale }}'] || selectedAlbum.items[imageIndex].title"></p>
+                            </div>
                         </div>
 
-                        {{-- Metadata Footer --}}
-                        <div class="py-8 text-center animate-slide-up">
-                            <span class="inline-block px-3 py-1 bg-white/10 text-[#f5a623] text-[10px] font-black uppercase tracking-widest rounded-full mb-3" x-text="lightbox.category"></span>
-                            <h2 class="text-white text-xl md:text-3xl font-black tracking-tight leading-tight" x-text="lightbox.title"></h2>
-                        </div>
+                        {{-- Next Button --}}
+                        <button @click.stop="next()" class="absolute right-4 md:right-12 p-6 bg-white/5 text-white rounded-full hover:bg-white hover:text-black transition-all duration-300 z-10">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        </button>
+                    </div>
+
+                    {{-- Thumbnails Navigation --}}
+                    <div class="absolute bottom-8 inset-x-0 flex items-center justify-center gap-3 px-8 overflow-x-auto py-4 no-scrollbar">
+                        <template x-for="(img, idx) in selectedAlbum.items" :key="idx">
+                            <button @click.stop="imageIndex = idx" 
+                                :class="imageIndex === idx ? 'border-[#f5a623] scale-110 opacity-100' : 'border-transparent opacity-40 hover:opacity-100'"
+                                class="flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-xl border-4 overflow-hidden shadow-lg transition-all duration-300">
+                                <img :src="'{{ asset('') }}' + img.image_url" class="w-full h-full object-cover">
+                            </button>
+                        </template>
+                    </div>
+
+                    {{-- Counter --}}
+                    <div class="absolute bottom-40 text-white/40 text-[10px] font-black uppercase tracking-[0.4em]">
+                        <span x-text="imageIndex + 1"></span> of <span x-text="selectedAlbum.items.length"></span>
                     </div>
                 </div>
-
-                <button @click="lightbox = null"
-                    class="absolute top-8 right-8 text-white bg-white/10 hover:bg-white/20 rounded-full w-14 h-14 flex items-center justify-center transition-all hover:rotate-90 z-[110]">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+            </template>
         </div>
     </div>
 @endsection

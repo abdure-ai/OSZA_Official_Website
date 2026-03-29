@@ -175,13 +175,16 @@
                         </div>
 
                         <div class="col-span-1 space-y-4">
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Category</label>
-                            <input wire:model="category" placeholder="e.g. Development, Culture" 
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm transition-all text-gray-900">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-4">Parent Album</label>
+                            <select wire:model="album_id" 
+                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm transition-all text-gray-900 appearance-none">
+                                <option value="">No Album (Isolated)</option>
+                                @foreach($albums as $album)<option value="{{ $album->id }}">{{ $album->title_en }}</option>@endforeach
+                            </select>
                         </div>
 
                         <div class="col-span-1 space-y-4">
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Linked Woreda</label>
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-4">Linked Woreda</label>
                             <select wire:model="woreda_id" 
                                 class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm transition-all text-gray-900 appearance-none">
                                 <option value="">Zone Level</option>

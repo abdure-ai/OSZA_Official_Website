@@ -4,28 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GalleryItem extends Model
+class Album extends Model
 {
     protected $fillable = [
-        'title',
+        'title_en',
         'title_am',
         'title_or',
-        'image_url',
+        'description_en',
+        'description_am',
+        'description_or',
+        'cover_image_url',
         'category',
-        'album_id',
         'woreda_id',
         'sort_order',
         'is_active'
     ];
 
-    public function album()
+    public function items()
     {
-        return $this->belongsTo(Album::class);
+        return $this->hasMany(GalleryItem::class);
     }
 
-    /**
-     * The woreda this gallery item belongs to.
-     */
     public function woreda()
     {
         return $this->belongsTo(Woreda::class);
