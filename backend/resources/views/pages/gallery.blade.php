@@ -108,14 +108,14 @@
     @open-album.window="selectedAlbum = $event.detail.album; imageIndex = $event.detail.index || 0"
     class="relative z-[9999]">
         <template x-if="selectedAlbum">
-            <div class="fixed inset-0 bg-black/98 z-[9999] flex flex-col items-center justify-center overflow-hidden"
+            <div class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center overflow-hidden"
                 @keydown.escape.window="selectedAlbum = null"
                 @keydown.right.window="next()"
                 @keydown.left.window="prev()"
                 x-transition.opacity>
                 
                 {{-- Header / Navigation --}}
-                <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-10 bg-gradient-to-b from-black/80 to-transparent">
+                <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-10 bg-gradient-to-b from-black to-transparent">
                     <div class="text-white">
                         <p class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.3em] mb-1" x-text="selectedAlbum.category"></p>
                         <h2 class="text-2xl md:text-3xl font-black tracking-tight" x-text="selectedAlbum['title_' + '{{ $locale }}'] || selectedAlbum.title_en"></h2>
