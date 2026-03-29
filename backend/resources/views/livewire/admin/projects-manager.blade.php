@@ -304,18 +304,22 @@
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Target Budget</label>
                                     <input wire:model="budget" placeholder="1,000,000.00" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('budget') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Progress (%)</label>
                                     <input wire:model="progress" type="number" min="0" max="100" placeholder="75" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('progress') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Commencement Date</label>
                                     <input type="date" wire:model="start_date" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('start_date') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Projected Handover</label>
                                     <input type="date" wire:model="end_date" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('end_date') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                             </div>
 

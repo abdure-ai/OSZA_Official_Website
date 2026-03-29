@@ -245,6 +245,7 @@
                                         Slug (URL)</label>
                                     <input wire:model="slug" placeholder="e.g. adama-special"
                                         class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl px-5 py-3 font-bold">
+                                    @error('slug') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                                 </div>
                                 <div class="grid grid-cols-3 gap-4">
                                     <div>
@@ -252,6 +253,7 @@
                                             class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Population</label>
                                         <input type="number" wire:model="population"
                                             class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl px-4 py-2 text-sm">
+                                        @error('population') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                                     </div>
                                     <div>
                                         <label
@@ -259,13 +261,15 @@
                                             (km²)</label>
                                         <input type="number" step="0.01" wire:model="area_km2"
                                             class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl px-4 py-2 text-sm">
+                                        @error('area_km2') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                                     </div>
                                     <div>
                                         <label
                                             class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Est.
                                             Year</label>
-                                        <input type="text" wire:model="established_year" placeholder="e.g. 1994"
+                                        <input type="number" wire:model="established_year" placeholder="e.g. 1994"
                                             class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl px-4 py-2 text-sm">
+                                        @error('established_year') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                                     </div>
                                 </div>
                             </div>
@@ -351,6 +355,7 @@
                                         Phone</label>
                                     <input wire:model="contact_phone"
                                         class="w-full bg-white/5 border-2 border-transparent focus:border-blue-500 rounded-2xl px-5 py-3 text-sm font-bold text-white transition-all">
+                                    @error('contact_phone') <p class="text-red-400 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label
@@ -358,6 +363,7 @@
                                         Email</label>
                                     <input wire:model="contact_email"
                                         class="w-full bg-white/5 border-2 border-transparent focus:border-blue-500 rounded-2xl px-5 py-3 text-sm font-bold text-white transition-all">
+                                    @error('contact_email') <p class="text-red-400 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
                                 </div>
                             </div>
                         </div>

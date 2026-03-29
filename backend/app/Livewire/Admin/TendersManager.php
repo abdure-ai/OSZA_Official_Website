@@ -15,7 +15,16 @@ class TendersManager extends Component
     public $title_en, $title_am, $title_or, $description_en;
     public $ref_number, $status = 'open', $deadline, $document;
 
-    protected $rules = ['title_en' => 'required|string|max:255', 'status' => 'required|in:open,closed', 'deadline' => 'nullable|date'];
+    protected $rules = [
+        'title_en' => 'required|string|max:255',
+        'title_am' => 'nullable|string|max:255',
+        'title_or' => 'nullable|string|max:255',
+        'description_en' => 'nullable|string',
+        'ref_number' => 'nullable|string|max:255',
+        'status' => 'required|in:open,closed',
+        'deadline' => 'nullable|date',
+        'document' => 'nullable|file|max:10240'
+    ];
 
     public function openCreate()
     {
@@ -47,11 +56,12 @@ class TendersManager extends Component
             Tender::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'Tender saved.');
+        $this->dispatch('notify', message: 'Tender saved successfully.', type: 'success');
     }
     public function delete($id)
     {
         Tender::findOrFail($id)->delete();
+        $this->dispatch('notify', message: 'Tender deleted.', type: 'info');
     }
     public function render()
     {

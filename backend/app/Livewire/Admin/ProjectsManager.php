@@ -31,7 +31,17 @@ class ProjectsManager extends Component
 
     protected $rules = [
         'title_en' => 'required|string|max:255',
+        'title_am' => 'nullable|string|max:255',
+        'title_or' => 'nullable|string|max:255',
+        'description_en' => 'nullable|string',
+        'location_en' => 'nullable|string|max:255',
+        'contractor' => 'nullable|string|max:255',
+        'funding_source' => 'nullable|string|max:255',
         'status' => 'required|in:planned,ongoing,completed',
+        'budget' => 'nullable|numeric|min:0',
+        'progress' => 'nullable|numeric|min:0|max:100',
+        'start_date' => 'nullable|date',
+        'end_date' => 'nullable|date|after_or_equal:start_date',
         'image' => 'nullable|image|max:4096',
     ];
 

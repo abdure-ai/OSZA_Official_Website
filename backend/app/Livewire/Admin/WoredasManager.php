@@ -31,9 +31,19 @@ class WoredasManager extends Component
 
     protected $rules = [
         'name_en' => 'required|string|max:255',
-        'name_am' => 'nullable|string',
-        'name_or' => 'nullable|string',
-        'slug' => 'nullable|string|alpha_dash',
+        'name_am' => 'nullable|string|max:255',
+        'name_or' => 'nullable|string|max:255',
+        'slug' => 'nullable|string|max:255',
+        'description_en' => 'nullable|string',
+        'description_am' => 'nullable|string',
+        'description_or' => 'nullable|string',
+        'population' => 'nullable|numeric|min:0',
+        'area_km2' => 'nullable|numeric|min:0',
+        'established_year' => 'nullable|integer|min:1800',
+        'contact_phone' => 'nullable|string|max:255',
+        'contact_email' => 'nullable|email|max:255',
+        'banner' => 'nullable|image|max:4096',
+        'logo' => 'nullable|image|max:2048',
         'is_active' => 'boolean',
     ];
 
@@ -153,9 +163,9 @@ class WoredasManager extends Component
             'vision_en' => $this->vision_en,
             'vision_am' => $this->vision_am,
             'vision_or' => $this->vision_or,
-            'population' => $this->population,
-            'area_km2' => $this->area_km2,
-            'established_year' => $this->established_year,
+            'population' => $this->population !== '' && $this->population !== null ? $this->population : null,
+            'area_km2' => $this->area_km2 !== '' && $this->area_km2 !== null ? $this->area_km2 : null,
+            'established_year' => $this->established_year !== '' && $this->established_year !== null ? $this->established_year : null,
             'capital_en' => $this->capital_en,
             'capital_am' => $this->capital_am,
             'capital_or' => $this->capital_or,
@@ -206,13 +216,13 @@ class WoredasManager extends Component
         $woreda->serviceSectors()->sync($syncData);
 
         $this->showModal = false;
-        session()->flash('success', 'Woreda information updated successfully.');
+        $this->dispatch('notify', message: 'Woreda information updated successfully.', type: 'success');
     }
 
     public function delete($id)
     {
         Woreda::findOrFail($id)->delete();
-        session()->flash('success', 'Woreda deleted permanently.');
+        $this->dispatch('notify', message: 'Woreda deleted permanently.', type: 'info');
     }
 
     public function render()

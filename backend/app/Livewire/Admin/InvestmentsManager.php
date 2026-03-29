@@ -30,6 +30,24 @@ class InvestmentsManager extends Component
 
     protected $rules = [
         'title_en' => 'required|string|max:255',
+        'title_am' => 'nullable|string|max:255',
+        'title_or' => 'nullable|string|max:255',
+        'description_en' => 'nullable|string',
+        'description_am' => 'nullable|string',
+        'description_or' => 'nullable|string',
+        'location' => 'nullable|string|max:255',
+        'location_am' => 'nullable|string|max:255',
+        'location_or' => 'nullable|string|max:255',
+        'incentives_en' => 'nullable|string',
+        'incentives_am' => 'nullable|string',
+        'incentives_or' => 'nullable|string',
+        'category' => 'nullable|string|max:255',
+        'sector' => 'nullable|string|max:255',
+        'budget' => 'nullable|numeric|min:0',
+        'status' => 'required|string|max:255',
+        'contact_name' => 'nullable|string|max:255',
+        'contact_phone' => 'nullable|string|max:255',
+        'contact_email' => 'nullable|email|max:255',
         'image' => 'nullable|image|max:4096',
     ];
 
@@ -100,7 +118,7 @@ class InvestmentsManager extends Component
             'incentives_or' => $this->incentives_or,
             'category' => $this->category,
             'sector' => $this->sector,
-            'budget' => $this->budget,
+            'budget' => $this->budget !== '' && $this->budget !== null ? $this->budget : null,
             'status' => $this->status,
             'contact_name' => $this->contact_name,
             'contact_phone' => $this->contact_phone,
@@ -119,13 +137,13 @@ class InvestmentsManager extends Component
         }
         
         $this->showModal = false;
-        session()->flash('success', 'Investment saved.');
+        $this->dispatch('notify', message: 'Investment successfully recorded.', type: 'success');
     }
 
     public function delete($id)
     {
         Investment::findOrFail($id)->delete();
-        session()->flash('success', 'Investment deleted.');
+        $this->dispatch('notify', message: 'Investment deleted.', type: 'info');
     }
 
     public function render()

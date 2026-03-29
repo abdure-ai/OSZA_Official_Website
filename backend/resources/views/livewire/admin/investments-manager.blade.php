@@ -195,28 +195,34 @@
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Asset Classification</label>
                                     <input wire:model="category" placeholder="PPP, Private Equity" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('category') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Economic Sector</label>
                                     <input wire:model="sector" placeholder="Agriculture, Energy" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('sector') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Estimated Budget</label>
                                     <input wire:model="budget" placeholder="$50M - $100M" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('budget') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                             </div>
                             <div class="grid grid-cols-3 gap-6 mb-6">
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Contact Name</label>
                                     <input wire:model="contact_name" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('contact_name') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Contact Phone</label>
                                     <input wire:model="contact_phone" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('contact_phone') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Contact Email</label>
                                     <input wire:model="contact_email" type="email" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('contact_email') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 </div>
                             </div>
                         </div>

@@ -15,7 +15,16 @@ class VacanciesManager extends Component
     public $title_en, $title_am, $title_or, $description_en, $department, $deadline;
     public $is_active = true, $document;
 
-    protected $rules = ['title_en' => 'required|string|max:255', 'deadline' => 'nullable|date'];
+    protected $rules = [
+        'title_en' => 'required|string|max:255',
+        'title_am' => 'nullable|string|max:255',
+        'title_or' => 'nullable|string|max:255',
+        'description_en' => 'nullable|string',
+        'department' => 'nullable|string|max:255',
+        'deadline' => 'nullable|date',
+        'is_active' => 'boolean',
+        'document' => 'nullable|file|max:10240'
+    ];
 
     public function openCreate()
     {
@@ -48,11 +57,12 @@ class VacanciesManager extends Component
             Vacancy::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'Vacancy saved.');
+        $this->dispatch('notify', message: 'Vacancy saved successfully.', type: 'success');
     }
     public function delete($id)
     {
         Vacancy::findOrFail($id)->delete();
+        $this->dispatch('notify', message: 'Vacancy deleted.', type: 'info');
     }
     public function render()
     {
