@@ -88,8 +88,12 @@
                                 <div>
                                     <div class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
                                         {{ $doc->title_en }}</div>
-                                    <div class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
-                                        {{ $doc->file_url ? basename($doc->file_url) : 'No File Attachment' }}</div>
+                                    <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest flex items-center gap-1.5 mt-0.5">
+                                        <svg class="w-2.5 h-2.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                        {{ $doc->file_url ? strtoupper(pathinfo($doc->file_url, PATHINFO_EXTENSION)) . ' Document' : 'No Attachment' }}
+                                    </div>
                                 </div>
                             </div>
                         </td>
