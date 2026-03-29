@@ -59,6 +59,27 @@
 
     @livewireScripts
     @stack('scripts')
+
+    {{-- Global Notification System (Alpine.js) --}}
+    <div x-data="{ show: false, message: '', type: 'success' }"
+        @notify.window="show = true; message = $event.detail.message; type = $event.detail.type || 'success'; setTimeout(() => show = false, 4000)"
+        class="fixed bottom-8 right-8 z-[100] transition-all duration-500 ease-out"
+        x-show="show"
+        x-transition:enter="translate-y-10 opacity-0"
+        x-transition:enter-start="translate-y-10 opacity-0"
+        x-transition:enter-end="translate-y-0 opacity-100"
+        x-transition:leave="translate-y-10 opacity-0"
+        x-transition:leave-start="translate-y-0 opacity-100"
+        x-transition:leave-end="translate-y-10 opacity-0"
+        style="display: none;"
+    >
+        <div :class="type === 'success' ? 'bg-green-600' : 'bg-red-600'" class="px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 text-white font-bold tracking-tight border-2 border-white/20">
+            <svg x-show="type === 'success'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <svg x-show="type === 'error'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <svg x-show="type === 'info'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span x-text="message"></span>
+        </div>
+    </div>
 </body>
 
 </html>

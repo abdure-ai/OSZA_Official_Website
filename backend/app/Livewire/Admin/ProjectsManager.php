@@ -108,17 +108,19 @@ class ProjectsManager extends Component
             'funding_source_am' => $this->funding_source_am,
             'funding_source_or' => $this->funding_source_or,
             'status' => $this->status,
-            'budget' => $this->budget,
-            'progress' => $this->progress,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'is_published' => $this->is_published ?? false,
+            'budget' => $this->budget !== '' && $this->budget !== null ? $this->budget : null,
+            'progress' => $this->progress !== '' && $this->progress !== null ? $this->progress : 0,
+            'start_date' => $this->start_date ?: null,
+            'end_date' => $this->end_date ?: null,
+            'is_published' => $this->is_published ? true : false,
         ];
         
         if ($this->image) {
             $path = $this->image->store('uploads', 'public_uploads');
             $data['cover_image_url'] = '/uploads/' . basename($path);
         }
+        
+        $message = $this->editingId ? 'Project updated successfully!' : 'Project registered successfully!';
         
         if ($this->editingId) {
             Project::findOrFail($this->editingId)->update($data);
@@ -127,7 +129,7 @@ class ProjectsManager extends Component
         }
         
         $this->showModal = false;
-        $this->dispatch('notify', message: 'Project registered successfully!', type: 'success');
+        $this->dispatch('notify', message: $message, type: 'success');
     }
 
     public function delete($id)
