@@ -17,7 +17,7 @@ class VacanciesManager extends Component
     public $requirements_en, $requirements_am, $requirements_or;
     public $department, $deadline, $vacancy_type;
     public $location_en, $location_am, $location_or;
-    public $is_active = true, $document;
+    public $is_active = true, $document, $document_url;
 
     protected $rules = [
         'title_en' => 'required|string|max:255',
@@ -41,14 +41,12 @@ class VacanciesManager extends Component
 
     public function openCreate()
     {
-        $this->reset([
-            'editingId', 'title_en', 'title_am', 'title_or', 
-            'description_en', 'description_am', 'description_or',
-            'requirements_en', 'requirements_am', 'requirements_or',
-            'department', 'deadline', 'vacancy_type',
-            'location_en', 'location_am', 'location_or',
-            'document'
-        ]);
+        $this->editingId = null;
+        $this->title_en = $this->title_am = $this->title_or = null;
+        $this->description_en = $this->description_am = $this->description_or = null;
+        $this->requirements_en = $this->requirements_am = $this->requirements_or = null;
+        $this->location_en = $this->location_am = $this->location_or = null;
+        $this->department = $this->deadline = $this->vacancy_type = $this->document = $this->document_url = null;
         $this->is_active = true;
         $this->showModal = true;
     }
@@ -63,8 +61,9 @@ class VacanciesManager extends Component
             'location_en', 'location_am', 'location_or'
         ];
         foreach ($fields as $f) {
-            $this->$f = $v->$f;
+            $this->$f = $v->$f ?? null;
         }
+        $this->document_url = $v->document_url;
         $this->is_active = (bool) $v->is_active;
         $this->editingId = $id;
         $this->showModal = true;

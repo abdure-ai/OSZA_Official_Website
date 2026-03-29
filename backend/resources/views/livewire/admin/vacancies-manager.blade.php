@@ -53,7 +53,7 @@
             </thead>
             <tbody class="divide-y divide-gray-50">
                 @forelse($vacancies as $v)
-                    <tr class="hover:bg-emerald-50/20 transition-colors group">
+                    <tr wire:key="vacancy-table-{{ $v->id }}" class="hover:bg-emerald-50/20 transition-colors group">
                         <td class="px-8 py-5">
                             <div class="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
                                 {{ $v->title_en }}
@@ -114,7 +114,7 @@
     <div x-show="view === 'grid'" x-cloak>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             @forelse($vacancies as $v)
-                <div
+                <div wire:key="vacancy-grid-{{ $v->id }}"
                     class="group bg-white rounded-3xl border-2 border-gray-50 shadow-sm p-7 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4">
                     <div class="flex items-start justify-between gap-3">
                         <div class="flex-1">

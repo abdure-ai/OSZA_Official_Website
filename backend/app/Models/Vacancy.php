@@ -19,6 +19,7 @@ class Vacancy extends Model
         'department',
         'vacancy_type',
         'location_en',
+        'document_url',
         'deadline',
         'is_active'
     ];
