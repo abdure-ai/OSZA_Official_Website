@@ -47,7 +47,7 @@
         </div>
 
         {{-- Album Grid --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" x-data="{}">
             @forelse($albums as $album)
                 @php 
                     $title = $album->{'title_' . $locale} ?? $album->title_en;
