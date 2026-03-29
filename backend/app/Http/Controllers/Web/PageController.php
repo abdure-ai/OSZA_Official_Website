@@ -159,6 +159,16 @@ class PageController extends Controller
         return view('pages.investment', compact('investments'));
     }
 
+    public function investmentShow(int $id)
+    {
+        $investment = Investment::findOrFail($id);
+        $related = Investment::where('id', '!=', $id)
+            ->where('category', $investment->category)
+            ->limit(3)
+            ->get();
+        return view('pages.investment.show', compact('investment', 'related'));
+    }
+
     public function directory(Request $request)
     {
         $query = DirectoryRecord::query();

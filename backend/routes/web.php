@@ -26,6 +26,7 @@ Route::get('/vacancies/{id}', [PageController::class, 'vacancyShow'])->name('vac
 Route::get('/projects', [PageController::class, 'projects'])->name('projects.index');
 Route::get('/projects/{id}', [PageController::class, 'projectsShow'])->name('projects.show');
 Route::get('/investment', [PageController::class, 'investment'])->name('investment.index');
+Route::get('/investment/{id}', [PageController::class, 'investmentShow'])->name('investment.show');
 Route::get('/directory', [PageController::class, 'directory'])->name('directory.index');
 Route::post('/contact', [PageController::class, 'contactStore'])->name('contact.store');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact.index');

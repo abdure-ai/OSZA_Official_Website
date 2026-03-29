@@ -32,20 +32,21 @@
                                 </div>
                             </div>
                             <div class="p-5">
-                                <h3 class="font-bold text-gray-900 mb-2 truncate">
-                                    {{ $investment->{'title_' . session('locale', 'en')} ?? $investment->title_en }}</h3>
+                                <h3 class="font-bold text-gray-900 mb-2 truncate group-hover:text-[#1a56db] transition-colors">
+                                    <a href="{{ route('investment.show', $investment->id) }}">{{ $investment->{'title_' . session('locale', 'en')} ?? $investment->title_en }}</a>
+                                </h3>
                                 <p class="text-gray-500 text-xs mb-4 line-clamp-2">
                                     {{ $investment->{'description_' . session('locale', 'en')} ?? $investment->description_en }}
                                 </p>
                                 <div class="flex items-center justify-between">
                                     <span class="text-[10px] font-medium text-gray-400">Sector:
                                         {{ $investment->sector ?: 'Mixed' }}</span>
-                                    <button
+                                    <a href="{{ route('investment.show', $investment->id) }}"
                                         class="text-[#1a56db] font-bold text-xs hover:underline flex items-center gap-1">Details
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 5l7 7-7 7" />
-                                        </svg></button>
+                                        </svg></a>
                                 </div>
                             </div>
                         </div>
