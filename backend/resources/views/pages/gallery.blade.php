@@ -47,22 +47,14 @@
         </div>
 
         {{-- Album Grid --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" x-data="{ 
-            selectedAlbum: null,
-            imageIndex: 0,
-            next() { if (this.selectedAlbum && this.imageIndex < this.selectedAlbum.items.length - 1) this.imageIndex++; else this.imageIndex = 0; },
-            prev() { if (this.selectedAlbum && this.imageIndex > 0) this.imageIndex--; else this.imageIndex = this.selectedAlbum.items.length - 1; }
-        }" x-init="$watch('selectedAlbum', value => {
-            if (value) document.body.style.overflow = 'hidden';
-            else document.body.style.overflow = '';
-        })">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($albums as $album)
                 @php 
                     $title = $album->{'title_' . $locale} ?? $album->title_en;
                     $desc = $album->{'description_' . $locale} ?? $album->description_en;
                 @endphp
                 <div class="group bg-white rounded-[2.5rem] border-2 border-gray-50 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer"
-                    @click="selectedAlbum = {{ json_encode($album->load('items')) }}; imageIndex = 0"
+                    @click="$dispatch('open-album', { album: {{ json_encode($album->load('items')) }}, index: 0 })"
                     data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     
                     <div class="aspect-[4/3] relative overflow-hidden">
@@ -76,7 +68,7 @@
                         </div>
                         <div class="absolute bottom-6 right-6">
                             <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-xl group-hover:bg-blue-900 group-hover:text-white transition duration-500">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                             </div>
                         </div>
                     </div>
@@ -99,72 +91,78 @@
                     <p class="text-sm font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('no_albums_found') }}</p>
                 </div>
             @endforelse
-
-            {{-- Sliding Detail View (Modal Slider) --}}
-            <template x-if="selectedAlbum">
-                <div class="fixed inset-0 bg-black/95 z-[9999] flex flex-col items-center justify-center overflow-hidden"
-                    @keydown.escape.window="selectedAlbum = null"
-                    @keydown.right.window="next()"
-                    @keydown.left.window="prev()"
-                    x-transition.opacity>
-                    
-                    {{-- Header / Navigation --}}
-                    <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-10 bg-gradient-to-b from-black/50 to-transparent">
-                        <div class="text-white">
-                            <p class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.3em] mb-1" x-text="selectedAlbum.category"></p>
-                            <h2 class="text-2xl md:text-3xl font-black tracking-tight" x-text="selectedAlbum['title_' + '{{ $locale }}'] || selectedAlbum.title_en"></h2>
-                        </div>
-                        <button @click="selectedAlbum = null" class="w-16 h-16 bg-white/10 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black hover:rotate-90 transition-all duration-500 group">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                        </button>
-                    </div>
-
-                    {{-- Main Slider Content --}}
-                    <div class="relative w-full h-[75vh] md:h-[80vh] flex items-center justify-center px-4">
-                        {{-- Prev Button (Desktop) --}}
-                        <button @click.stop="prev()" class="hidden md:flex absolute left-8 p-10 bg-white/5 text-white rounded-full hover:bg-white hover:text-black transition-all duration-500 z-10 hover:scale-110 active:scale-90">
-                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                        </button>
-
-                        {{-- Active Image with Transition --}}
-                        <div class="relative w-full h-full flex flex-col items-center justify-center">
-                            <div class="relative w-full h-full flex items-center justify-center transition-all duration-700 ease-in-out">
-                                <img :src="'{{ asset('') }}' + selectedAlbum.items[imageIndex].image_url" 
-                                    class="max-w-full max-h-full object-contain rounded-3xl shadow-[0_0_100px_rgba(255,255,255,0.05)] animate-zoom-in"
-                                    :key="imageIndex">
-                                
-                                {{-- Mobile Controls Overlay --}}
-                                <div class="md:hidden absolute inset-0 flex">
-                                    <div @click.stop="prev()" class="w-1/2 h-full cursor-pointer"></div>
-                                    <div @click.stop="next()" class="w-1/2 h-full cursor-pointer"></div>
-                                </div>
-                            </div>
-
-                            {{-- Image Caption --}}
-                            <div class="mt-8 text-center animate-slide-up" :key="'cap-' + imageIndex">
-                                <span class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.4em] mb-2 block" x-text="(imageIndex + 1) + ' / ' + selectedAlbum.items.length"></span>
-                                <p class="text-white text-xl md:text-3xl font-black tracking-tight" x-text="selectedAlbum.items[imageIndex]['title_' + '{{ $locale }}'] || selectedAlbum.items[imageIndex].title"></p>
-                            </div>
-                        </div>
-
-                        {{-- Next Button (Desktop) --}}
-                        <button @click.stop="next()" class="hidden md:flex absolute right-8 p-10 bg-white/5 text-white rounded-full hover:bg-white hover:text-black transition-all duration-500 z-10 hover:scale-110 active:scale-90">
-                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                        </button>
-                    </div>
-
-                    {{-- Thumbnails Navigation --}}
-                    <div class="w-full max-w-5xl px-8 flex items-center justify-center gap-4 overflow-x-auto py-10 no-scrollbar mt-4">
-                        <template x-for="(img, idx) in selectedAlbum.items" :key="idx">
-                            <button @click.stop="imageIndex = idx" 
-                                :class="imageIndex === idx ? 'border-[#f5a623] scale-110 opacity-100 ring-4 ring-[#f5a623]/20' : 'border-white/10 opacity-30 hover:opacity-100'"
-                                class="flex-shrink-0 w-20 h-20 md:w-28 md:h-28 rounded-2xl border-4 overflow-hidden transition-all duration-500">
-                                <img :src="'{{ asset('') }}' + img.image_url" class="w-full h-full object-cover">
-                            </button>
-                        </template>
-                    </div>
-                </div>
-            </template>
         </div>
+    </div>
+
+    {{-- Sliding Detail View (Modal Slider) - MOVED OUTSIDE FOR STACKING CONTEXT --}}
+    <div x-data="{ 
+        selectedAlbum: null,
+        imageIndex: 0,
+        next() { if (this.selectedAlbum && this.imageIndex < this.selectedAlbum.items.length - 1) this.imageIndex++; else this.imageIndex = 0; },
+        prev() { if (this.selectedAlbum && this.imageIndex > 0) this.imageIndex--; else this.imageIndex = this.selectedAlbum.items.length - 1; }
+    }" x-init="$watch('selectedAlbum', value => {
+        if (value) document.body.style.overflow = 'hidden';
+        else document.body.style.overflow = '';
+    })" 
+    @open-album.window="selectedAlbum = $event.detail.album; imageIndex = $event.detail.index || 0"
+    class="relative z-[9999]">
+        <template x-if="selectedAlbum">
+            <div class="fixed inset-0 bg-black/98 z-[9999] flex flex-col items-center justify-center overflow-hidden"
+                @keydown.escape.window="selectedAlbum = null"
+                @keydown.right.window="next()"
+                @keydown.left.window="prev()"
+                x-transition.opacity>
+                
+                {{-- Header / Navigation --}}
+                <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-10 bg-gradient-to-b from-black/80 to-transparent">
+                    <div class="text-white">
+                        <p class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.3em] mb-1" x-text="selectedAlbum.category"></p>
+                        <h2 class="text-2xl md:text-3xl font-black tracking-tight" x-text="selectedAlbum['title_' + '{{ $locale }}'] || selectedAlbum.title_en"></h2>
+                    </div>
+                    <button @click="selectedAlbum = null" class="w-16 h-16 bg-white/10 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black hover:rotate-90 transition-all duration-500">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+
+                {{-- Main Slider Content --}}
+                <div class="relative w-full h-[75vh] md:h-[80vh] flex items-center justify-center px-4 md:px-12">
+                    {{-- Prev Button (Always Visible) --}}
+                    <button @click.stop="prev()" class="absolute left-4 md:left-12 w-16 h-16 md:w-24 md:h-24 bg-white/5 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 z-20 hover:scale-110 active:scale-90 border border-white/10 shadow-2xl">
+                        <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+
+                    {{-- Active Image with Transition --}}
+                    <div class="relative w-full h-full flex flex-col items-center justify-center px-2 md:px-20">
+                        <div class="relative w-full h-full flex items-center justify-center transition-all duration-700 ease-in-out">
+                            <img :src="'{{ asset('') }}' + selectedAlbum.items[imageIndex].image_url" 
+                                class="max-w-full max-h-full object-contain rounded-3xl shadow-[0_0_120px_rgba(0,0,0,0.5)] animate-zoom-in"
+                                :key="imageIndex">
+                        </div>
+
+                        {{-- Image Caption --}}
+                        <div class="mt-10 text-center animate-slide-up" :key="'cap-' + imageIndex">
+                            <span class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.4em] mb-3 block" x-text="(imageIndex + 1) + ' / ' + selectedAlbum.items.length"></span>
+                            <p class="text-white text-xl md:text-3xl font-black tracking-tight" x-text="selectedAlbum.items[imageIndex]['title_' + '{{ $locale }}'] || selectedAlbum.items[imageIndex].title"></p>
+                        </div>
+                    </div>
+
+                    {{-- Next Button (Always Visible) --}}
+                    <button @click.stop="next()" class="absolute right-4 md:right-12 w-16 h-16 md:w-24 md:h-24 bg-white/5 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 z-20 hover:scale-110 active:scale-90 border border-white/10 shadow-2xl">
+                        <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                </div>
+
+                {{-- Thumbnails Navigation --}}
+                <div class="w-full max-w-5xl px-8 flex items-center justify-center gap-4 overflow-x-auto py-10 no-scrollbar mt-4">
+                    <template x-for="(img, idx) in selectedAlbum.items" :key="idx">
+                        <button @click.stop="imageIndex = idx" 
+                            :class="imageIndex === idx ? 'border-[#f5a623] scale-110 opacity-100 ring-4 ring-[#f5a623]/20 shadow-2xl shadow-[#f5a623]/20' : 'border-white/10 opacity-20 hover:opacity-100'"
+                            class="flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-2xl border-4 overflow-hidden transition-all duration-500">
+                            <img :src="'{{ asset('') }}' + img.image_url" class="w-full h-full object-cover">
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </template>
     </div>
 @endsection
