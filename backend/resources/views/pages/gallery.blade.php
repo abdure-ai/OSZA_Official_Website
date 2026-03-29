@@ -126,30 +126,30 @@
                 </div>
 
                 {{-- Main Slider Content --}}
-                <div class="relative w-full h-[75vh] md:h-[80vh] flex items-center justify-center px-4 md:px-12">
+                <div class="relative w-full h-[65vh] md:h-[70vh] flex items-center justify-center px-4 md:px-12">
                     {{-- Prev Button (Always Visible) --}}
-                    <button @click.stop="prev()" class="absolute left-4 md:left-12 w-16 h-16 md:w-24 md:h-24 bg-white/5 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 z-20 hover:scale-110 active:scale-90 border border-white/10 shadow-2xl">
-                        <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    <button @click.stop="prev()" class="absolute left-4 md:left-12 w-12 h-12 md:w-20 md:h-20 bg-white/5 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 z-20 hover:scale-110 active:scale-90 border border-white/10 shadow-2xl">
+                        <svg class="w-6 h-6 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                     </button>
 
                     {{-- Active Image with Transition --}}
-                    <div class="relative w-full h-full flex flex-col items-center justify-center px-4 md:px-20">
+                    <div class="relative w-full h-full flex flex-col items-center justify-center px-4 md:px-24">
                         <div class="relative w-full h-full flex items-center justify-center transition-all duration-700 ease-in-out">
                             <img :src="'{{ asset('') }}' + selectedAlbum.items[imageIndex].image_url" 
-                                class="max-w-full max-h-full object-contain rounded-3xl shadow-[0_0_120px_rgba(0,0,0,0.5)] animate-zoom-in"
+                                class="max-w-full max-h-full object-contain rounded-2xl shadow-[0_40px_100px_rgba(0,0,0,0.6)] animate-zoom-in"
                                 :key="imageIndex">
                         </div>
 
                         {{-- Image Caption --}}
-                        <div class="mt-10 text-center animate-slide-up" :key="'cap-' + imageIndex">
-                            <span class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.4em] mb-3 block" x-text="(imageIndex + 1) + ' / ' + selectedAlbum.items.length"></span>
-                            <p class="text-white text-xl md:text-3xl font-black tracking-tight" x-text="selectedAlbum.items[imageIndex]['title_' + '{{ $locale }}'] || selectedAlbum.items[imageIndex].title"></p>
+                        <div class="mt-8 text-center animate-slide-up" :key="'cap-' + imageIndex">
+                            <span class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.4em] mb-2 block" x-text="(imageIndex + 1) + ' / ' + selectedAlbum.items.length"></span>
+                            <p class="text-white text-lg md:text-2xl font-black tracking-tight" x-text="selectedAlbum.items[imageIndex]['title_' + '{{ $locale }}'] || selectedAlbum.items[imageIndex].title"></p>
                         </div>
                     </div>
 
                     {{-- Next Button (Always Visible) --}}
-                    <button @click.stop="next()" class="absolute right-4 md:right-12 w-16 h-16 md:w-24 md:h-24 bg-white/5 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 z-20 hover:scale-110 active:scale-90 border border-white/10 shadow-2xl">
-                        <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    <button @click.stop="next()" class="absolute right-4 md:right-12 w-12 h-12 md:w-20 md:h-20 bg-white/5 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 z-20 hover:scale-110 active:scale-90 border border-white/10 shadow-2xl">
+                        <svg class="w-6 h-6 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                     </button>
                 </div>
 
