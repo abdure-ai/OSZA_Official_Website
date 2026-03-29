@@ -342,7 +342,7 @@
                     <a href="{{ route('woreda.show', $woreda->slug) }}"
                         class="group relative rounded-2xl overflow-hidden border border-gray-100 hover:border-[#1a56db]/30 shadow-sm hover:shadow-md transition-all bg-gray-50 flex flex-col items-center p-5 text-center">
                         @if($woreda->logo_url)
-                            <img src="{{ config('app.url') . $woreda->logo_url }}"
+                            <img src="{{ asset($woreda->logo_url) }}"
                                 alt="{{ $woreda->{'name_' . $locale} ?? $woreda->name_en }}"
                                 class="w-14 h-14 rounded-full object-cover mb-3 border-2 border-white shadow">
                         @else
@@ -381,7 +381,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     @foreach($galleryItems->take(8) as $item)
                         <div class="relative h-44 rounded-xl overflow-hidden group">
-                            <img src="{{ config('app.url') . $item->image_url }}" alt="{{ $item->title }}"
+                            <img src="{{ asset($item->image_url) }}" alt="{{ $item->title }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             @if($item->title)
                                 <div

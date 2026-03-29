@@ -48,8 +48,8 @@
             @forelse($items as $item)
                 <div class="break-inside-avoid">
                     <div class="relative group rounded-xl overflow-hidden cursor-pointer"
-                        @click="lightbox = '{{ config('app.url') . $item->image_url }}'">
-                        <img src="{{ config('app.url') . $item->image_url }}" alt="{{ $item->title }}"
+                        @click="lightbox = '{{ asset($item->image_url) }}'">
+                        <img src="{{ asset($item->image_url) }}" alt="{{ $item->title }}"
                             class="w-full object-cover rounded-xl group-hover:scale-105 transition duration-300">
                         <div
                             class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 rounded-xl flex items-center justify-center">

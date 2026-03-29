@@ -24,7 +24,7 @@
         @forelse($items as $item)
             <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden group">
                 <div class="h-40 bg-gray-100 relative overflow-hidden">
-                    <img src="{{ config('app.url') . $item->image_url }}" alt="{{ $item->title }}"
+                    <img src="{{ asset($item->image_url) }}" alt="{{ $item->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                     <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button wire:click="openEdit({{ $item->id }})"

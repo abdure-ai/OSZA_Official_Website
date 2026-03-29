@@ -10,7 +10,7 @@
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
             @if($site->cover_image_url)
-                <img src="{{ config('app.url') . $site->cover_image_url }}" class="w-full h-full object-cover scale-105"
+                <img src="{{ asset($site->cover_image_url) }}" class="w-full h-full object-cover scale-105"
                     alt="{{ $site->name_en }}">
             @else
                 <div class="w-full h-full bg-blue-900"></div>
@@ -91,10 +91,10 @@
                 <div
                     class="sticky top-24 rounded-3xl overflow-hidden shadow-2xl h-[400px] md:h-[600px] border-4 border-white">
                     @if($site->cover_image_url && preg_match('/\.(mp4|mov|webm)$/i', $site->cover_image_url))
-                        <video src="{{ config('app.url') . $site->cover_image_url }}" class="w-full h-full object-cover"
+                        <video src="{{ asset($site->cover_image_url) }}" class="w-full h-full object-cover"
                             autoplay muted loop playsinline></video>
                     @elseif($site->cover_image_url)
-                        <img src="{{ config('app.url') . $site->cover_image_url }}"
+                        <img src="{{ asset($site->cover_image_url) }}"
                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                             alt="{{ $site->name_en }}">
                     @else
@@ -120,7 +120,7 @@
         <section class="py-24 bg-gray-50 overflow-hidden" x-data="{ 
                     lightboxOpen: false, 
                     activeImage: '',
-                    images: {{ json_encode(array_map(fn($url) => config('app.url') . $url, $site->gallery_urls)) }},
+                    images: {{ json_encode(array_map(fn($url) => asset($url), $site->gallery_urls)) }},
                     currentIndex: 0,
                     openLightbox(index) {
                         this.currentIndex = index;
@@ -239,7 +239,7 @@
                     @foreach($related as $rel)
                         <a href="{{ route('tourism.show', $rel->slug) }}" class="group block">
                             <div class="h-72 rounded-[2rem] overflow-hidden mb-6 shadow-md shadow-blue-900/5">
-                                <img src="{{ config('app.url') . $rel->cover_image_url }}"
+                                <img src="{{ asset($rel->cover_image_url) }}"
                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                             </div>
                             <h4 class="text-xl font-black text-gray-900 group-hover:text-blue-600 transition">

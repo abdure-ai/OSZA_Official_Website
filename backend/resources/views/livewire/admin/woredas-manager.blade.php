@@ -45,7 +45,7 @@
                         <div
                             class="w-16 h-16 rounded-2xl bg-gray-50 border-2 border-white shadow-inner flex items-center justify-center overflow-hidden">
                             @if($w->logo_url)
-                                <img src="{{ config('app.url') . $w->logo_url }}" class="w-full h-full object-cover">
+                                <img src="{{ asset($w->logo_url) }}" class="w-full h-full object-cover">
                             @else
                                 <span class="text-2xl font-black text-blue-200">{{ substr($w->name_en, 0, 1) }}</span>
                             @endif

@@ -84,7 +84,7 @@
 
                             @if($vacancy->document_url)
                                 <div class="pt-6 border-t border-white/10">
-                                    <a href="{{ config('app.url') . $vacancy->document_url }}" download
+                                    <a href="{{ asset($vacancy->document_url) }}" download
                                         class="block w-full text-center bg-[#f5a623] text-blue-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-black/20">
                                         Apply for Position
                                     </a>

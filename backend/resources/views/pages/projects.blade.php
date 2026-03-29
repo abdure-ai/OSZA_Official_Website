@@ -29,7 +29,24 @@
         <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent"></div>
     </section>
 
-    <div class="max-w-[1440px] mx-auto px-4 py-10">
+    <div class="max-w-[1440px] mx-auto px-4 py-8">
+        {{-- Status Filter Pills --}}
+        <div class="flex flex-wrap items-center gap-3 mb-10 overflow-x-auto pb-4 no-scrollbar">
+            @php $currentStatus = request('status'); @endphp
+            <a href="{{ route('projects.index') }}" 
+                class="px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-300 {{ !$currentStatus ? 'bg-indigo-600 border-indigo-600 text-white shadow-xl shadow-indigo-500/20' : 'bg-white border-gray-100 text-gray-400 hover:border-indigo-600 hover:text-indigo-600' }}">
+                {{ __('all') ?? 'All' }}
+            </a>
+            <a href="{{ route('projects.index', ['status' => 'Ongoing']) }}" 
+                class="px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-300 {{ $currentStatus === 'Ongoing' ? 'bg-[#f5a623] border-[#f5a623] text-blue-900 shadow-xl shadow-[#f5a623]/20' : 'bg-white border-gray-100 text-gray-400 hover:border-[#f5a623] hover:text-[#f5a623]' }}">
+                {{ __('ongoing') ?? 'Ongoing' }}
+            </a>
+            <a href="{{ route('projects.index', ['status' => 'Completed']) }}" 
+                class="px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-300 {{ $currentStatus === 'Completed' ? 'bg-emerald-600 border-emerald-600 text-white shadow-xl shadow-emerald-500/20' : 'bg-white border-gray-100 text-gray-400 hover:border-emerald-600 hover:text-emerald-600' }}">
+                {{ __('completed') ?? 'Completed' }}
+            </a>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($projects as $project)
                 <div

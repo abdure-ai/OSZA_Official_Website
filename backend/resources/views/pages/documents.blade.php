@@ -53,7 +53,7 @@
                     <div
                         class="relative aspect-[3/4] bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden group-hover:shadow-2xl group-hover:-translate-y-2 transition-all duration-500">
                         @if($doc->cover_image_url)
-                            <img src="{{ config('app.url') . $doc->cover_image_url }}"
+                            <img src="{{ asset($doc->cover_image_url) }}"
                                 alt="{{ $doc->{'title_' . $locale} ?? $doc->title_en }}"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         @else
@@ -85,7 +85,7 @@
                             class="absolute inset-0 bg-blue-900/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-all duration-500 p-6 text-center backdrop-blur-sm z-30">
                             <div class="flex flex-col gap-3 w-full max-w-[160px]">
                                 @if($doc->file_url)
-                                    <a href="{{ config('app.url') . $doc->file_url }}" target="_blank" rel="noopener"
+                                    <a href="{{ asset($doc->file_url) }}" target="_blank" rel="noopener"
                                         class="bg-white text-blue-900 px-6 py-3 rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl transform translate-y-8 group-hover:translate-y-0 transition-all duration-500 flex items-center justify-center gap-2 hover:bg-gray-100 active:scale-95">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -95,7 +95,7 @@
                                         </svg>
                                         Read Online
                                     </a>
-                                    <a href="{{ config('app.url') . $doc->file_url }}" download
+                                    <a href="{{ asset($doc->file_url) }}" download
                                         class="bg-[#f5a623] text-blue-900 px-6 py-3 rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl transform translate-y-12 group-hover:translate-y-0 transition-all duration-700 flex items-center justify-center gap-2 hover:scale-105 active:scale-95">
                                         Download
                                     </a>

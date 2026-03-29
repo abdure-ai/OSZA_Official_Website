@@ -82,7 +82,7 @@
                 @if($woreda->administrator_name)
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-md p-6 text-center">
                         @if($woreda->administrator_photo_url)
-                            <img src="{{ config('app.url') . $woreda->administrator_photo_url }}"
+                            <img src="{{ asset($woreda->administrator_photo_url) }}"
                                 alt="{{ $woreda->administrator_name }}"
                                 class="w-28 h-36 rounded-2xl object-cover border-4 border-white shadow-lg mx-auto mb-4">
                         @else
@@ -147,7 +147,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     @foreach($recentPhotos as $photo)
                         <div class="relative h-36 rounded-xl overflow-hidden group">
-                            <img src="{{ config('app.url') . $photo->image_url }}" alt="{{ $photo->title }}"
+                            <img src="{{ asset($photo->image_url) }}" alt="{{ $photo->title }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-2">
                                 <p class="text-white text-xs font-medium truncate">{{ $photo->title }}</p>

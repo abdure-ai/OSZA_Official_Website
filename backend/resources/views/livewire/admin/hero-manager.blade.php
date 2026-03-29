@@ -29,11 +29,11 @@
                     @if($slide->media_type === 'video')
                         <div
                             class="w-20 h-14 rounded-lg bg-gray-900 flex items-center justify-center flex-shrink-0 border overflow-hidden">
-                            <video src="{{ config('app.url') . $slide->media_url }}" class="w-full h-full object-cover"
+                            <video src="{{ asset($slide->media_url) }}" class="w-full h-full object-cover"
                                 muted></video>
                         </div>
                     @else
-                        <img src="{{ config('app.url') . $slide->media_url }}"
+                        <img src="{{ asset($slide->media_url) }}"
                             class="w-20 h-14 rounded-lg object-cover flex-shrink-0 border">
                     @endif
                 @endif

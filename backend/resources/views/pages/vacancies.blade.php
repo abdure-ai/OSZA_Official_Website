@@ -67,7 +67,7 @@
                                 View Detail
                             </a>
                             @if($vacancy->document_url)
-                                <a href="{{ config('app.url') . $vacancy->document_url }}" target="_blank" download
+                                <a href="{{ asset($vacancy->document_url) }}" target="_blank" download
                                     class="w-full text-center px-6 py-3 bg-blue-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#f5a623] hover:text-blue-900 transition active:scale-95 shadow-lg flex items-center justify-center gap-2">
                                     Apply Now
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

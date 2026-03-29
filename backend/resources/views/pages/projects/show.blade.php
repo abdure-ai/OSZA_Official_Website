@@ -169,7 +169,7 @@
                     @foreach($related as $rel)
                         <a href="{{ route('projects.show', $rel->id) }}" class="group block bg-white rounded-[2rem] border border-gray-100 overflow-hidden shadow-xl hover:-translate-y-2 transition duration-500">
                             <div class="h-64 overflow-hidden relative">
-                                <img src="{{ config('app.url') . ($rel->cover_image_url ?: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800') }}" 
+                                <img src="{{ asset($rel->cover_image_url ?: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800') }}" 
                                      class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                                 <div class="absolute bottom-4 left-4">
                                     <span class="px-3 py-1 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">

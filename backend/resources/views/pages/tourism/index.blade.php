@@ -136,7 +136,7 @@
                         class="group flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
                         <div class="h-80 relative overflow-hidden">
                             @if($site->cover_image_url)
-                                <img src="{{ config('app.url') . $site->cover_image_url }}"
+                                <img src="{{ asset($site->cover_image_url) }}"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             @else
                                 <div class="w-full h-full bg-blue-50 flex items-center justify-center text-blue-200">

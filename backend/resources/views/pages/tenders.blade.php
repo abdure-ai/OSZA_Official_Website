@@ -69,7 +69,7 @@
                             View Detail
                         </a>
                         @if($tender->document_url)
-                            <a href="{{ config('app.url') . $tender->document_url }}" target="_blank" download
+                            <a href="{{ asset($tender->document_url) }}" target="_blank" download
                                 class="w-full text-center px-6 py-2.5 bg-blue-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#f5a623] hover:text-blue-900 transition active:scale-95 shadow-md flex items-center justify-center gap-2">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

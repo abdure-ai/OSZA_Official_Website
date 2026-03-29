@@ -72,7 +72,7 @@
                                 <div
                                     class="w-12 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden border border-gray-200">
                                     @if($doc->cover_image_url)
-                                        <img src="{{ config('app.url') . $doc->cover_image_url }}"
+                                        <img src="{{ asset($doc->cover_image_url) }}"
                                             class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center text-gray-300">
@@ -102,7 +102,7 @@
                         </td>
                         <td class="px-8 py-5 text-right space-x-2">
                             @if($doc->file_url)
-                                <a href="{{ config('app.url') . $doc->file_url }}" target="_blank"
+                                <a href="{{ asset($doc->file_url) }}" target="_blank"
                                     class="inline-flex items-center justify-center w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-600 hover:text-white transition shadow-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -149,7 +149,7 @@
                     class="group bg-white rounded-3xl overflow-hidden border-2 border-gray-50 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="aspect-[3/4] relative overflow-hidden bg-indigo-50">
                         @if($doc->cover_image_url)
-                            <img src="{{ config('app.url') . $doc->cover_image_url }}"
+                            <img src="{{ asset($doc->cover_image_url) }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         @else
                             <div class="w-full h-full flex flex-col items-center justify-center text-indigo-200 p-4">
@@ -162,7 +162,7 @@
                         <div
                             class="absolute inset-0 bg-indigo-900/80 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2 p-3">
                             @if($doc->file_url)
-                                <a href="{{ config('app.url') . $doc->file_url }}" target="_blank"
+                                <a href="{{ asset($doc->file_url) }}" target="_blank"
                                     class="w-9 h-9 bg-white text-indigo-700 rounded-full flex items-center justify-center hover:bg-indigo-50 transition">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -225,15 +225,35 @@
                 </div>
 
                 <div class="p-10 space-y-8 overflow-y-auto">
+                    {{-- Language Tabs --}}
+                    <div class="flex items-center gap-2 p-1 bg-gray-50 rounded-2xl w-fit">
+                        <button wire:click="$set('activeTab', 'en')"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $activeTab === 'en' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-400 hover:text-gray-600' }}">English</button>
+                        <button wire:click="$set('activeTab', 'am')"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $activeTab === 'am' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-400 hover:text-gray-600' }}">Amharic</button>
+                        <button wire:click="$set('activeTab', 'or')"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $activeTab === 'or' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-400 hover:text-gray-600' }}">Oromo</button>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-8">
                         <div class="col-span-2">
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Document
-                                Title (Official)</label>
-                            <input wire:model="title_en" placeholder="e.g. Annual Strategic Growth Plan"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
-                            @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p>
-                            @enderror
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">
+                                Document Title ({{ strtoupper($activeTab) }})
+                            </label>
+
+                            @if($activeTab === 'en')
+                                <input wire:model="title_en" placeholder="e.g. Annual Strategic Growth Plan"
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900 shadow-sm">
+                                @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @elseif($activeTab === 'am')
+                                <input wire:model="title_am" placeholder="የዓመታዊ ስትራቴጂክ ዕድገት ዕቅድ"
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900 shadow-sm">
+                                @error('title_am') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @elseif($activeTab === 'or')
+                                <input wire:model="title_or" placeholder="Karoora Guddina Istaatireejii Waggaa"
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900 shadow-sm">
+                                @error('title_or') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @endif
                         </div>
 
                         <div>
@@ -266,6 +286,7 @@
                                     {{ $file ? 'PDF READY' : 'ARCHIVE PDF' }}
                                 </div>
                             </div>
+                            @error('file') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
                         </div>
 
                         <div class="col-span-1">
@@ -284,6 +305,7 @@
                                     {{ $cover_image ? 'ARTWORK CACHED' : 'UPLOAD COVER' }}
                                 </div>
                             </div>
+                            @error('cover_image') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div wire:loading wire:target="file, cover_image"
@@ -295,9 +317,16 @@
                     <button wire:click="$set('showModal', false)"
                         class="px-8 py-3 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-red-500 transition">Discard
                         Asset</button>
-                    <button wire:click="save"
-                        class="px-12 py-4 bg-indigo-600 text-white rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-indigo-700 transition shadow-xl shadow-indigo-500/30 active:scale-95">
-                        {{ $editingId ? 'Refine Record' : 'Commit to Archive' }}
+                    <button wire:click="save" wire:loading.attr="disabled"
+                        class="px-12 py-4 bg-indigo-600 text-white rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-indigo-700 transition shadow-xl shadow-indigo-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span wire:loading.remove wire:target="save">{{ $editingId ? 'Refine Record' : 'Commit to Archive' }}</span>
+                        <span wire:loading wire:target="save" class="flex items-center gap-2">
+                            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Processing...
+                        </span>
                     </button>
                 </div>
             </div>

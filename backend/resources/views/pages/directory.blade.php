@@ -23,7 +23,7 @@
                     @foreach($members as $record)
                         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
                             @if($record->photo_url)
-                                <img src="{{ config('app.url') . $record->photo_url }}" alt="{{ $record->name }}"
+                                <img src="{{ asset($record->photo_url) }}" alt="{{ $record->name }}"
                                     class="w-12 h-12 rounded-full object-cover flex-shrink-0">
                             @else
                                 <div class="w-12 h-12 rounded-full bg-[#1a56db]/10 flex items-center justify-center flex-shrink-0">

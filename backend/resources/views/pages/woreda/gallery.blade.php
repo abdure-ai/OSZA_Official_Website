@@ -28,8 +28,8 @@
             <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
                 @foreach($items as $item)
                     <div class="break-inside-avoid relative rounded-2xl overflow-hidden group border border-gray-100 shadow-sm cursor-pointer"
-                        @click="$dispatch('open-lightbox', { img: '{{ config('app.url') . $item->image_url }}', title: '{{ $item->title }}' })">
-                        <img src="{{ config('app.url') . $item->image_url }}" alt="{{ $item->title }}"
+                        @click="$dispatch('open-lightbox', { img: '{{ asset($item->image_url) }}', title: '{{ $item->title }}' })">
+                        <img src="{{ asset($item->image_url) }}" alt="{{ $item->title }}"
                             class="w-full h-auto object-cover group-hover:scale-105 transition duration-500">
                         <div
                             class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">

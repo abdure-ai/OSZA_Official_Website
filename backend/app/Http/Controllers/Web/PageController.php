@@ -137,9 +137,16 @@ class PageController extends Controller
         return view('pages.vacancies.show', compact('vacancy'));
     }
 
-    public function projects()
+    public function projects(\Illuminate\Http\Request $request)
     {
-        $projects = Project::where('is_published', 1)->orderByDesc('created_at')->get();
+        $status = $request->get('status');
+        $query = Project::where('is_published', 1);
+
+        if ($status && in_array($status, ['Ongoing', 'Completed'])) {
+            $query->where('status', $status);
+        }
+
+        $projects = $query->orderByDesc('created_at')->get();
         return view('pages.projects', compact('projects'));
     }
 

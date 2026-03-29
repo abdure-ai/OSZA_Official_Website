@@ -6,7 +6,7 @@
     @php
         $locale = session('locale', 'en');
         $title = $document->{'title_' . $locale} ?? $document->title_en ?? 'Document';
-        $fileUrl = config('app.url') . $document->file_url;
+        $fileUrl = asset($document->file_url);
     @endphp
 
     {{-- ── Reader Toolbar ─────────────────────────────────────────────────────── --}}

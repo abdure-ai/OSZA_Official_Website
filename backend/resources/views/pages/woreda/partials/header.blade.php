@@ -4,7 +4,7 @@
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
         @if($woreda->banner_url)
-            <img src="{{ config('app.url') . $woreda->banner_url }}" alt="{{ $woreda->name_en }}"
+            <img src="{{ asset($woreda->banner_url) }}" alt="{{ $woreda->name_en }}"
                 class="w-full h-full object-cover scale-105">
         @else
             <div class="w-full h-full bg-[#1a56db]"></div>
@@ -14,7 +14,7 @@
     <div
         class="relative z-20 max-w-[1440px] mx-auto px-4 pb-12 w-full flex flex-col md:flex-row items-start md:items-end gap-6 text-white">
         @if($woreda->logo_url)
-            <img src="{{ config('app.url') . $woreda->logo_url }}" alt="{{ $woreda->name_en }}"
+            <img src="{{ asset($woreda->logo_url) }}" alt="{{ $woreda->name_en }}"
                 class="w-24 h-24 rounded-3xl object-cover border-4 border-white shadow-2xl flex-shrink-0 bg-white">
         @endif
         <div class="flex-grow">

@@ -16,7 +16,7 @@
                             class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-md transition">
                             <div class="relative h-48">
                                 @if($investment->image_url)
-                                    <img src="{{ config('app.url') . $investment->image_url }}" alt="{{ $investment->title_en }}"
+                                    <img src="{{ asset($investment->image_url) }}" alt="{{ $investment->title_en }}"
                                         class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full bg-blue-50 flex items-center justify-center">

@@ -34,7 +34,7 @@
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 @if($site->cover_image_url)
-                                    <img src="{{ config('app.url') . $site->cover_image_url }}"
+                                    <img src="{{ asset($site->cover_image_url) }}"
                                         class="w-10 h-10 rounded-lg object-cover border border-gray-100">
                                 @endif
                                 <div>
@@ -179,7 +179,7 @@
                                 <img src="{{ $cover_image->temporaryUrl() }}"
                                     class="w-full h-48 object-cover rounded-xl border-2 border-dashed border-gray-100">
                             @elseif($cover_image_url)
-                                <img src="{{ config('app.url') . $cover_image_url }}"
+                                <img src="{{ asset($cover_image_url) }}"
                                     class="w-full h-48 object-cover rounded-xl border">
                             @endif
                             <input type="file" wire:model="cover_image"
@@ -191,7 +191,7 @@
                             <div class="grid grid-cols-4 gap-2 mb-2">
                                 @foreach($gallery_urls as $idx => $url)
                                     <div class="relative group">
-                                        <img src="{{ config('app.url') . $url }}" class="w-full h-16 object-cover rounded-lg">
+                                        <img src="{{ asset($url) }}" class="w-full h-16 object-cover rounded-lg">
                                         <button wire:click="removeGalleryImage({{ $idx }})"
                                             class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow-lg">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
