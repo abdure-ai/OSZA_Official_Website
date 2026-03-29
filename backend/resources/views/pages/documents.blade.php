@@ -16,14 +16,13 @@
             <div class="max-w-3xl">
                 <span
                     class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6 shadow-xl">
-                    Public Archive
+                    {{ __('public_archive') }}
                 </span>
                 <h1
                     class="text-5xl md:text-7xl font-black mb-4 leading-none antialiased drop-shadow-2xl italic tracking-tight">
                     {{ __('documents') }}
                 </h1>
-                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">Access official publications, legislative
-                    reports, and development policy documents.</p>
+                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">{{ __('library_subtitle') }}</p>
             </div>
         </div>
         {{-- Bottom fade --}}
@@ -37,13 +36,13 @@
                 class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db] w-64">
             <select name="category"
                 class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1a56db] bg-white">
-                <option value="">All Categories</option>
+                <option value="">{{ __('all_categories') }}</option>
                 @foreach($categories as $cat)
                     <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
                 @endforeach
             </select>
             <button type="submit"
-                class="px-5 py-2 bg-[#1a56db] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Filter</button>
+                class="px-5 py-2 bg-[#1a56db] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">{{ __('filter') }}</button>
         </form>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
@@ -68,7 +67,7 @@
                                 </div>
                                 <span
                                     class="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 group-hover:text-indigo-600 transition-colors">
-                                    Official Digital Resource
+                                    {{ __('official_digital_resource') }}
                                 </span>
                                 <div class="absolute inset-0 border-8 border-white/30 rounded-[2rem] pointer-events-none"></div>
                             </div>
@@ -93,11 +92,11 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                                 d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
-                                        Read Online
+                                        {{ __('read_online') }}
                                     </a>
                                     <a href="{{ asset($doc->file_url) }}" download
                                         class="bg-[#f5a623] text-blue-900 px-6 py-3 rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl transform translate-y-12 group-hover:translate-y-0 transition-all duration-700 flex items-center justify-center gap-2 hover:scale-105 active:scale-95">
-                                        Download
+                                        {{ __('download_pdf') }}
                                     </a>
                                 @endif
                             </div>
@@ -114,13 +113,13 @@
                             {{ $doc->{'title_' . $locale} ?? $doc->title_en }}
                         </h3>
                         <p class="text-xs text-gray-400 line-clamp-1 italic font-medium">
-                            {{ $doc->author ?: 'Oromo Special Zone Administration' }}
+                            {{ $doc->author ?: __('osza_full') }}
                         </p>
                     </div>
                 </div>
             @empty
                 <div class="col-span-full text-center py-32 bg-white rounded-[3rem] border-2 border-dashed border-gray-100">
-                    <p class="text-gray-400 font-bold italic">No documents found in the archives.</p>
+                    <p class="text-gray-400 font-bold italic">{{ __('no_documents') }}</p>
                 </div>
             @endforelse
         </div>

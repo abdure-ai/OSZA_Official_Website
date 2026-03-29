@@ -7,16 +7,16 @@
         <div class="max-w-[1440px] mx-auto px-4">
             {{-- Breadcrumb --}}
             <nav class="flex mb-8 text-xs font-black uppercase tracking-widest text-gray-400">
-                <a href="{{ route('home') }}" class="hover:text-blue-600 transition">Home</a>
+                <a href="{{ route('home') }}" class="hover:text-blue-600 transition">{{ __('home') }}</a>
                 <span class="mx-3">/</span>
-                <a href="{{ route('tenders.index') }}" class="hover:text-blue-600 transition">Tenders</a>
+                <a href="{{ route('tenders.index') }}" class="hover:text-blue-600 transition">{{ __('tenders') }}</a>
                 <span class="mx-3">/</span>
                 <span class="text-blue-900 font-black flex items-center gap-2">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
-                    Notice Detail
+                    {{ __('notice_detail') }}
                 </span>
             </nav>
 
@@ -27,12 +27,12 @@
                         <div class="flex flex-wrap items-center gap-4 mb-8">
                             <span
                                 class="px-4 py-1.5 bg-green-100 text-green-700 text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm">
-                                {{ $tender->status }}
+                                {{ __('status_' . $tender->status) }}
                             </span>
                             @if($tender->ref_number)
                                 <span
                                     class="bg-gray-50 text-gray-400 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest">
-                                    REF: {{ $tender->ref_number }}
+                                    {{ __('ref_search') }} {{ $tender->ref_number }}
                                 </span>
                             @endif
                         </div>
@@ -52,12 +52,11 @@
                     {{-- Quick Metadata --}}
                     <div class="bg-blue-900 text-white p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
-                        <h3 class="text-lg font-black mb-8 tracking-tight relative z-10">Procurement Detail</h3>
+                        <h3 class="text-lg font-black mb-8 tracking-tight relative z-10">{{ __('procurement') }}</h3>
 
                         <div class="space-y-6 relative z-10">
                             <div>
-                                <span class="block text-[10px] font-black uppercase tracking-widest opacity-40 mb-1">Closing
-                                    Date</span>
+                                <span class="block text-[10px] font-black uppercase tracking-widest opacity-40 mb-1">{{ __('deadline') }}</span>
                                 <span class="text-lg font-bold text-[#f5a623]">
                                     {{ $tender->deadline instanceof \Carbon\Carbon ? $tender->deadline->format('F d, Y') : $tender->deadline }}
                                 </span>
@@ -70,7 +69,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                         </svg>
-                                        Download Bid Documents
+                                        {{ __('download_pdf') }}
                                     </a>
                                 </div>
                             @endif

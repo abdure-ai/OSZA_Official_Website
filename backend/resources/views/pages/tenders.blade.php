@@ -22,8 +22,7 @@
                     class="text-5xl md:text-7xl font-black mb-4 leading-none antialiased drop-shadow-2xl italic tracking-tight">
                     {{ __('tenders') }}
                 </h1>
-                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">Transparent opportunities for business
-                    and community project partnerships.</p>
+                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">{{ __('tender_subtitle') }}</p>
             </div>
         </div>
         {{-- Bottom fade --}}
@@ -34,13 +33,13 @@
         <form method="GET" class="flex gap-3 mb-8">
             <select name="status"
                 class="px-4 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#1a56db] focus:outline-none">
-                <option value="">All Status</option>
-                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Open</option>
-                <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>Closed</option>
-                <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
+                <option value="">{{ __('all_status') }}</option>
+                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>{{ __('status_active') }}</option>
+                <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>{{ __('status_closed') }}</option>
+                <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>{{ __('status_archived') }}</option>
             </select>
             <button type="submit"
-                class="px-5 py-2 bg-[#1a56db] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Filter</button>
+                class="px-5 py-2 bg-[#1a56db] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">{{ __('filter') }}</button>
         </form>
 
         <div class="space-y-4">
@@ -51,9 +50,9 @@
                         <div class="flex items-center gap-3 mb-2">
                             @php $isActive = $tender->status === 'active'; @endphp
                             <span
-                                class="px-2 py-0.5 text-xs font-semibold rounded-full {{ $isActive ? 'bg-green-100 text-green-700' : ($tender->status === 'closed' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500') }}">{{ ucfirst($tender->status) }}</span>
+                                class="px-2 py-0.5 text-xs font-semibold rounded-full {{ $isActive ? 'bg-green-100 text-green-700' : ($tender->status === 'closed' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500') }}">{{ __('status_' . $tender->status) }}</span>
                             @if($tender->ref_number)
-                                <span class="text-xs text-gray-400">REF: {{ $tender->ref_number }}</span>
+                                <span class="text-xs text-gray-400">{{ __('ref_search') }} {{ $tender->ref_number }}</span>
                             @endif
                         </div>
                         <h3 class="font-bold text-gray-900 text-base">{{ $tender->{'title_' . $locale} ?? $tender->title_en }}
@@ -67,7 +66,7 @@
                     <div class="flex flex-col items-start md:items-end gap-3 flex-shrink-0 min-w-[160px]">
                         <a href="{{ route('tenders.show', $tender->id) }}"
                             class="w-full text-center px-6 py-2.5 bg-white text-blue-900 border-2 border-blue-900 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-50 transition active:scale-95 shadow-sm">
-                            View Detail
+                            {{ __('view_detail') }}
                         </a>
                         @if($tender->file_url)
                             <a href="{{ asset($tender->file_url) }}" target="_blank" download
@@ -76,13 +75,13 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                 </svg>
-                                Download
+                                {{ __('download_pdf') }}
                             </a>
                         @endif
                     </div>
                 </div>
             @empty
-                <div class="text-center py-16 text-gray-400">No tenders available.</div>
+                <div class="text-center py-16 text-gray-400">{{ __('no_tenders') }}</div>
             @endforelse
         </div>
 
