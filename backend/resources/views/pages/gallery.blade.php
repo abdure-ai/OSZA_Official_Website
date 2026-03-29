@@ -1,5 +1,25 @@
 @extends('layouts.app')
 @section('title', __('gallery') . ' — OSZA')
+
+@push('head')
+<style>
+    .gallery-modal-overlay {
+        background-color: #000000 !important;
+        z-index: 999999 !important;
+        position: fixed !important;
+        inset: 0 !important;
+    }
+    .gallery-image-container {
+        height: 55vh !important;
+    }
+    @media (min-width: 768px) {
+        .gallery-image-container {
+            height: 60vh !important;
+        }
+    }
+</style>
+@endpush
+
 @section('content')
     @php $locale = session('locale', 'en'); @endphp
 
@@ -94,8 +114,7 @@
         </div>
     </div>
 
-    @push('modals')
-    {{-- Sliding Detail View (Modal Slider) - MOVED TO TOP-LEVEL STACK FOR STACKING CONTEXT --}}
+    {{-- Fallback: If @stack is missing, the modal will render here but стиле will force it on top --}}
     <div x-data="{ 
         selectedAlbum: null,
         imageIndex: 0,
@@ -105,17 +124,16 @@
         if (value) document.body.style.overflow = 'hidden';
         else document.body.style.overflow = '';
     })" 
-    @open-album.window="selectedAlbum = $event.detail.album; imageIndex = $event.detail.index || 0"
-    class="relative z-[9999]">
+    @open-album.window="selectedAlbum = $event.detail.album; imageIndex = $event.detail.index || 0">
         <template x-if="selectedAlbum">
-            <div class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center overflow-hidden"
+            <div class="gallery-modal-overlay flex flex-col items-center justify-center overflow-hidden"
                 @keydown.escape.window="selectedAlbum = null"
                 @keydown.right.window="next()"
                 @keydown.left.window="prev()"
                 x-transition.opacity>
                 
                 {{-- Header / Navigation --}}
-                <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-10 bg-gradient-to-b from-black to-transparent">
+                <div class="absolute top-0 inset-x-0 p-8 flex items-center justify-between z-10 bg-gradient-to-b from-black via-black/50 to-transparent">
                     <div class="text-white">
                         <p class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.3em] mb-1" x-text="selectedAlbum.category"></p>
                         <h2 class="text-2xl md:text-3xl font-black tracking-tight" x-text="selectedAlbum['title_' + '{{ $locale }}'] || selectedAlbum.title_en"></h2>
@@ -126,7 +144,7 @@
                 </div>
 
                 {{-- Main Slider Content --}}
-                <div class="relative w-full h-[65vh] md:h-[70vh] flex items-center justify-center px-4 md:px-12">
+                <div class="gallery-image-container relative w-full flex items-center justify-center px-4 md:px-12">
                     {{-- Prev Button (Always Visible) --}}
                     <button @click.stop="prev()" class="absolute left-4 md:left-12 w-12 h-12 md:w-20 md:h-20 bg-white/5 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500 z-20 hover:scale-110 active:scale-90 border border-white/10 shadow-2xl">
                         <svg class="w-6 h-6 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
@@ -136,7 +154,7 @@
                     <div class="relative w-full h-full flex flex-col items-center justify-center px-4 md:px-24">
                         <div class="relative w-full h-full flex items-center justify-center transition-all duration-700 ease-in-out">
                             <img :src="'{{ asset('') }}' + selectedAlbum.items[imageIndex].image_url" 
-                                class="max-w-full max-h-full object-contain rounded-2xl shadow-[0_40px_100px_rgba(0,0,0,0.6)] animate-zoom-in"
+                                class="max-w-full max-h-full object-contain rounded-2xl shadow-[0_40px_100px_rgba(0,0,0,0.8)] animate-zoom-in"
                                 :key="imageIndex">
                         </div>
 
@@ -166,5 +184,4 @@
             </div>
         </template>
     </div>
-    @endpush
 @endsection
