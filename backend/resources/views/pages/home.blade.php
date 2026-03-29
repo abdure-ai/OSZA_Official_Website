@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home — Oromo Special Zone Administration')
+@section('title', __('home') . ' — ' . __('osza_full'))
 
 @section('content')
 
@@ -57,7 +57,7 @@
                     class="max-w-4xl">
                     <span
                         class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-4 shadow-xl"
-                        x-text="slide['cta_text_label'] || 'Zone Updates'"></span>
+                        x-text="slide['cta_text_label'] || '{{ __('zone_updates') }}'"></span>
                     <h1 class="text-4xl md:text-6xl font-black mb-6 leading-[1.1] drop-shadow-2xl antialiased"
                         x-text="slide['title_{{ $locale }}'] || slide.title_en || '{{ __('hero_title') }}'"></h1>
                     <p class="text-xl md:text-2xl mb-10 text-gray-100/90 leading-relaxed font-medium drop-shadow-lg max-w-2xl"
@@ -239,16 +239,16 @@
                             <div class="inline-flex items-center gap-3 mb-6">
                                 <span
                                     class="bg-[#1a56db] text-white text-xs font-bold uppercase tracking-[0.2em] px-5 py-2 rounded-full shadow-lg shadow-[#1a56db]/20">
-                                    Official Communication
+                                    {{ __('official_communication') }}
                                 </span>
                             </div>
 
                             <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-2 leading-tight">
-                                {{ $adminMessage->{'name_' . $locale} ?? $adminMessage->name_en ?? ($adminMessage->name ?? 'Leadership') }}
+                                {{ $adminMessage->{'name_' . $locale} ?? $adminMessage->name_en ?? ($adminMessage->name ?? __('leadership')) }}
                             </h2>
                             <p
                                 class="text-[#1a56db] font-bold text-lg md:text-xl mb-10 pb-6 border-b-2 border-dashed border-[#1a56db]/10 inline-block">
-                                {{ $adminMessage->{'title_position_' . $locale} ?? $adminMessage->title_position_en ?? ($adminMessage->title_position ?? 'Administrator') }}
+                                {{ $adminMessage->{'title_position_' . $locale} ?? $adminMessage->title_position_en ?? ($adminMessage->title_position ?? __('position_admin')) }}
                             </p>
 
                             <div class="relative max-w-3xl">
@@ -359,7 +359,7 @@
                         @endif
                     </a>
                 @empty
-                    <p class="col-span-5 text-center text-gray-400 py-8">No woredas found.</p>
+                    <p class="col-span-5 text-center text-gray-400 py-8">{{ __('no_woredas') }}</p>
                 @endforelse
             </div>
         </div>
