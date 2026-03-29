@@ -10,11 +10,11 @@
         inset: 0 !important;
     }
     .gallery-image-container {
-        height: 55vh !important;
+        height: 65vh !important;
     }
     @media (min-width: 768px) {
         .gallery-image-container {
-            height: 60vh !important;
+            height: 75vh !important;
         }
     }
 </style>
