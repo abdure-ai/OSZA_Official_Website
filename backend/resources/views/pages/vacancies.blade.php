@@ -15,12 +15,12 @@
         <div class="max-w-[1440px] mx-auto px-4 relative z-20">
             <div class="max-w-3xl">
                 <span class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6 shadow-xl">
-                    Careers
+                    {{ __('join_our_team') }}
                 </span>
                 <h1 class="text-5xl md:text-7xl font-black mb-4 leading-none antialiased drop-shadow-2xl italic tracking-tight">
                     {{ __('vacancies') }}
                 </h1>
-                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">Build a career with purpose. Join the dedicated team serving the Oromo Special Zone.</p>
+                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">{{ __('careers_subtitle') }}</p>
             </div>
         </div>
         {{-- Bottom fade --}}
@@ -51,7 +51,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
-                                        Deadline:
+                                        {{ __('deadline_label') }}
                                         {{ $vacancy->deadline instanceof \Carbon\Carbon ? $vacancy->deadline->format('M d, Y') : $vacancy->deadline }}
                                     </span>
                                 @endif
@@ -64,12 +64,12 @@
                         <div class="flex-shrink-0 flex flex-col sm:flex-row md:flex-col gap-3 min-w-[180px]">
                             <a href="{{ route('vacancies.show', $vacancy->id) }}" 
                                class="w-full text-center px-6 py-3 bg-white text-blue-900 border-2 border-blue-900 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-50 transition active:scale-95 shadow-sm">
-                                View Detail
+                                {{ __('view_detail') }}
                             </a>
                             @if($vacancy->document_url)
                                 <a href="{{ asset($vacancy->document_url) }}" target="_blank" download
                                     class="w-full text-center px-6 py-3 bg-blue-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#f5a623] hover:text-blue-900 transition active:scale-95 shadow-lg flex items-center justify-center gap-2">
-                                    Apply Now
+                                    {{ __('apply_now') }}
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                     </svg>
@@ -79,7 +79,7 @@
                     </div>
                 </div>
             @empty
-                <div class="text-center py-16 text-gray-400">No vacancies available at this time.</div>
+                <div class="text-center py-16 text-gray-400">{{ __('no_vacancies') }}</div>
             @endforelse
         </div>
         <div class="mt-8">{{ $vacancies->links() }}</div>
