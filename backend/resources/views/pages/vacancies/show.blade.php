@@ -29,7 +29,7 @@
                             </span>
                         </div>
 
-                        <h1 class="text-3xl md:text-5xl font-black text-gray-900 mb-8 italic tracking-tight leading-none">
+                        <h1 class="text-3xl md:text-5xl font-black text-gray-900 mb-8 tracking-tight leading-none">
                             {{ $vacancy->{'title_' . $locale} ?? $vacancy->title_en }}
                         </h1>
 
@@ -62,7 +62,7 @@
                     {{-- Application Card --}}
                     <div class="bg-blue-900 text-white p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
-                        <h3 class="text-lg font-black mb-8 italic tracking-tight relative z-10">{{ __('join_the_team') }}</h3>
+                        <h3 class="text-lg font-black mb-8 tracking-tight relative z-10">{{ __('join_the_team') }}</h3>
 
                         <div class="space-y-6 relative z-10">
                             <div>
@@ -81,10 +81,21 @@
                             </div>
 
                             @if($vacancy->document_url)
-                                <div class="pt-6 border-t border-white/10">
+                                <div class="pt-6 border-t border-white/10 space-y-3">
+                                    <a href="{{ asset($vacancy->document_url) }}" target="_blank"
+                                        class="block w-full text-center bg-white/10 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/20 transition-all flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        {{ __('view_document') }}
+                                    </a>
                                     <a href="{{ asset($vacancy->document_url) }}" download
-                                        class="block w-full text-center bg-[#f5a623] text-blue-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-black/20">
-                                        {{ __('apply_for_position') }}
+                                        class="block w-full text-center bg-[#f5a623] text-blue-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-black/20 flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                        </svg>
+                                        {{ __('apply_now') }}
                                     </a>
                                 </div>
                             @endif

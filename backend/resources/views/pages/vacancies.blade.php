@@ -55,6 +55,20 @@
                                         {{ $vacancy->deadline instanceof \Carbon\Carbon ? $vacancy->deadline->format('M d, Y') : $vacancy->deadline }}
                                     </span>
                                 @endif
+                                @if($vacancy->{'location_' . $locale} ?? $vacancy->location_en)
+                                    <span class="flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        {{ $vacancy->{'location_' . $locale} ?? $vacancy->location_en }}
+                                    </span>
+                                @endif
+                                @if($vacancy->vacancy_type)
+                                    <span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">
+                                        {{ $vacancy->vacancy_type }}
+                                    </span>
+                                @endif
                             </div>
                             @if($vacancy->description_en)
                                 <p class="text-sm text-gray-600 line-clamp-3">
@@ -69,10 +83,10 @@
                             @if($vacancy->document_url)
                                 <a href="{{ asset($vacancy->document_url) }}" target="_blank" download
                                     class="w-full text-center px-6 py-3 bg-blue-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#f5a623] hover:text-blue-900 transition active:scale-95 shadow-lg flex items-center justify-center gap-2">
-                                    {{ __('apply_now') }}
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                     </svg>
+                                    {{ __('apply_now') }}
                                 </a>
                             @endif
                         </div>

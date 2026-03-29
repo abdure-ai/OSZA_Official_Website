@@ -164,8 +164,9 @@
     @if($showModal)
         <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div
-                class="bg-white rounded-[3rem] shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-modal-up">
-                <div class="px-10 py-8 border-b border-gray-50 flex items-center justify-between">
+                class="bg-white rounded-[3rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col animate-modal-up"
+                x-data="{ tab: 'en' }">
+                <div class="px-10 py-8 border-b border-gray-50 flex items-center justify-between bg-emerald-50/10">
                     <div>
                         <h3 class="text-2xl font-black text-gray-900 tracking-tight">
                             {{ $editingId ? 'Evolve' : 'Create' }} Role
@@ -183,38 +184,115 @@
                 </div>
 
                 <div class="p-10 space-y-8 overflow-y-auto">
+                    {{-- Language Tabs --}}
+                    <div class="flex gap-2 p-1.5 bg-gray-50 rounded-2xl w-fit">
+                        <button @click="tab = 'en'" :class="tab === 'en' ? 'bg-white shadow text-emerald-600' : 'text-gray-400'"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">English</button>
+                        <button @click="tab = 'am'" :class="tab === 'am' ? 'bg-white shadow text-emerald-600' : 'text-gray-400'"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">አማርኛ</button>
+                        <button @click="tab = 'or'" :class="tab === 'or' ? 'bg-white shadow text-emerald-600' : 'text-gray-400'"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Afaan Oromoo</button>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-8">
-                        <div class="col-span-2">
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Position
-                                Title (Official)</label>
-                            <input wire:model="title_en" placeholder="e.g. Senior Strategic Planner"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
-                            @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p>
-                            @enderror
+                        {{-- Title --}}
+                        <div class="col-span-2 space-y-4">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Position Title</label>
+                            <div x-show="tab === 'en'">
+                                <input wire:model="title_en" placeholder="e.g. Senior Strategic Planner"
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
+                            </div>
+                            <div x-show="tab === 'am'">
+                                <input wire:model="title_am" placeholder="የሥራ መደብ መጠሪያ..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                            </div>
+                            <div x-show="tab === 'or'">
+                                <input wire:model="title_or" placeholder="Moggaasa Hojii..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                            </div>
                         </div>
 
-                        <div class="col-span-2">
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Role
-                                Responsibilities</label>
-                            <textarea wire:model="description_en" rows="4"
-                                placeholder="Outline the key duties of this position..."
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                        {{-- Description --}}
+                        <div class="col-span-2 space-y-4">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Role Responsibilities</label>
+                            <div x-show="tab === 'en'">
+                                <textarea wire:model="description_en" rows="4"
+                                    placeholder="Outline the key duties of this position..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                            </div>
+                            <div x-show="tab === 'am'">
+                                <textarea wire:model="description_am" rows="4"
+                                    placeholder="የሥራው ኃላፊነቶች..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                            </div>
+                            <div x-show="tab === 'or'">
+                                <textarea wire:model="description_or" rows="4"
+                                    placeholder="Gahee hojii..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                            </div>
                         </div>
 
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Department</label>
+                        {{-- Requirements --}}
+                        <div class="col-span-2 space-y-4">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Candidate Requirements</label>
+                            <div x-show="tab === 'en'">
+                                <textarea wire:model="requirements_en" rows="4"
+                                    placeholder="Education, Experience, Skills..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                            </div>
+                            <div x-show="tab === 'am'">
+                                <textarea wire:model="requirements_am" rows="4"
+                                    placeholder="ትምህርት፣ የሥራ ልምድ፣ ክህሎት..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                            </div>
+                            <div x-show="tab === 'or'">
+                                <textarea wire:model="requirements_or" rows="4"
+                                    placeholder="Barnoota, Muuxannoo, Dandeeettii..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        {{-- Location --}}
+                        <div class="col-span-2 space-y-4">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">Work Location</label>
+                            <div x-show="tab === 'en'">
+                                <input wire:model="location_en" placeholder="e.g. Bishoftu Office"
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                            </div>
+                            <div x-show="tab === 'am'">
+                                <input wire:model="location_am" placeholder="የሥራ ቦታ..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                            </div>
+                            <div x-show="tab === 'or'">
+                                <input wire:model="location_or" placeholder="Bakka Hojii..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                            </div>
+                        </div>
+
+                        {{-- Meta Info --}}
+                        <div class="col-span-1">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Department</label>
                             <input wire:model="department" placeholder="e.g. Finance & Treasury"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm text-gray-900">
                         </div>
 
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Application
-                                Deadline</label>
+                        <div class="col-span-1">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Vacancy Type</label>
+                            <select wire:model="vacancy_type" 
+                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm text-gray-900">
+                                <option value="">Select Type</option>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Internship">Internship</option>
+                            </select>
+                        </div>
+
+                        <div class="col-span-1">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Application Deadline</label>
                             <input type="date" wire:model="deadline"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                class="w-full bg-gray-50 border-2 border-transparent focus:border-emerald-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm text-gray-900">
                         </div>
 
                         <div class="col-span-2 flex items-center justify-between p-6 bg-gray-50 rounded-3xl">
