@@ -14,12 +14,14 @@ class GalleryManager extends Component
 
     public $showModal = false;
     public $editingId = null;
-    public $title, $category, $woreda_id, $sort_order = 0, $is_active = true;
+    public $title_en, $title_am, $title_or, $category, $woreda_id, $sort_order = 0, $is_active = true;
     public $image;
     public $filterWoreda = '';
 
     protected $rules = [
-        'title' => 'nullable|string|max:255',
+        'title_en' => 'required|string|max:255',
+        'title_am' => 'nullable|string|max:255',
+        'title_or' => 'nullable|string|max:255',
         'category' => 'nullable|string',
         'woreda_id' => 'nullable|exists:woredas,id',
         'sort_order' => 'integer|min:0',
@@ -34,7 +36,7 @@ class GalleryManager extends Component
 
     public function openCreate()
     {
-        $this->reset(['editingId', 'title', 'category', 'woreda_id', 'image']);
+        $this->reset(['editingId', 'title_en', 'title_am', 'title_or', 'category', 'woreda_id', 'image']);
         $this->sort_order = 0;
         $this->is_active = true;
         $this->showModal = true;
@@ -44,7 +46,9 @@ class GalleryManager extends Component
     {
         $item = GalleryItem::findOrFail($id);
         $this->editingId = $id;
-        $this->title = $item->title;
+        $this->title_en = $item->title; // Legacy title
+        $this->title_am = $item->title_am;
+        $this->title_or = $item->title_or;
         $this->category = $item->category;
         $this->woreda_id = $item->woreda_id;
         $this->sort_order = $item->sort_order;
@@ -55,7 +59,15 @@ class GalleryManager extends Component
     public function save()
     {
         $this->validate();
-        $data = ['title' => $this->title, 'category' => $this->category, 'woreda_id' => $this->woreda_id ?: null, 'sort_order' => $this->sort_order, 'is_active' => $this->is_active ? 1 : 0];
+        $data = [
+            'title' => $this->title_en,
+            'title_am' => $this->title_am,
+            'title_or' => $this->title_or,
+            'category' => $this->category,
+            'woreda_id' => $this->woreda_id ?: null,
+            'sort_order' => $this->sort_order,
+            'is_active' => $this->is_active ? 1 : 0
+        ];
         if ($this->image) {
             $path = $this->image->store('uploads', 'public_uploads');
             $data['image_url'] = '/uploads/' . basename($path);
@@ -70,13 +82,13 @@ class GalleryManager extends Component
             GalleryItem::create($data);
         }
         $this->showModal = false;
-        $this->dispatch('notify', message: 'Gallery item saved.', type: 'success');
+        $this->dispatch('notify', message: 'Gallery item saved successfully.', type: 'success');
     }
 
     public function delete($id)
     {
         GalleryItem::findOrFail($id)->delete();
-        $this->dispatch('notify', message: 'Item deleted.', type: 'info');
+        $this->dispatch('notify', message: 'Gallery item removed.', type: 'info');
     }
 
     public function render()
