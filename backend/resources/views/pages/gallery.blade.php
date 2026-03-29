@@ -52,7 +52,10 @@
             imageIndex: 0,
             next() { if (this.selectedAlbum && this.imageIndex < this.selectedAlbum.items.length - 1) this.imageIndex++; else this.imageIndex = 0; },
             prev() { if (this.selectedAlbum && this.imageIndex > 0) this.imageIndex--; else this.imageIndex = this.selectedAlbum.items.length - 1; }
-        }">
+        }" x-init="$watch('selectedAlbum', value => {
+            if (value) document.body.style.overflow = 'hidden';
+            else document.body.style.overflow = '';
+        })">
             @forelse($albums as $album)
                 @php 
                     $title = $album->{'title_' . $locale} ?? $album->title_en;
@@ -99,7 +102,7 @@
 
             {{-- Sliding Detail View (Modal Slider) --}}
             <template x-if="selectedAlbum">
-                <div class="fixed inset-0 bg-black/95 z-[200] flex flex-col items-center justify-center overflow-hidden"
+                <div class="fixed inset-0 bg-black/95 z-[9999] flex flex-col items-center justify-center overflow-hidden"
                     @keydown.escape.window="selectedAlbum = null"
                     @keydown.right.window="next()"
                     @keydown.left.window="prev()"
