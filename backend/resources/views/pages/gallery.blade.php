@@ -159,9 +159,9 @@
                         </div>
 
                         {{-- Image Caption --}}
-                        <div class="mt-8 text-center animate-slide-up" :key="'cap-' + imageIndex">
-                            <span class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.4em] mb-2 block" x-text="(imageIndex + 1) + ' / ' + selectedAlbum.items.length"></span>
-                            <p class="text-white text-lg md:text-2xl font-black tracking-tight" x-text="selectedAlbum.items[imageIndex]['title_' + '{{ $locale }}'] || selectedAlbum.items[imageIndex].title"></p>
+                        <div class="mt-6 text-center animate-slide-up" :key="'cap-' + imageIndex">
+                            <span class="text-[9px] font-black text-[#f5a623] uppercase tracking-[0.4em] mb-1.5 block" x-text="(imageIndex + 1) + ' / ' + selectedAlbum.items.length"></span>
+                            <p class="text-white text-base md:text-lg font-bold tracking-tight opacity-90" x-text="selectedAlbum.items[imageIndex]['title_' + '{{ $locale }}'] || selectedAlbum.items[imageIndex].title"></p>
                         </div>
                     </div>
 
@@ -172,11 +172,11 @@
                 </div>
 
                 {{-- Thumbnails Navigation --}}
-                <div class="w-full max-w-5xl px-8 flex items-center justify-center gap-4 overflow-x-auto py-10 no-scrollbar mt-4">
+                <div class="w-full max-w-4xl px-8 flex items-center justify-center gap-3 overflow-x-auto py-6 no-scrollbar mt-2">
                     <template x-for="(img, idx) in selectedAlbum.items" :key="idx">
                         <button @click.stop="imageIndex = idx" 
-                            :class="imageIndex === idx ? 'border-[#f5a623] scale-110 opacity-100 ring-4 ring-[#f5a623]/20 shadow-2xl shadow-[#f5a623]/20' : 'border-white/10 opacity-20 hover:opacity-100'"
-                            class="flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-2xl border-4 overflow-hidden transition-all duration-500">
+                            :class="imageIndex === idx ? 'border-[#f5a623] scale-110 opacity-100 ring-4 ring-[#f5a623]/20 shadow-2xl shadow-[#f5a623]/20' : 'border-white/10 opacity-30 hover:opacity-100'"
+                            class="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-xl border-2 overflow-hidden transition-all duration-500">
                             <img :src="'{{ asset('') }}' + img.image_url" class="w-full h-full object-cover">
                         </button>
                     </template>
