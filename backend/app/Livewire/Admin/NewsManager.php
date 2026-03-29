@@ -86,14 +86,12 @@ class NewsManager extends Component
             Post::create(array_merge($data, ['admin_id' => auth()->id()]));
         }
         $this->showModal = false;
-        session()->flash('success', 'News article saved.');
         $this->dispatch('notify', message: 'Article saved successfully!', type: 'success');
     }
 
     public function delete($id)
     {
         Post::findOrFail($id)->delete();
-        session()->flash('success', 'Article deleted.');
         $this->dispatch('notify', message: 'Article deleted.', type: 'success');
     }
 

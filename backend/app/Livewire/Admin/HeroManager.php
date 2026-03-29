@@ -80,12 +80,13 @@ class HeroManager extends Component
             HeroSlide::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'Slide saved.');
+        $this->dispatch('notify', message: 'Slide saved successfully.', type: 'success');
     }
 
     public function delete($id)
     {
         HeroSlide::findOrFail($id)->delete();
+        $this->dispatch('notify', message: 'Slide removed.', type: 'info');
     }
 
     public function render()

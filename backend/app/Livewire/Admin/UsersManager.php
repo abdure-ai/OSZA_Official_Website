@@ -47,12 +47,14 @@ class UsersManager extends Component
             User::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'User saved.');
+        $this->showModal = false;
+        $this->dispatch('notify', message: 'User saved successfully.', type: 'success');
     }
     public function delete($id)
     {
         if ($id !== auth()->id()) {
             User::findOrFail($id)->delete();
+            $this->dispatch('notify', message: 'User deleted.', type: 'info');
         }
     }
     public function render()

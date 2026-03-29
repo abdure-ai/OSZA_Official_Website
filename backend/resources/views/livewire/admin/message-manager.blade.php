@@ -1,9 +1,7 @@
 <div>
     <h2 class="text-xl font-bold text-gray-900 mb-2">Admin Message</h2>
     <p class="text-sm text-gray-500 mb-6">This message is shown as a banner on the home page.</p>
-    @if($saved)
-        <div class="mb-4 bg-green-50 border border-green-200 text-green-800 rounded-xl px-4 py-3 text-sm">Message saved
-    successfully!</div>@endif
+
     <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5 max-w-2xl">
         <!-- Multilingual fields moved inside tabs -->
         <div x-data="{tab:'en'}">

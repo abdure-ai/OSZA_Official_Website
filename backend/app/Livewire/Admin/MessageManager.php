@@ -67,7 +67,7 @@ class MessageManager extends Component
             $data['photo_url'] = '/uploads/' . basename($path);
         }
         AdminMessage::updateOrCreate(['id' => 1], $data);
-        $this->saved = true;
+        $this->dispatch('notify', message: 'Message updated successfully!', type: 'success');
         $this->photo_url = $data['photo_url'] ?? $this->photo_url;
     }
 

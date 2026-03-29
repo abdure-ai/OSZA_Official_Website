@@ -12,17 +12,7 @@
         </button>
     </div>
 
-    <!-- Toast Notification -->
-    @if(session()->has('success'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
-            class="fixed bottom-10 right-10 z-[100] bg-green-600 text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4 animate-bounce">
-            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-xl font-bold">✓</div>
-            <div>
-                <div class="font-black uppercase tracking-tight">Success</div>
-                <div class="text-sm opacity-90">{{ session('success') }}</div>
-            </div>
-        </div>
-    @endif
+
 
     <div class="mb-6 flex items-center gap-4">
         <div class="relative flex-1 max-w-md">

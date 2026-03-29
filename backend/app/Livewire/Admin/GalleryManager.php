@@ -70,13 +70,13 @@ class GalleryManager extends Component
             GalleryItem::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'Gallery item saved.');
+        $this->dispatch('notify', message: 'Gallery item saved.', type: 'success');
     }
 
     public function delete($id)
     {
         GalleryItem::findOrFail($id)->delete();
-        session()->flash('success', 'Item deleted.');
+        $this->dispatch('notify', message: 'Item deleted.', type: 'info');
     }
 
     public function render()

@@ -26,7 +26,7 @@ class ContactManager extends Component
     {
         ContactMessage::findOrFail($id)->delete();
         $this->closeView();
-        session()->flash('success', 'Message deleted.');
+        $this->dispatch('notify', message: 'Message deleted.', type: 'info');
     }
 
     public function render()

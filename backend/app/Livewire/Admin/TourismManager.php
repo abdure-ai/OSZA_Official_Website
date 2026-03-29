@@ -135,13 +135,13 @@ class TourismManager extends Component
         }
 
         $this->showModal = false;
-        session()->flash('success', 'Tourism site saved successfully.');
+        $this->dispatch('notify', message: 'Tourism site saved successfully.', type: 'success');
     }
 
     public function delete($id)
     {
         TouristSite::findOrFail($id)->delete();
-        session()->flash('success', 'Tourism site deleted.');
+        $this->dispatch('notify', message: 'Tourism site deleted.', type: 'info');
     }
 
     public function removeGalleryImage($index)
@@ -151,6 +151,7 @@ class TourismManager extends Component
 
         if ($this->editingId) {
             TouristSite::findOrFail($this->editingId)->update(['gallery_urls' => $this->gallery_urls]);
+            $this->dispatch('notify', message: 'Image removed from gallery.', type: 'info');
         }
     }
 

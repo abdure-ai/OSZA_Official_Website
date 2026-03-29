@@ -61,13 +61,13 @@ class AlertsManager extends Component
             EmergencyAlert::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'Alert saved.');
+        $this->dispatch('notify', message: 'Alert saved successfully.', type: 'success');
     }
 
     public function delete($id)
     {
         EmergencyAlert::findOrFail($id)->delete();
-        session()->flash('success', 'Alert deleted.');
+        $this->dispatch('notify', message: 'Alert deleted.', type: 'info');
     }
 
     public function render()

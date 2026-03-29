@@ -77,7 +77,7 @@ class SettingsManager extends Component
         ];
 
         OfficeSetting::updateOrCreate(['id' => 1], $data);
-        $this->showSuccess = true;
+        $this->dispatch('notify', message: 'Settings updated successfully!', type: 'success');
     }
 
     public function render()

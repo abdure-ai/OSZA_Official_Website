@@ -72,13 +72,13 @@ class ServiceSectorsManager extends Component
             ServiceSector::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'Service Sector saved successfully.');
+        $this->dispatch('notify', message: 'Service Sector saved successfully.', type: 'success');
     }
 
     public function delete($id)
     {
         ServiceSector::findOrFail($id)->delete();
-        session()->flash('success', 'Service Sector deleted.');
+        $this->dispatch('notify', message: 'Service Sector deleted.', type: 'info');
     }
 
     public function render()

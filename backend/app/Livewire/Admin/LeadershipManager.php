@@ -47,11 +47,12 @@ class LeadershipManager extends Component
             Leadership::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'Leader saved.');
+        $this->dispatch('notify', message: 'Leader saved successfully.', type: 'success');
     }
     public function delete($id)
     {
         Leadership::findOrFail($id)->delete();
+        $this->dispatch('notify', message: 'Leader removed.', type: 'info');
     }
     public function render()
     {

@@ -89,13 +89,13 @@ class DirectoryManager extends Component
             DirectoryRecord::create($data);
         }
         $this->showModal = false;
-        session()->flash('success', 'Directory record saved.');
+        $this->dispatch('notify', message: 'Directory record saved.', type: 'success');
     }
 
     public function delete($id)
     {
         DirectoryRecord::findOrFail($id)->delete();
-        session()->flash('success', 'Record deleted.');
+        $this->dispatch('notify', message: 'Record deleted.', type: 'info');
     }
 
     public function render()
