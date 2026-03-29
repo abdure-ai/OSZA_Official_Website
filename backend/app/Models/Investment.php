@@ -14,6 +14,7 @@ class Investment extends Model
         'description_am',
         'description_or',
         'category',
+        'sector',
         'location',
         'location_am',
         'location_or',

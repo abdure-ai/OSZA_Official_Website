@@ -128,38 +128,97 @@
                 </div>
 
                 <div class="p-10 space-y-8 overflow-y-auto">
+                    {{-- Language Tabs --}}
+                    <div class="flex gap-4 border-b-2 border-gray-100 pb-4">
+                        <button wire:click="$set('activeTab', 'en')"
+                            class="px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition {{ $activeTab === 'en' ? 'bg-amber-600 text-white shadow-lg shadow-amber-500/30' : 'bg-gray-50 text-gray-400 hover:bg-gray-100' }}">English</button>
+                        <button wire:click="$set('activeTab', 'am')"
+                            class="px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition {{ $activeTab === 'am' ? 'bg-amber-600 text-white shadow-lg shadow-amber-500/30' : 'bg-gray-50 text-gray-400 hover:bg-gray-100' }}">አማርኛ</button>
+                        <button wire:click="$set('activeTab', 'or')"
+                            class="px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition {{ $activeTab === 'or' ? 'bg-amber-600 text-white shadow-lg shadow-amber-500/30' : 'bg-gray-50 text-gray-400 hover:bg-gray-100' }}">Afaan Oromo</button>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-8">
-                        <div class="col-span-2">
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Investment
-                                Title (Official Name)</label>
-                            <input wire:model="title_en" placeholder="e.g. Modern Industrial Agro-Processing Hub"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
-                            @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p>
-                            @enderror
+                        {{-- MULTILINGUAL FIELDS --}}
+                        <div class="col-span-2 space-y-6">
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Investment Title</label>
+                                @if($activeTab === 'en')
+                                    <input wire:model="title_en" placeholder="e.g. Modern Industrial Agro-Processing Hub" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                @elseif($activeTab === 'am')
+                                    <input wire:model="title_am" placeholder="የርዕስ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                @else
+                                    <input wire:model="title_or" placeholder="Mata duree..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                @endif
+                                @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Value Proposition & Potential</label>
+                                @if($activeTab === 'en')
+                                    <textarea wire:model="description_en" rows="3" placeholder="Detail the investment returns, scale, and strategic importance..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                @elseif($activeTab === 'am')
+                                    <textarea wire:model="description_am" rows="3" placeholder="የማብራሪያ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                @else
+                                    <textarea wire:model="description_or" rows="3" placeholder="Ibsa..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                @endif
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-8">
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Location / Region</label>
+                                    @if($activeTab === 'en')
+                                        <input wire:model="location" placeholder="e.g. Sheger City" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @elseif($activeTab === 'am')
+                                        <input wire:model="location_am" placeholder="የቦታ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @else
+                                        <input wire:model="location_or" placeholder="Iddoo..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @endif
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Government Incentives</label>
+                                    @if($activeTab === 'en')
+                                        <input wire:model="incentives_en" placeholder="e.g. 5-Year Tax Holiday" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @elseif($activeTab === 'am')
+                                        <input wire:model="incentives_am" placeholder="የማበረታቻ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @else
+                                        <input wire:model="incentives_or" placeholder="Jajjabeessituu..." class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @endif
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-span-2">
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Value
-                                Proposition & Potential</label>
-                            <textarea wire:model="description_en" rows="4"
-                                placeholder="Detail the investment returns, scale, and strategic importance..."
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
-                        </div>
-
-                        <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Asset
-                                Classification</label>
-                            <input wire:model="category" placeholder="e.g. PPP, Private Equity, Grant"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
-                        </div>
-
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Economic
-                                Sector</label>
-                            <input wire:model="sector" placeholder="e.g. Agriculture, Energy, Tourism"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                        {{-- UNIVERSAL FIELDS --}}
+                        <div class="col-span-2 border-t-2 border-gray-100 pt-6 mt-4">
+                            <h4 class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-6">Universal Asset Data</h4>
+                            <div class="grid grid-cols-3 gap-6 mb-6">
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Asset Classification</label>
+                                    <input wire:model="category" placeholder="PPP, Private Equity" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Economic Sector</label>
+                                    <input wire:model="sector" placeholder="Agriculture, Energy" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Estimated Budget</label>
+                                    <input wire:model="budget" placeholder="$50M - $100M" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-6 mb-6">
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Contact Name</label>
+                                    <input wire:model="contact_name" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Contact Phone</label>
+                                    <input wire:model="contact_phone" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Contact Email</label>
+                                    <input wire:model="contact_email" type="email" class="w-full bg-gray-50 border-2 border-transparent focus:border-amber-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-span-2">
