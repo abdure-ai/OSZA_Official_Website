@@ -13,10 +13,14 @@ class GalleryManager extends Component
     use WithPagination, WithFileUploads;
 
     public $showModal = false;
+    public $showQuickAlbumModal = false;
     public $editingId = null;
     public $title_en, $title_am, $title_or, $category, $album_id, $woreda_id, $sort_order = 0, $is_active = true;
     public $image;
     public $filterWoreda = '';
+    
+    // Quick Album Fields
+    public $quickAlbumTitle, $quickAlbumCategory, $quickAlbumCover;
 
     protected $rules = [
         'title_en' => 'nullable|string|max:255',
@@ -85,7 +89,35 @@ class GalleryManager extends Component
             GalleryItem::create($data);
         }
         $this->showModal = false;
-        $this->dispatch('notify', message: 'Gallery item saved successfully.', type: 'success');
+        $this->dispatch('notify', message: 'Visual asset saved successfully.', type: 'success');
+    }
+
+    public function openQuickAlbum()
+    {
+        $this->reset(['quickAlbumTitle', 'quickAlbumCategory', 'quickAlbumCover']);
+        $this->showQuickAlbumModal = true;
+    }
+
+    public function saveQuickAlbum()
+    {
+        $this->validate([
+            'quickAlbumTitle' => 'required|string|max:255',
+            'quickAlbumCategory' => 'nullable|string|max:255',
+            'quickAlbumCover' => 'required|image|max:8192',
+        ]);
+
+        $path = $this->quickAlbumCover->store('uploads', 'public_uploads');
+        
+        $album = \App\Models\Album::create([
+            'title_en' => $this->quickAlbumTitle,
+            'category' => $this->quickAlbumCategory ?: $this->category,
+            'cover_image_url' => '/uploads/' . basename($path),
+            'is_active' => true,
+        ]);
+
+        $this->album_id = $album->id;
+        $this->showQuickAlbumModal = false;
+        $this->dispatch('notify', message: 'New collection created and selected.', type: 'success');
     }
 
     public function delete($id)
