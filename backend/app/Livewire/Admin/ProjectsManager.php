@@ -14,10 +14,18 @@ class ProjectsManager extends Component
 
     public $showModal = false;
     public $editingId = null;
+    public $activeTab = 'en';
+
+    // Multilingual Fields
     public $title_en, $title_am, $title_or;
     public $description_en, $description_am, $description_or;
+    public $location_en, $location_am, $location_or;
+    public $contractor, $contractor_am, $contractor_or;
+    public $funding_source, $funding_source_am, $funding_source_or;
+    
+    // Standard Fields
     public $status = 'ongoing';
-    public $budget, $location_en, $start_date, $end_date;
+    public $budget, $progress, $start_date, $end_date, $is_published = true;
     public $image;
     public $search = '';
 
@@ -34,8 +42,17 @@ class ProjectsManager extends Component
 
     public function openCreate()
     {
-        $this->reset(['editingId', 'title_en', 'title_am', 'title_or', 'description_en', 'description_am', 'description_or', 'status', 'budget', 'location_en', 'start_date', 'end_date', 'image']);
+        $this->reset([
+            'editingId', 'activeTab',
+            'title_en', 'title_am', 'title_or', 
+            'description_en', 'description_am', 'description_or', 
+            'location_en', 'location_am', 'location_or', 
+            'contractor', 'contractor_am', 'contractor_or',
+            'funding_source', 'funding_source_am', 'funding_source_or',
+            'status', 'budget', 'progress', 'start_date', 'end_date', 'is_published', 'image'
+        ]);
         $this->status = 'ongoing';
+        $this->is_published = true;
         $this->showModal = true;
     }
 
@@ -43,17 +60,31 @@ class ProjectsManager extends Component
     {
         $project = Project::findOrFail($id);
         $this->editingId = $id;
+        $this->activeTab = 'en';
+        
         $this->title_en = $project->title_en;
         $this->title_am = $project->title_am;
         $this->title_or = $project->title_or;
         $this->description_en = $project->description_en;
         $this->description_am = $project->description_am;
         $this->description_or = $project->description_or;
+        $this->location_en = $project->location_en;
+        $this->location_am = $project->location_am;
+        $this->location_or = $project->location_or;
+        $this->contractor = $project->contractor;
+        $this->contractor_am = $project->contractor_am;
+        $this->contractor_or = $project->contractor_or;
+        $this->funding_source = $project->funding_source;
+        $this->funding_source_am = $project->funding_source_am;
+        $this->funding_source_or = $project->funding_source_or;
+        
         $this->status = $project->status;
         $this->budget = $project->budget;
-        $this->location_en = $project->location_en;
+        $this->progress = $project->progress;
         $this->start_date = $project->start_date?->format('Y-m-d');
         $this->end_date = $project->end_date?->format('Y-m-d');
+        $this->is_published = $project->is_published;
+        
         $this->showModal = true;
     }
 
@@ -67,29 +98,42 @@ class ProjectsManager extends Component
             'description_en' => $this->description_en,
             'description_am' => $this->description_am,
             'description_or' => $this->description_or,
+            'location_en' => $this->location_en,
+            'location_am' => $this->location_am,
+            'location_or' => $this->location_or,
+            'contractor' => $this->contractor,
+            'contractor_am' => $this->contractor_am,
+            'contractor_or' => $this->contractor_or,
+            'funding_source' => $this->funding_source,
+            'funding_source_am' => $this->funding_source_am,
+            'funding_source_or' => $this->funding_source_or,
             'status' => $this->status,
             'budget' => $this->budget,
-            'location_en' => $this->location_en,
+            'progress' => $this->progress,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'is_published' => $this->is_published ?? false,
         ];
+        
         if ($this->image) {
             $path = $this->image->store('uploads', 'public_uploads');
             $data['cover_image_url'] = '/uploads/' . basename($path);
         }
+        
         if ($this->editingId) {
             Project::findOrFail($this->editingId)->update($data);
         } else {
             Project::create($data);
         }
+        
         $this->showModal = false;
-        session()->flash('success', 'Project saved.');
+        $this->dispatch('notify', message: 'Project registered successfully!', type: 'success');
     }
 
     public function delete($id)
     {
         Project::findOrFail($id)->delete();
-        session()->flash('success', 'Project deleted.');
+        $this->dispatch('notify', message: 'Project successfully deleted.', type: 'info');
     }
 
     public function render()

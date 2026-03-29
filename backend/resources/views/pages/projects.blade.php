@@ -14,16 +14,15 @@
 
         <div class="max-w-[1440px] mx-auto px-4 relative z-20">
             <div class="max-w-3xl">
-                <span
-                    class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6 shadow-xl">
-                    Development Works
+                <span class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6 shadow-xl">
+                    {{ __('Development Works') ?? 'Development Works' }}
                 </span>
-                <h1
-                    class="text-5xl md:text-7xl font-black mb-4 leading-none antialiased drop-shadow-2xl italic tracking-tight">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-none antialiased drop-shadow-2xl tracking-tight">
                     {{ __('projects') }}
                 </h1>
-                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">Progressing towards a better future
-                    through sustainable infrastructure and community initiatives.</p>
+                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">
+                    {{ __('projects_desc') ?? 'Progressing towards a better future through sustainable infrastructure and community initiatives.' }}
+                </p>
             </div>
         </div>
         {{-- Bottom fade --}}
@@ -55,27 +54,28 @@
                             </span>
                         </div>
                     </div>
-                    <div class="p-8">
+                    <div class="p-8 flex flex-col h-[calc(100%-16rem)]">
                         <a href="{{ route('projects.show', $project->id) }}" class="block group/link">
-                            <h3 class="text-xl font-black text-gray-900 mb-3 group-hover/link:text-blue-600 transition-colors">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover/link:text-blue-600 transition-colors">
                                 {{ $project->{'title_' . $locale} ?? $project->title_en }}
                             </h3>
                         </a>
                         <p class="text-gray-500 text-sm leading-relaxed line-clamp-3 mb-6 font-medium">
                             {{ $project->{'description_' . $locale} ?? $project->description_en }}
                         </p>
-                        <div class="flex items-center justify-between mt-auto pt-6 border-t border-gray-50">
-                            <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                                Progress: {{ $project->progress ?? 0 }}%
-                            </div>
-                            <div class="w-32 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-600 rounded-full" style="width: {{ $project->progress ?? 0 }}%">
+                        <div class="mt-auto">
+                            <div class="flex items-center justify-between pt-6 border-t border-gray-50">
+                                <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                    {{ __('progress') ?? 'Progress' }}: {{ $project->progress ?? 0 }}%
+                                </div>
+                                <div class="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-blue-600 rounded-full" style="width: {{ $project->progress ?? 0 }}%"></div>
                                 </div>
                             </div>
-                            <div class="mt-8 pt-8 border-t border-gray-50">
+                            <div class="mt-6 pt-6 border-t border-gray-50">
                                 <a href="{{ route('projects.show', $project->id) }}"
                                     class="flex items-center justify-between text-sm font-black uppercase tracking-widest text-blue-600 hover:text-[#f5a623] transition group/btn">
-                                    <span>View Details</span>
+                                    <span>{{ __('view_details') ?? 'View Details' }}</span>
                                     <svg class="w-5 h-5 transition-transform group-hover/btn:translate-x-2" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
@@ -85,11 +85,12 @@
                             </div>
                         </div>
                     </div>
+                </div>
             @empty
-                    <div class="col-span-full py-20 text-center">
-                        <p class="text-gray-400 italic">No projects are currently listed.</p>
-                    </div>
-                @endforelse
+                <div class="col-span-full py-20 text-center">
+                    <p class="text-gray-400 font-bold">{{ __('no_projects_listed') ?? 'No projects are currently listed.' }}</p>
+                </div>
+            @endforelse
             </div>
         </div>
 @endsection

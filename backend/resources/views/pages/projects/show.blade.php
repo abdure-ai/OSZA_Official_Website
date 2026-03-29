@@ -23,27 +23,27 @@
 
         <div class="max-w-[1440px] mx-auto px-4 relative z-20 w-full text-white">
             <nav class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-300 mb-6">
-                <a href="{{ route('home') }}" class="hover:text-[#f5a623] transition">Home</a>
+                <a href="{{ route('home') }}" class="hover:text-[#f5a623] transition">{{ __('home') ?? 'Home' }}</a>
                 <span>/</span>
                 <a href="{{ route('projects.index') }}" class="hover:text-[#f5a623] transition">{{ __('projects') }}</a>
                 <span>/</span>
-                <span class="text-[#f5a623]">Details</span>
+                <span class="text-[#f5a623]">{{ __('details') ?? 'Details' }}</span>
             </nav>
-            <h1 class="text-4xl md:text-7xl font-black mb-4 leading-tight antialiased drop-shadow-xl italic">
+            <h1 class="text-4xl md:text-7xl font-bold mb-4 leading-tight antialiased drop-shadow-xl">
                 {{ $project->{'title_' . $locale} ?? $project->title_en }}
             </h1>
             <div class="flex flex-wrap items-center gap-6">
                 <div class="flex items-center gap-2 text-[#f5a623] font-bold">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span>{{ $project->location_en ?? 'Oromo Special Zone' }}</span>
+                    <span>{{ $project->{'location_' . $locale} ?? $project->location_en ?? 'Oromo Special Zone' }}</span>
                 </div>
                 <div class="w-px h-6 bg-white/20 hidden md:block"></div>
                 <div class="flex items-center gap-4">
                     <span class="text-sm font-black uppercase tracking-widest border border-white/30 px-4 py-1.5 rounded-full backdrop-blur-md bg-white/5">
-                        Status: {{ $project->status }}
+                        {{ __('status') ?? 'Status' }}: {{ $project->status }}
                     </span>
                     <span class="text-sm font-black uppercase tracking-widest border border-white/30 px-4 py-1.5 rounded-full backdrop-blur-md bg-white/5 text-[#f5a623]">
-                        Progress: {{ $project->progress }}%
+                        {{ __('progress') ?? 'Progress' }}: {{ $project->progress }}%
                     </span>
                 </div>
             </div>
@@ -59,13 +59,13 @@
                 <div class="lg:col-span-2 space-y-10">
                     <div class="bg-white rounded-[2.5rem] p-10 md:p-16 shadow-2xl shadow-gray-200/50 border border-gray-100 relative overflow-hidden">
                         {{-- Decorative background text --}}
-                        <div class="absolute -top-10 -right-10 text-9xl font-black text-gray-50 select-none pointer-events-none uppercase tracking-tighter italic opacity-50">
+                        <div class="absolute -top-10 -right-10 text-9xl font-black text-gray-50 select-none pointer-events-none uppercase tracking-tighter opacity-50">
                             Info
                         </div>
 
                         <div class="relative z-10">
-                            <h2 class="text-3xl md:text-5xl font-black text-gray-900 mb-8 leading-tight tracking-tighter italic border-l-8 border-[#f5a623] pl-6">
-                                Overview
+                            <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight tracking-tighter border-l-8 border-[#f5a623] pl-6">
+                                {{ __('Overview') ?? 'Overview' }}
                             </h2>
                             <div class="prose prose-xl text-gray-600 font-medium leading-relaxed max-w-none antialiased">
                                 {!! nl2br(e($project->{'description_' . $locale} ?? $project->description_en)) !!}
@@ -76,23 +76,23 @@
                     {{-- Timeline/Details Grid --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-indigo-900 rounded-[2rem] p-8 text-white shadow-xl shadow-indigo-900/20 group hover:scale-[1.02] transition">
-                            <h4 class="text-sm font-black uppercase tracking-[0.2em] text-indigo-400 mb-4">Financials</h4>
-                            <div class="text-3xl font-black text-[#f5a623] mb-2 tracking-tight italic">
+                            <h4 class="text-sm font-black uppercase tracking-[0.2em] text-indigo-400 mb-4">{{ __('Financials') ?? 'Financials' }}</h4>
+                            <div class="text-3xl font-black text-[#f5a623] mb-2 tracking-tight">
                                 @if($project->budget)
                                     {{ number_format($project->budget) }} ETB
                                 @else
-                                    Allocated
+                                    {{ __('Allocated') ?? 'Allocated' }}
                                 @endif
                             </div>
-                            <p class="text-indigo-200 text-sm font-bold uppercase tracking-widest">Estimated Budget</p>
+                            <p class="text-indigo-200 text-sm font-bold uppercase tracking-widest">{{ __('Estimated Budget') ?? 'Estimated Budget' }}</p>
                         </div>
 
                         <div class="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-xl shadow-gray-200/50 group hover:scale-[1.02] transition">
-                            <h4 class="text-sm font-black uppercase tracking-[0.2em] text-gray-400 mb-4">Contractor</h4>
-                            <div class="text-2xl font-black text-gray-900 mb-2 tracking-tight italic">
-                                {{ $project->contractor ?? 'Internal OSZA Services' }}
+                            <h4 class="text-sm font-black uppercase tracking-[0.2em] text-gray-400 mb-4">{{ __('Contractor') ?? 'Contractor' }}</h4>
+                            <div class="text-2xl font-black text-gray-900 mb-2 tracking-tight">
+                                {{ $project->{'contractor_' . $locale} ?? $project->contractor ?? 'Internal OSZA Services' }}
                             </div>
-                            <p class="text-gray-400 text-sm font-bold uppercase tracking-widest">Executing Entity</p>
+                            <p class="text-gray-400 text-sm font-bold uppercase tracking-widest">{{ __('Executing Entity') ?? 'Executing Entity' }}</p>
                         </div>
                     </div>
                 </div>
@@ -102,14 +102,14 @@
                     {{-- Status Card --}}
                     <div class="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-gray-200/50 border border-gray-100">
                         <div class="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
-                            <span class="text-xs font-black uppercase tracking-widest text-gray-400 italic">Project Vitality</span>
+                            <span class="text-xs font-bold uppercase tracking-widest text-gray-400">{{ __('Project Vitality') ?? 'Project Vitality' }}</span>
                             <div class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
                         </div>
                         <div class="p-8 space-y-8">
                             <div>
                                 <div class="flex justify-between items-end mb-3">
-                                    <span class="text-3xl font-black text-gray-900 italic tracking-tighter">{{ $project->progress }}%</span>
-                                    <span class="text-[10px] font-black uppercase tracking-widest text-[#f5a623] mb-1">Execution Progress</span>
+                                    <span class="text-3xl font-black text-gray-900 tracking-tighter">{{ $project->progress }}%</span>
+                                    <span class="text-[10px] font-black uppercase tracking-widest text-[#f5a623] mb-1">{{ __('Execution Progress') ?? 'Execution Progress' }}</span>
                                 </div>
                                 <div class="w-full h-4 bg-gray-100 rounded-full overflow-hidden p-1 shadow-inner">
                                     <div class="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full shadow-lg transition-all duration-1000" style="width: {{ $project->progress }}%"></div>
@@ -122,7 +122,7 @@
                                         📅
                                     </div>
                                     <div>
-                                        <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-0.5">Start Date</div>
+                                        <div class="text-[10px] font-bold text-gray-300 uppercase tracking-widest mb-0.5">{{ __('Start Date') ?? 'Start Date' }}</div>
                                         <div class="text-sm font-black text-gray-800">{{ $project->start_date ? date('M d, Y', strtotime($project->start_date)) : 'N/A' }}</div>
                                     </div>
                                 </div>
@@ -131,7 +131,7 @@
                                         🏁
                                     </div>
                                     <div>
-                                        <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-0.5">Expected End</div>
+                                        <div class="text-[10px] font-bold text-gray-300 uppercase tracking-widest mb-0.5">{{ __('Expected End') ?? 'Expected End' }}</div>
                                         <div class="text-sm font-black text-gray-800">{{ $project->end_date ? date('M d, Y', strtotime($project->end_date)) : 'Ongoing' }}</div>
                                     </div>
                                 </div>
@@ -142,10 +142,10 @@
                     {{-- Funding Source --}}
                     @if($project->funding_source)
                         <div class="bg-gray-900 rounded-[2rem] p-8 text-white relative overflow-hidden shadow-2xl">
-                            <div class="absolute -bottom-10 -right-10 text-8xl font-black text-white/5 italic">Source</div>
-                            <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-6">Funding Source</h4>
-                            <div class="text-xl font-black text-[#f5a623] leading-tight italic">
-                                {{ $project->funding_source }}
+                            <div class="absolute -bottom-10 -right-10 text-8xl font-black text-white/5 disabled select-none">Source</div>
+                            <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-6">{{ __('Funding Source') ?? 'Funding Source' }}</h4>
+                            <div class="text-xl font-bold text-[#f5a623] leading-tight">
+                                {{ $project->{'funding_source_' . $locale} ?? $project->funding_source }}
                             </div>
                         </div>
                     @endif
@@ -159,9 +159,9 @@
         <section class="py-24 bg-white">
             <div class="max-w-[1440px] mx-auto px-4">
                 <div class="flex items-center justify-between mb-12">
-                    <h3 class="text-3xl md:text-5xl font-black text-gray-900 tracking-tighter italic uppercase">Other Projects</h3>
+                    <h3 class="text-3xl md:text-5xl font-bold text-gray-900 tracking-tighter uppercase">{{ __('Other Projects') ?? 'Other Projects' }}</h3>
                     <a href="{{ route('projects.index') }}" class="text-sm font-black uppercase tracking-widest text-[#1a56db] hover:text-[#f5a623] transition flex items-center gap-2">
-                        View All
+                        {{ __('View All') ?? 'View All' }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
                 </div>

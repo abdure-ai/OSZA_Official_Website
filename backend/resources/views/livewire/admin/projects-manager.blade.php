@@ -225,58 +225,117 @@
                 </div>
 
                 <div class="p-10 space-y-8 overflow-y-auto">
+                    {{-- Language Tabs --}}
+                    <div class="flex gap-4 border-b-2 border-gray-100 pb-4">
+                        <button wire:click="$set('activeTab', 'en')"
+                            class="px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition {{ $activeTab === 'en' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-50 text-gray-400 hover:bg-gray-100' }}">English</button>
+                        <button wire:click="$set('activeTab', 'am')"
+                            class="px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition {{ $activeTab === 'am' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-50 text-gray-400 hover:bg-gray-100' }}">አማርኛ</button>
+                        <button wire:click="$set('activeTab', 'or')"
+                            class="px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition {{ $activeTab === 'or' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-gray-50 text-gray-400 hover:bg-gray-100' }}">Afaan Oromo</button>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-8">
-                        <div class="col-span-2">
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Project
-                                Title (Strategic Name)</label>
-                            <input wire:model="title_en" placeholder="e.g. Integrated Rural Water Supply Scheme"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
-                            @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p>
-                            @enderror
+                        {{-- MULTILINGUAL FIELDS --}}
+                        <div class="col-span-2 space-y-6">
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Project Title (Strategic Name)</label>
+                                @if($activeTab === 'en')
+                                    <input wire:model="title_en" placeholder="e.g. Integrated Rural Water Supply Scheme" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                @elseif($activeTab === 'am')
+                                    <input wire:model="title_am" placeholder="የርዕስ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                @else
+                                    <input wire:model="title_or" placeholder="Mata duree..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                @endif
+                                @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Narrative & Impact Statement</label>
+                                @if($activeTab === 'en')
+                                    <textarea wire:model="description_en" rows="3" placeholder="Describe the project goals and community benefits..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                @elseif($activeTab === 'am')
+                                    <textarea wire:model="description_am" rows="3" placeholder="የማብራሪያ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                @else
+                                    <textarea wire:model="description_or" rows="3" placeholder="Ibsa..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                @endif
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-8">
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Project Site / Region</label>
+                                    @if($activeTab === 'en')
+                                        <input wire:model="location_en" placeholder="e.g. Sheger City" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @elseif($activeTab === 'am')
+                                        <input wire:model="location_am" placeholder="የቦታ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @else
+                                        <input wire:model="location_or" placeholder="Iddoo..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @endif
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Principal Contractor</label>
+                                    @if($activeTab === 'en')
+                                        <input wire:model="contractor" placeholder="e.g. Oromia Construction Corp." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @elseif($activeTab === 'am')
+                                        <input wire:model="contractor_am" placeholder="የስራ ተቋራጭ..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @else
+                                        <input wire:model="contractor_or" placeholder="Kontaarkitara..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @endif
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Funding Source / Partners</label>
+                                @if($activeTab === 'en')
+                                    <input wire:model="funding_source" placeholder="e.g. World Bank / Regional Gov" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                @elseif($activeTab === 'am')
+                                    <input wire:model="funding_source_am" placeholder="የገንዘብ ምንጭ..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                @else
+                                    <input wire:model="funding_source_or" placeholder="Madda Maallaqaa..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                @endif
+                            </div>
                         </div>
 
-                        <div class="col-span-2">
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Narrative
-                                & Impact Statement</label>
-                            <textarea wire:model="description_en" rows="4"
-                                placeholder="Describe the project goals and community benefits..."
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
-                        </div>
+                        {{-- UNIVERSAL FIELDS --}}
+                        <div class="col-span-2 border-t-2 border-gray-100 pt-6 mt-4">
+                            <h4 class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-6">Master Operational Data</h4>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Target Budget</label>
+                                    <input wire:model="budget" placeholder="1,000,000.00" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Progress (%)</label>
+                                    <input wire:model="progress" type="number" min="0" max="100" placeholder="75" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Commencement Date</label>
+                                    <input type="date" wire:model="start_date" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Projected Handover</label>
+                                    <input type="date" wire:model="end_date" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                </div>
+                            </div>
 
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Operational
-                                Status</label>
-                            <select wire:model="status"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm outline-none appearance-none">
-                                <option value="planned">CONCEPT / PLANNED</option>
-                                <option value="ongoing">OPERATIONAL / ONGOING</option>
-                                <option value="completed">FINALIZED / COMPLETED</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Final
-                                Allocated Budget</label>
-                            <input wire:model="budget" placeholder="1,000,000.00"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
-                        </div>
-
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Deployment
-                                Date</label>
-                            <input type="date" wire:model="start_date"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
-                        </div>
-
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Projected
-                                Handover</label>
-                            <input type="date" wire:model="end_date"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                            <div class="grid grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Operational Status</label>
+                                    <select wire:model="status" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm outline-none appearance-none">
+                                        <option value="planned">CONCEPT / PLANNED</option>
+                                        <option value="ongoing">OPERATIONAL / ONGOING</option>
+                                        <option value="completed">FINALIZED / COMPLETED</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Public Visibility</label>
+                                    <select wire:model="is_published" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm outline-none appearance-none">
+                                        <option value="1">PUBLISHED</option>
+                                        <option value="0">DRAFT (HIDDEN)</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-span-2">
