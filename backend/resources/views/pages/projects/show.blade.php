@@ -10,7 +10,7 @@
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
             @if($project->cover_image_url)
-                <img src="{{ config('app.url') . $project->cover_image_url }}" 
+                <img src="{{ asset($project->cover_image_url) }}" 
                      class="w-full h-full object-cover scale-105" alt="{{ $project->title_en }}">
             @else
                 <div class="w-full h-full bg-indigo-900 flex items-center justify-center">

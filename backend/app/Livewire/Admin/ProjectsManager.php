@@ -24,7 +24,7 @@ class ProjectsManager extends Component
     public $funding_source, $funding_source_am, $funding_source_or;
     
     // Standard Fields
-    public $status = 'ongoing';
+    public $status = 'Ongoing';
     public $budget, $progress, $start_date, $end_date, $is_published = true;
     public $image;
     public $search = '';
@@ -37,7 +37,7 @@ class ProjectsManager extends Component
         'location_en' => 'nullable|string|max:255',
         'contractor' => 'nullable|string|max:255',
         'funding_source' => 'nullable|string|max:255',
-        'status' => 'required|in:planned,ongoing,completed',
+        'status' => 'required|in:Planning,Ongoing,Completed',
         'budget' => 'nullable|numeric|min:0',
         'progress' => 'nullable|numeric|min:0|max:100',
         'start_date' => 'nullable|date',
@@ -61,7 +61,7 @@ class ProjectsManager extends Component
             'funding_source', 'funding_source_am', 'funding_source_or',
             'status', 'budget', 'progress', 'start_date', 'end_date', 'is_published', 'image'
         ]);
-        $this->status = 'ongoing';
+        $this->status = 'Ongoing';
         $this->is_published = true;
         $this->showModal = true;
     }

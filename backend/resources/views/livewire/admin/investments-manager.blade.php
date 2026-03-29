@@ -48,10 +48,10 @@
                     <tr class="hover:bg-amber-50/20 transition-colors group">
                         <td class="px-8 py-5">
                             <div class="flex items-center gap-4">
-                                @if($i->image_url)
+                                @if($i->thumbnail_url)
                                     <div
                                         class="w-12 h-12 rounded-xl overflow-hidden border-2 border-white shadow-sm hover:scale-105 transition-transform">
-                                        <img src="{{ config('app.url') . $i->image_url }}" class="w-full h-full object-cover">
+                                        <img src="{{ asset($i->thumbnail_url) }}" class="w-full h-full object-cover">
                                     </div>
                                 @else
                                     <div

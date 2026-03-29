@@ -69,9 +69,9 @@
                             <tr class="hover:bg-blue-50/20 transition-colors group">
                                 <td class="px-8 py-5">
                                     <div class="flex items-center gap-4">
-                                        @if($p->image_url)
+                                        @if($p->cover_image_url)
                                             <div class="w-12 h-12 rounded-xl overflow-hidden border-2 border-white shadow-sm">
-                                                <img src="{{ config('app.url') . $p->image_url }}" class="w-full h-full object-cover">
+                                                <img src="{{ asset($p->cover_image_url) }}" class="w-full h-full object-cover">
                                             </div>
                                         @else
                                             <div
@@ -143,11 +143,8 @@
                 <div
                     class="group bg-white rounded-3xl overflow-hidden border-2 border-gray-50 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
                     <div class="aspect-video relative overflow-hidden bg-blue-50">
-                        @if($p->image_url)
-                            <img src="{{ config('app.url') . $p->image_url }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        @elseif($p->cover_image_url)
-                            <img src="{{ config('app.url') . $p->cover_image_url }}"
+                        @if($p->cover_image_url)
+                            <img src="{{ asset($p->cover_image_url) }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-blue-200">
@@ -242,44 +239,55 @@
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Project Title (Strategic Name)</label>
                                 @if($activeTab === 'en')
                                     <input wire:model="title_en" placeholder="e.g. Integrated Rural Water Supply Scheme" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                    @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @elseif($activeTab === 'am')
                                     <input wire:model="title_am" placeholder="የርዕስ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                    @error('title_am') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @else
                                     <input wire:model="title_or" placeholder="Mata duree..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
+                                    @error('title_or') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @endif
-                                @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                             </div>
 
                             <div>
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Narrative & Impact Statement</label>
                                 @if($activeTab === 'en')
                                     <textarea wire:model="description_en" rows="3" placeholder="Describe the project goals and community benefits..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                    @error('description_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @elseif($activeTab === 'am')
                                     <textarea wire:model="description_am" rows="3" placeholder="የማብራሪያ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                    @error('description_am') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @else
                                     <textarea wire:model="description_or" rows="3" placeholder="Ibsa..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                    @error('description_or') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @endif
                             </div>
 
                             <div class="grid grid-cols-2 gap-8">
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Project Site / Region</label>
-                                    @if($activeTab === 'en')
+                                @if($activeTab === 'en')
                                         <input wire:model="location_en" placeholder="e.g. Sheger City" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                        @error('location_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                     @elseif($activeTab === 'am')
                                         <input wire:model="location_am" placeholder="የቦታ ትርጉም..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                        @error('location_am') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                     @else
                                         <input wire:model="location_or" placeholder="Iddoo..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                        @error('location_or') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                     @endif
                                 </div>
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Principal Contractor</label>
                                     @if($activeTab === 'en')
                                         <input wire:model="contractor" placeholder="e.g. Oromia Construction Corp." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                        @error('contractor') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                     @elseif($activeTab === 'am')
                                         <input wire:model="contractor_am" placeholder="የስራ ተቋራጭ..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                        @error('contractor_am') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                     @else
                                         <input wire:model="contractor_or" placeholder="Kontaarkitara..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                        @error('contractor_or') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                     @endif
                                 </div>
                             </div>
@@ -288,10 +296,13 @@
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Funding Source / Partners</label>
                                 @if($activeTab === 'en')
                                     <input wire:model="funding_source" placeholder="e.g. World Bank / Regional Gov" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('funding_source') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @elseif($activeTab === 'am')
                                     <input wire:model="funding_source_am" placeholder="የገንዘብ ምንጭ..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('funding_source_am') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @else
                                     <input wire:model="funding_source_or" placeholder="Madda Maallaqaa..." class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                                    @error('funding_source_or') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p> @enderror
                                 @endif
                             </div>
                         </div>
@@ -327,9 +338,9 @@
                                 <div>
                                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Operational Status</label>
                                     <select wire:model="status" class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm outline-none appearance-none">
-                                        <option value="planned">CONCEPT / PLANNED</option>
-                                        <option value="ongoing">OPERATIONAL / ONGOING</option>
-                                        <option value="completed">FINALIZED / COMPLETED</option>
+                                        <option value="Planning">CONCEPT / PLANNED</option>
+                                        <option value="Ongoing">OPERATIONAL / ONGOING</option>
+                                        <option value="Completed">FINALIZED / COMPLETED</option>
                                     </select>
                                 </div>
                                 <div>

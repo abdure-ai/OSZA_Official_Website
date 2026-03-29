@@ -36,7 +36,7 @@
                     class="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-200/50 overflow-hidden group hover:-translate-y-2 transition-all duration-500">
                     <div class="h-64 relative overflow-hidden">
                         @if($project->cover_image_url)
-                            <img src="{{ config('app.url') . $project->cover_image_url }}"
+                            <img src="{{ asset($project->cover_image_url) }}"
                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 alt="{{ $project->title_en }}">
                         @else
