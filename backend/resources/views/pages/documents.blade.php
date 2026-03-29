@@ -46,7 +46,7 @@
                 class="px-5 py-2 bg-[#1a56db] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Filter</button>
         </form>
 
-        <div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 gap-5">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
             @forelse($documents as $doc)
                 <div class="group flex flex-col">
                     {{-- Book Card --}}
