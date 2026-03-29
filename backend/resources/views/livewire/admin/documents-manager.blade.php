@@ -267,7 +267,7 @@
                             @endif
                         </div>
 
-                        <div class="col-span-2 md:col-span-1">
+                        <div class="col-span-1">
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">
                                 Sector / Issuing Body
                             </label>
@@ -281,7 +281,7 @@
                             @error('author') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
                         </div>
 
-                        <div class="col-span-2 md:col-span-1">
+                        <div class="col-span-1">
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">
                                 Asset Classification
                             </label>
