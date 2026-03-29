@@ -155,7 +155,7 @@ class PageController extends Controller
 
     public function investment()
     {
-        $investments = Investment::orderByDesc('created_at')->get();
+        $investments = Investment::orderByDesc('created_at')->paginate(10);
         return view('pages.investment', compact('investments'));
     }
 
