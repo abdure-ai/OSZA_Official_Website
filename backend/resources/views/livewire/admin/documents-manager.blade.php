@@ -56,9 +56,11 @@
             <thead class="bg-gray-50/50 border-b-2 border-gray-50">
                 <tr>
                     <th class="text-left px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                        Document</th>
+                        Document Details</th>
                     <th class="text-left px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                        Category</th>
+                        Sector / Source</th>
+                    <th class="text-left px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                        Classification</th>
                     <th class="text-left px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
                         Archived Date</th>
                     <th class="text-right px-8 py-5"></th>
@@ -87,14 +89,19 @@
                                     <div class="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
                                         {{ $doc->title_en }}</div>
                                     <div class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">
-                                        {{ $doc->author ?: 'Official Resource' }}</div>
+                                        {{ $doc->file_url ? basename($doc->file_url) : 'No File Attachment' }}</div>
                                 </div>
                             </div>
                         </td>
                         <td class="px-8 py-5">
+                            <span class="text-[10px] font-black uppercase text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+                                {{ $doc->author ?: 'Official Resource' }}
+                            </span>
+                        </td>
+                        <td class="px-8 py-5">
                             <span
-                                class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border border-indigo-100">
-                                {{ $doc->category ?: 'Uncategorized' }}
+                                class="bg-gray-50 text-gray-600 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border border-gray-100">
+                                {{ $doc->category ?: 'General' }}
                             </span>
                         </td>
                         <td class="px-8 py-5">
@@ -256,11 +263,37 @@
                             @endif
                         </div>
 
-                        <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Asset
-                                Classification</label>
-                            <input wire:model="category" placeholder="e.g. Policy, Regulation, Report"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm">
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">
+                                Sector / Issuing Body
+                            </label>
+                            <input wire:model="author" list="sector-list" placeholder="e.g. Finance Bureau"
+                                class="w-full bg-gray-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm transition-all shadow-sm">
+                            <datalist id="sector-list">
+                                @foreach($sectors as $sector)
+                                    <option value="{{ $sector->{'name_' . $activeTab} ?? $sector->name_en }}">
+                                @endforeach
+                            </datalist>
+                            @error('author') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">
+                                Asset Classification
+                            </label>
+                            <input wire:model="category" list="category-list" placeholder="e.g. Policy, Regulation, Report"
+                                class="w-full bg-gray-50 border-2 border-transparent focus:border-indigo-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm transition-all shadow-sm">
+                            <datalist id="category-list">
+                                <option value="Policy">
+                                <option value="Regulation">
+                                <option value="Report">
+                                <option value="Manual">
+                                <option value="Guideline">
+                                <option value="Strategic Plan">
+                                <option value="Budget">
+                                <option value="Directive">
+                            </datalist>
+                            @error('category') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
                         </div>
 
                         <div>

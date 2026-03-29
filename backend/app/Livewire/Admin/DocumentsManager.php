@@ -12,13 +12,15 @@ class DocumentsManager extends Component
     use WithPagination, WithFileUploads;
 
     public $showModal = false, $editingId = null;
-    public $title_en, $title_am, $title_or, $category, $search = '', $activeTab = 'en';
+    public $title_en, $title_am, $title_or, $category, $author, $search = '', $activeTab = 'en';
     public $file, $cover_image;
 
     protected $rules = [
         'title_en' => 'required|string|max:255',
         'title_am' => 'nullable|string|max:255',
         'title_or' => 'nullable|string|max:255',
+        'category' => 'nullable|string|max:255',
+        'author' => 'nullable|string|max:255',
         'file' => 'nullable|file|max:20480',
         'cover_image' => 'nullable|image|max:5120'
     ];
@@ -29,7 +31,7 @@ class DocumentsManager extends Component
     }
     public function openCreate()
     {
-        $this->reset(['editingId', 'title_en', 'title_am', 'title_or', 'category', 'file', 'cover_image', 'activeTab']);
+        $this->reset(['editingId', 'title_en', 'title_am', 'title_or', 'category', 'author', 'file', 'cover_image', 'activeTab']);
         $this->showModal = true;
     }
     public function openEdit($id)
@@ -39,6 +41,7 @@ class DocumentsManager extends Component
         $this->title_am = $d->title_am;
         $this->title_or = $d->title_or;
         $this->category = $d->category;
+        $this->author = $d->author;
         $this->editingId = $id;
         $this->activeTab = 'en';
         $this->showModal = true;
@@ -53,7 +56,8 @@ class DocumentsManager extends Component
                 'title_en' => $this->title_en, 
                 'title_am' => $this->title_am, 
                 'title_or' => $this->title_or, 
-                'category' => $this->category
+                'category' => $this->category,
+                'author' => $this->author
             ];
 
             if ($this->file) {
@@ -90,7 +94,16 @@ class DocumentsManager extends Component
     }
     public function render()
     {
-        $docs = Document::when($this->search, fn($q) => $q->where('title_en', 'like', '%' . $this->search . '%'))->orderByDesc('created_at')->paginate(10);
-        return view('livewire.admin.documents-manager', ['documents' => $docs]);
+        $sectors = \App\Models\ServiceSector::orderBy('name_en')->get();
+        $docs = Document::when($this->search, function($q) {
+            $q->where('title_en', 'like', '%' . $this->search . '%')
+              ->orWhere('author', 'like', '%' . $this->search . '%')
+              ->orWhere('category', 'like', '%' . $this->search . '%');
+        })->orderByDesc('created_at')->paginate(10);
+
+        return view('livewire.admin.documents-manager', [
+            'documents' => $docs,
+            'sectors' => $sectors
+        ]);
     }
 }
