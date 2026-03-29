@@ -11,7 +11,7 @@
                 <span class="mx-3">/</span>
                 <a href="{{ route('tenders.index') }}" class="hover:text-blue-600 transition">Tenders</a>
                 <span class="mx-3">/</span>
-                <span class="text-blue-900 italic">Notice Detail</span>
+                <span class="text-blue-900 font-black">Notice Detail</span>
             </nav>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -23,15 +23,15 @@
                                 class="px-4 py-1.5 bg-green-100 text-green-700 text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm">
                                 {{ $tender->status }}
                             </span>
-                            @if($tender->reference_no)
+                            @if($tender->ref_number)
                                 <span
                                     class="bg-gray-50 text-gray-400 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest">
-                                    REF: {{ $tender->reference_no }}
+                                    REF: {{ $tender->ref_number }}
                                 </span>
                             @endif
                         </div>
 
-                        <h1 class="text-3xl md:text-5xl font-black text-gray-900 mb-8 italic tracking-tight leading-none">
+                        <h1 class="text-3xl md:text-5xl font-black text-gray-900 mb-8 tracking-tight leading-none">
                             {{ $tender->{'title_' . $locale} ?? $tender->title_en }}
                         </h1>
 
@@ -46,7 +46,7 @@
                     {{-- Quick Metadata --}}
                     <div class="bg-blue-900 text-white p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
-                        <h3 class="text-lg font-black mb-8 italic tracking-tight relative z-10">Procurement Detail</h3>
+                        <h3 class="text-lg font-black mb-8 tracking-tight relative z-10">Procurement Detail</h3>
 
                         <div class="space-y-6 relative z-10">
                             <div>
@@ -57,9 +57,9 @@
                                 </span>
                             </div>
 
-                            @if($tender->document_url)
+                            @if($tender->file_url)
                                 <div class="pt-6 border-t border-white/10">
-                                    <a href="{{ asset($tender->document_url) }}" download
+                                    <a href="{{ asset($tender->file_url) }}" download
                                         class="block w-full text-center bg-[#f5a623] text-blue-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-black/20">
                                         Download Bid Documents
                                     </a>

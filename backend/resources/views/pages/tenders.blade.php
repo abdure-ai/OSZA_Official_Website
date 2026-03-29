@@ -35,8 +35,9 @@
             <select name="status"
                 class="px-4 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-[#1a56db] focus:outline-none">
                 <option value="">All Status</option>
-                <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Open</option>
+                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Open</option>
                 <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>Closed</option>
+                <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
             </select>
             <button type="submit"
                 class="px-5 py-2 bg-[#1a56db] text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Filter</button>
@@ -48,11 +49,11 @@
                     class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition p-5 flex flex-col md:flex-row md:items-center gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-3 mb-2">
-                            @php $isOpen = $tender->status === 'open'; @endphp
+                            @php $isActive = $tender->status === 'active'; @endphp
                             <span
-                                class="px-2 py-0.5 text-xs font-semibold rounded-full {{ $isOpen ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">{{ ucfirst($tender->status) }}</span>
-                            @if($tender->reference_no)
-                                <span class="text-xs text-gray-400">REF: {{ $tender->reference_no }}</span>
+                                class="px-2 py-0.5 text-xs font-semibold rounded-full {{ $isActive ? 'bg-green-100 text-green-700' : ($tender->status === 'closed' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500') }}">{{ ucfirst($tender->status) }}</span>
+                            @if($tender->ref_number)
+                                <span class="text-xs text-gray-400">REF: {{ $tender->ref_number }}</span>
                             @endif
                         </div>
                         <h3 class="font-bold text-gray-900 text-base">{{ $tender->{'title_' . $locale} ?? $tender->title_en }}
@@ -68,8 +69,8 @@
                             class="w-full text-center px-6 py-2.5 bg-white text-blue-900 border-2 border-blue-900 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-50 transition active:scale-95 shadow-sm">
                             View Detail
                         </a>
-                        @if($tender->document_url)
-                            <a href="{{ asset($tender->document_url) }}" target="_blank" download
+                        @if($tender->file_url)
+                            <a href="{{ asset($tender->file_url) }}" target="_blank" download
                                 class="w-full text-center px-6 py-2.5 bg-blue-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#f5a623] hover:text-blue-900 transition active:scale-95 shadow-md flex items-center justify-center gap-2">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

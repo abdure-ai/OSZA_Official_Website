@@ -64,7 +64,7 @@
                         </td>
                         <td class="px-8 py-5">
                             <span
-                                class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $t->status === 'open' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">{{ $t->status }}</span>
+                                class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $t->status === 'active' ? 'bg-green-100 text-green-700' : ($t->status === 'closed' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700') }}">{{ $t->status }}</span>
                         </td>
                         <td class="px-8 py-5">
                             <div class="text-xs font-bold text-gray-500">
@@ -115,7 +115,7 @@
                                 {{ $t->title_en }}</h3>
                         </div>
                         <span
-                            class="flex-shrink-0 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest {{ $t->status === 'open' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">{{ $t->status }}</span>
+                            class="flex-shrink-0 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest {{ $t->status === 'active' ? 'bg-green-100 text-green-700' : ($t->status === 'closed' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700') }}">{{ $t->status }}</span>
                     </div>
                     @if($t->description_en)
                         <p class="text-xs text-gray-400 line-clamp-2">{{ $t->description_en }}</p>
@@ -171,24 +171,59 @@
                     </button>
                 </div>
 
+                <div class="px-10 py-6 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2 p-1 bg-white rounded-2xl w-fit shadow-sm border">
+                        <button wire:click="$set('activeTab', 'en')"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $activeTab === 'en' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-gray-600' }}">English</button>
+                        <button wire:click="$set('activeTab', 'am')"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $activeTab === 'am' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-gray-600' }}">Amharic</button>
+                        <button wire:click="$set('activeTab', 'or')"
+                            class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ $activeTab === 'or' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-gray-600' }}">Oromo</button>
+                    </div>
+                </div>
+
                 <div class="p-10 space-y-8 overflow-y-auto">
                     <div class="grid grid-cols-2 gap-8">
                         <div class="col-span-2">
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Tender
-                                Title (Official)</label>
-                            <input wire:model="title_en" placeholder="Enter tender title..."
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900">
-                            @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black">{{ $message }}</p>
-                            @enderror
+                                Title ({{ strtoupper($activeTab) }})</label>
+                            
+                            @if($activeTab === 'en')
+                                <input wire:model="title_en" placeholder="Enter English title..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900 shadow-sm">
+                                @error('title_en') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @elseif($activeTab === 'am')
+                                <input wire:model="title_am" placeholder="የጨረታ ርዕስ (አማርኛ)..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900 shadow-sm">
+                                @error('title_am') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @elseif($activeTab === 'or')
+                                <input wire:model="title_or" placeholder="Maqaa Caalbaasii (Afaan Oromoo)..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold transition-all text-gray-900 shadow-sm">
+                                @error('title_or') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @endif
                         </div>
 
                         <div class="col-span-2">
                             <label
                                 class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Detailed
-                                Scope of Work</label>
-                            <textarea wire:model="description_en" rows="4"
-                                placeholder="Describe the procurement requirements..."
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none"></textarea>
+                                Scope of Work ({{ strtoupper($activeTab) }})</label>
+                            
+                            @if($activeTab === 'en')
+                                <textarea wire:model="description_en" rows="4"
+                                    placeholder="Describe requirements in English..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none shadow-sm"></textarea>
+                                @error('description_en') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @elseif($activeTab === 'am')
+                                <textarea wire:model="description_am" rows="4"
+                                    placeholder="ዝርዝር መግለጫ (አማርኛ)..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none shadow-sm"></textarea>
+                                @error('description_am') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @elseif($activeTab === 'or')
+                                <textarea wire:model="description_or" rows="4"
+                                    placeholder="Ibsa bal'aa (Afaan Oromoo)..."
+                                    class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-3xl px-6 py-4 text-sm font-medium transition-all resize-none shadow-sm"></textarea>
+                                @error('description_or') <p class="text-red-500 text-[10px] mt-2 font-black italic">{{ $message }}</p> @enderror
+                            @endif
                         </div>
 
                         <div>
@@ -204,9 +239,10 @@
                                 class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-3">Submission
                                 Status</label>
                             <select wire:model="status"
-                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm outline-none appearance-none">
-                                <option value="open">ACTIVE / OPEN</option>
-                                <option value="closed">CLOSED / ARCHIVED</option>
+                                class="w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-sm outline-none appearance-none shadow-sm">
+                                <option value="active">ACTIVE / OPEN</option>
+                                <option value="closed">CLOSED</option>
+                                <option value="archived">ARCHIVED</option>
                             </select>
                         </div>
 
