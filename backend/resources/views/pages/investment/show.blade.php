@@ -31,11 +31,11 @@
             <div class="flex items-center justify-center gap-6 mt-8">
                 <div class="flex items-center gap-2 text-blue-100 bg-blue-950/50 px-4 py-2 rounded-xl backdrop-blur-sm border border-blue-800/50">
                     <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span class="text-sm font-bold uppercase tracking-wide">{{ $location ?: 'Oromo Special Zone' }}</span>
+                    <span class="text-sm font-bold uppercase tracking-wide">{{ $location ?: __('oromo_special_zone') }}</span>
                 </div>
                 <div class="flex items-center gap-2 text-blue-100 bg-blue-950/50 px-4 py-2 rounded-xl backdrop-blur-sm border border-blue-800/50 hidden sm:flex">
                     <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                    <span class="text-sm font-bold uppercase tracking-wide">{{ $investment->sector ?: 'Diversified' }}</span>
+                    <span class="text-sm font-bold uppercase tracking-wide">{{ $investment->sector ?: __('diversified') }}</span>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
                             <div class="w-12 h-12 bg-amber-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>
                             </div>
-                            <h3 class="text-2xl font-black text-amber-900">{{ __('Incentives') ?? 'Government Incentives' }}</h3>
+                            <h3 class="text-2xl font-black text-amber-900">{{ __('item_incentives') }}</h3>
                         </div>
                         <div class="prose max-w-none text-amber-800 font-medium">
                             {!! nl2br(e($incentives)) !!}
@@ -78,23 +78,23 @@
             <div class="space-y-8">
                 {{-- Quick Facts --}}
                 <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
-                    <h4 class="font-black text-gray-900 mb-6 uppercase tracking-widest text-sm text-center">{{ __('Quick Facts') ?? 'Quick Facts' }}</h4>
+                    <h4 class="font-black text-gray-900 mb-6 uppercase tracking-widest text-sm text-center">{{ __('quick_facts') }}</h4>
                     <ul class="space-y-6">
                         <li class="flex items-center justify-between border-b border-gray-50 pb-4">
-                            <span class="text-gray-400 font-bold text-xs uppercase">{{ __('Status') ?? 'Status' }}</span>
-                            <span class="text-[#1a56db] font-black text-sm uppercase bg-blue-50 px-3 py-1 rounded-full">{{ $investment->status ?: 'Open' }}</span>
+                            <span class="text-gray-400 font-bold text-xs uppercase">{{ __('status') }}</span>
+                            <span class="text-[#1a56db] font-black text-sm uppercase bg-blue-50 px-3 py-1 rounded-full">{{ $investment->status ?: __('status_active') }}</span>
                         </li>
                         <li class="flex items-center justify-between border-b border-gray-50 pb-4">
-                            <span class="text-gray-400 font-bold text-xs uppercase">{{ __('Sector') ?? 'Sector' }}</span>
-                            <span class="text-gray-900 font-bold text-sm text-right max-w-[150px] truncate">{{ $investment->sector ?: 'Diversified' }}</span>
+                            <span class="text-gray-400 font-bold text-xs uppercase">{{ __('sector') }}</span>
+                            <span class="text-gray-900 font-bold text-sm text-right max-w-[150px] truncate">{{ $investment->sector ?: __('diversified') }}</span>
                         </li>
                         <li class="flex items-center justify-between border-b border-gray-50 pb-4">
-                            <span class="text-gray-400 font-bold text-xs uppercase">{{ __('Category') ?? 'Category' }}</span>
-                            <span class="text-gray-900 font-bold text-sm text-right max-w-[150px] truncate">{{ $investment->category ?: 'General' }}</span>
+                            <span class="text-gray-400 font-bold text-xs uppercase">{{ __('category') }}</span>
+                            <span class="text-gray-900 font-bold text-sm text-right max-w-[150px] truncate">{{ $investment->category ?: __('general') }}</span>
                         </li>
                         @if($investment->budget)
                         <li class="flex items-center justify-between border-b border-gray-50 pb-4">
-                            <span class="text-gray-400 font-bold text-xs uppercase">{{ __('Budget') ?? 'Estimated Budget' }}</span>
+                            <span class="text-gray-400 font-bold text-xs uppercase">{{ __('estimated_budget') }}</span>
                             <span class="text-green-600 font-black text-sm text-right">{{ $investment->budget }}</span>
                         </li>
                         @endif
@@ -105,8 +105,8 @@
                 <div class="bg-gray-900 rounded-3xl p-8 text-white relative overflow-hidden">
                     <div class="absolute -right-10 -top-10 w-40 h-40 bg-[#1a56db]/30 rounded-full blur-3xl z-0"></div>
                     <div class="relative z-10">
-                        <h4 class="font-black mb-2 text-xl">{{ __('contact_us') }}</h4>
-                        <p class="text-gray-400 text-sm mb-6">{{ __('Contact our investment bureau for a consultation or to request more information.') ?? 'Contact us for a consultation.' }}</p>
+                        <h4 class="font-black mb-2 text-xl">{{ __('ready_to_start') }}</h4>
+                        <p class="text-gray-400 text-sm mb-6">{{ __('investment_contact_desc') }}</p>
                         
                         <div class="space-y-4 mb-8">
                             @if($investment->contact_name)
@@ -145,7 +145,7 @@
         @if($related->isNotEmpty())
             <div class="mt-20 pt-16 border-t border-gray-100">
                 <div class="flex items-end gap-4 mb-10">
-                    <h2 class="text-3xl font-black text-gray-900 border-l-4 border-[#1a56db] pl-4">Similar Opportunities</h2>
+                    <h2 class="text-3xl font-black text-gray-900 border-l-4 border-[#1a56db] pl-4">{{ __('similar_opportunities') }}</h2>
                 </div>
                 <div class="grid md:grid-cols-3 gap-6">
                     @foreach($related as $inv)
@@ -159,7 +159,7 @@
                                     </div>
                                 @endif
                                 <div class="absolute top-3 left-3 bg-white/90 backdrop-blur rounded px-2 py-1 text-[10px] font-bold text-blue-700 uppercase">
-                                    {{ $inv->sector ?: 'Diversified' }}
+                                    {{ $inv->sector ?: __('diversified') }}
                                 </div>
                             </div>
                             <div class="p-6">

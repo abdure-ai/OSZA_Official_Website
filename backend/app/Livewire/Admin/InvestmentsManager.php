@@ -43,7 +43,7 @@ class InvestmentsManager extends Component
         'incentives_or' => 'nullable|string',
         'category' => 'nullable|string|max:255',
         'sector' => 'nullable|string|max:255',
-        'budget' => 'nullable|numeric|min:0',
+        'budget' => 'nullable|string|max:255',
         'status' => 'required|string|max:255',
         'contact_name' => 'nullable|string|max:255',
         'contact_phone' => 'nullable|string|max:255',
