@@ -23,7 +23,7 @@
                 District Portal
             </span>
             <h1
-                class="text-4xl md:text-7xl font-black mb-2 leading-none antialiased drop-shadow-2xl italic tracking-tight">
+                class="text-4xl md:text-7xl font-black mb-2 leading-none antialiased drop-shadow-2xl tracking-tight">
                 {{ $woreda->{'name_' . $locale} ?? $woreda->name_en }}
             </h1>
             <p class="text-gray-300 font-bold tracking-widest uppercase text-xs">Official Portal • Oromo Special Zone

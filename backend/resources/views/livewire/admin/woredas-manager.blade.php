@@ -268,21 +268,38 @@
                                     class="text-[10px] font-black text-blue-600 uppercase tracking-widest block mb-6 px-2">Administrator
                                     Profile</label>
                                 <div class="space-y-4">
-                                    <input wire:model="administrator_name" placeholder="Name"
-                                        class="w-full bg-white border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-2 text-sm shadow-sm font-bold">
-                                    <input wire:model="administrator_title" placeholder="Professional Title"
-                                        class="w-full bg-white border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-2 text-sm shadow-sm font-medium">
+                                    <div x-show="tab === 'en'">
+                                        <input wire:model="administrator_name" placeholder="Name (EN)"
+                                            class="w-full bg-white border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-2 text-sm shadow-sm font-bold">
+                                        <input wire:model="administrator_title" placeholder="Professional Title (EN)"
+                                            class="w-full bg-white border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-2 text-sm shadow-sm font-medium mt-2">
+                                    </div>
+                                    <div x-show="tab === 'am'">
+                                        <input wire:model="administrator_name_am" placeholder="ስም (አማርኛ)"
+                                            class="w-full bg-white border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-2 text-sm shadow-sm font-bold">
+                                        <input wire:model="administrator_title_am" placeholder="የሥራ ኃላፊነት (አማርኛ)"
+                                            class="w-full bg-white border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-2 text-sm shadow-sm font-medium mt-2">
+                                    </div>
+                                    <div x-show="tab === 'or'">
+                                        <input wire:model="administrator_name_or" placeholder="Maqaa (OR)"
+                                            class="w-full bg-white border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-2 text-sm shadow-sm font-bold">
+                                        <input wire:model="administrator_title_or" placeholder="Gahee Hojii (OR)"
+                                            class="w-full bg-white border-2 border-transparent focus:border-blue-500 rounded-xl px-4 py-2 text-sm shadow-sm font-medium mt-2">
+                                    </div>
 
                                     <div class="grid grid-cols-2 gap-3 mt-4">
                                         <label class="cursor-pointer">
                                             <input type="file" wire:model="admin_photo" class="hidden">
                                             <div
                                                 class="py-3 px-4 bg-white rounded-xl border-2 border-gray-50 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest hover:border-blue-200 transition shadow-sm">
-                                                {{ $admin_photo ? '✓ Changed' : 'Portrait' }}
+                                                {{ $admin_photo ? '✓ Ready' : 'Portrait' }}
                                             </div>
                                         </label>
                                         <div wire:loading wire:target="admin_photo"
-                                            class="text-[10px] text-blue-500 font-bold animate-pulse">Uploading...</div>
+                                            class="flex items-center justify-center">
+                                            <div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                                            <span class="text-[9px] text-blue-500 font-bold ml-2">Uploading...</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -303,15 +320,23 @@
                                                     d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
                                             </svg> @endif
                                     </div>
-                                    <input type="file" wire:model="logo"
+                                    <input type="file" wire:model="logo" id="logo_input"
                                         class="text-[10px] font-medium text-gray-500 flex-1">
+                                    <div wire:loading wire:target="logo" class="ml-2">
+                                        <div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="bg-indigo-50/50 p-6 rounded-3xl border-2 border-indigo-50">
                                 <label
                                     class="text-[10px] font-black text-indigo-400 uppercase tracking-widest block mb-4">Banner
                                     Image</label>
-                                <input type="file" wire:model="banner" class="text-[10px] font-medium text-gray-500">
+                                <div class="flex items-center gap-2">
+                                    <input type="file" wire:model="banner" class="text-[10px] font-medium text-gray-500 flex-1">
+                                    <div wire:loading wire:target="banner">
+                                        <div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="flex items-center justify-center bg-gray-50 rounded-3xl p-6">
                                 <label class="flex items-center gap-3 cursor-pointer group">

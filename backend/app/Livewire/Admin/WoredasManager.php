@@ -20,7 +20,8 @@ class WoredasManager extends Component
     public $vision_en, $vision_am, $vision_or;
     public $population, $area_km2, $established_year;
     public $capital_en, $capital_am, $capital_or;
-    public $administrator_name, $administrator_title;
+    public $administrator_name, $administrator_name_am, $administrator_name_or;
+    public $administrator_title, $administrator_title_am, $administrator_title_or;
     public $contact_phone, $contact_email, $address_en;
     public $is_active = true;
     public $banner, $logo, $admin_photo;
@@ -76,7 +77,11 @@ class WoredasManager extends Component
             'capital_am',
             'capital_or',
             'administrator_name',
+            'administrator_name_am',
+            'administrator_name_or',
             'administrator_title',
+            'administrator_title_am',
+            'administrator_title_or',
             'contact_phone',
             'contact_email',
             'address_en',
@@ -114,7 +119,11 @@ class WoredasManager extends Component
             'capital_am',
             'capital_or',
             'administrator_name',
+            'administrator_name_am',
+            'administrator_name_or',
             'administrator_title',
+            'administrator_title_am',
+            'administrator_title_or',
             'contact_phone',
             'contact_email',
             'address_en'
@@ -170,14 +179,18 @@ class WoredasManager extends Component
             'capital_am' => $this->capital_am,
             'capital_or' => $this->capital_or,
             'administrator_name' => $this->administrator_name,
+            'administrator_name_am' => $this->administrator_name_am,
+            'administrator_name_or' => $this->administrator_name_or,
             'administrator_title' => $this->administrator_title,
+            'administrator_title_am' => $this->administrator_title_am,
+            'administrator_title_or' => $this->administrator_title_or,
             'contact_phone' => $this->contact_phone,
             'contact_email' => $this->contact_email,
             'address_en' => $this->address_en,
             'is_active' => $this->is_active ? 1 : 0
         ];
         foreach (['banner' => 'banner_url', 'logo' => 'logo_url', 'admin_photo' => 'administrator_photo_url'] as $field => $col) {
-            if ($this->$field) {
+            if ($this->$field && $this->$field instanceof \Illuminate\Http\UploadedFile) {
                 $path = $this->$field->store('uploads', 'public_uploads');
                 $data[$col] = '/uploads/' . basename($path);
             }
@@ -195,7 +208,7 @@ class WoredasManager extends Component
                 $photoUrl = $sectorData['official_photo_url'] ?? null;
 
                 // Handle new photo upload
-                if (!empty($sectorData['new_photo'])) {
+                if (!empty($sectorData['new_photo']) && $sectorData['new_photo'] instanceof \Illuminate\Http\UploadedFile) {
                     $path = $sectorData['new_photo']->store('uploads/officials', 'public_uploads');
                     $photoUrl = '/uploads/officials/' . basename($path);
                 }

@@ -94,9 +94,12 @@
                                 </svg>
                             </div>
                         @endif
-                        <h4 class="text-lg font-extrabold text-gray-900 mb-0.5">{{ $woreda->administrator_name }}</h4>
+                        <h4 class="text-lg font-extrabold text-gray-900 mb-0.5">
+                            {{ $woreda->{'administrator_name_' . $locale} ?? $woreda->administrator_name }}
+                        </h4>
                         <p class="text-xs font-bold text-green-700 uppercase tracking-widest mb-3">
-                            {{ $woreda->{'administrator_title_' . $locale} ?? $woreda->administrator_title ?? 'Woreda Administrator' }}</p>
+                            {{ $woreda->{'administrator_title_' . $locale} ?? $woreda->administrator_title ?? 'Woreda Administrator' }}
+                        </p>
                         <p class="text-gray-500 italic text-xs leading-relaxed">"Committed to serving the people of
                             {{ $woreda->{'name_' . $locale} ?? $woreda->name_en }} with transparency and dedication."</p>
                     </div>
