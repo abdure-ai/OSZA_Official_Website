@@ -113,8 +113,18 @@ class PageController extends Controller
     // ── About ─────────────────────────────────────────────────────────────────
     public function about()
     {
+        $heroSlides = HeroSlide::where('is_active', 1)->where('page', 'about')->orderBy('sort_order')->get();
+        $sections = \App\Models\AboutSection::where('is_active', 1)->orderBy('sort_order')->get();
         $leadership = Leadership::orderBy('rank_order')->get();
-        return view('pages.about', compact('leadership'));
+
+        $woredaStats = [
+            'total_population' => Woreda::sum('population'),
+            'total_area' => Woreda::sum('area_km2'),
+            'woreda_count' => Woreda::count(),
+            'established_since' => Woreda::min('established_year') ?: 'N/A',
+        ];
+
+        return view('pages.about', compact('heroSlides', 'sections', 'leadership', 'woredaStats'));
     }
 
     // ── Leadership ────────────────────────────────────────────────────────────

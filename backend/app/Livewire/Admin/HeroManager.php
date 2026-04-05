@@ -20,7 +20,7 @@ class HeroManager extends Component
     public $media, $media_type = 'image', $page = 'home';
 
     protected $rules = [
-        'page' => 'required|in:home,tourism',
+        'page' => 'required|in:home,tourism,about',
         'title_en' => 'required|string|max:255',
         'media' => 'nullable|mimes:jpg,jpeg,png,webp,mp4,mov|max:204800',
         'sort_order' => 'integer|min:0',
