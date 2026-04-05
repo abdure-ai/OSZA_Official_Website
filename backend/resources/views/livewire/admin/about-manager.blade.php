@@ -1,3 +1,4 @@
+<div>
     <div class="flex items-center justify-between mb-8">
         <div>
             <h2 class="text-2xl font-black text-gray-900 tracking-tight text-left">About Page Manager</h2>
@@ -46,12 +47,12 @@
                                     class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">English</button>
                                 <button type="button" @click="lang = 'am'"
                                     :class="lang === 'am' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'"
-                                    class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">Amharic</button>
+                                    class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">አማርኛ</button>
                                 <button type="button" @click="lang = 'or'"
                                     :class="lang === 'or' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'"
                                     class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">Oromo</button>
                             </div>
- 
+
                             <div x-show="lang === 'en'" class="space-y-6">
                                 <div>
                                     <label class="label-badge">Section Title (EN)</label>
@@ -62,7 +63,7 @@
                                     <textarea wire:model="content_en" rows="10" class="admin-input resize-none"></textarea>
                                 </div>
                             </div>
- 
+
                             <div x-show="lang === 'am'" class="space-y-6" style="display:none">
                                 <div>
                                     <label class="label-badge">Section Title (AM)</label>
@@ -73,7 +74,7 @@
                                     <textarea wire:model="content_am" rows="10" class="admin-input resize-none"></textarea>
                                 </div>
                             </div>
- 
+
                             <div x-show="lang === 'or'" class="space-y-6" style="display:none">
                                 <div>
                                     <label class="label-badge">Section Title (OR)</label>
@@ -86,7 +87,7 @@
                             </div>
                         </div>
                     </div>
- 
+
                     <div class="space-y-6">
                         @if($activeTab === 'history')
                         <div class="bg-gray-50 p-8 rounded-[2rem] border-2 border-dashed border-gray-100">
@@ -109,7 +110,7 @@
                             <div wire:loading wire:target="image" class="mt-4 text-[10px] font-black text-blue-600 animate-pulse uppercase tracking-widest text-center">Processing...</div>
                         </div>
                         @endif
- 
+
                         <div class="bg-gray-50 p-8 rounded-[2rem] border-2 border-gray-100 flex items-center justify-between">
                             <span class="text-xs font-black uppercase tracking-widest text-gray-400 font-bold">Visibility Control</span>
                             <label class="flex items-center gap-3 cursor-pointer group">
@@ -120,7 +121,7 @@
                                 <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-blue-600">Active</span>
                             </label>
                         </div>
- 
+
                         <div class="bg-blue-50/30 p-8 rounded-[2rem] border-2 border-blue-50/50 flex flex-col items-center justify-center text-center">
                             <p class="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-6">Finalize Content</p>
                             <button type="submit"
@@ -141,7 +142,7 @@
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Institutional Goals & Milestones</p>
                     </div>
                 </div>
- 
+
                 <div class="bg-gray-50/50 rounded-[2rem] border-2 border-gray-100/50 overflow-hidden shadow-sm">
                     <table class="w-full text-sm">
                         <thead>
@@ -188,7 +189,7 @@
             </div>
         @endif
     </div>
- 
+
     {{-- Modal (Woreda style) --}}
     @if($showModal)
         <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" x-data="{ tab: 'en' }">
@@ -202,7 +203,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
- 
+
                 <!-- Modal Tabs -->
                 <div class="flex border-b border-gray-50 bg-gray-50/50 px-8">
                     <button @click="tab = 'en'" :class="tab === 'en' ? 'border-blue-600 text-blue-600 bg-white' : 'border-transparent text-gray-400 hover:text-gray-600'" class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] border-b-2 transition-all">English</button>
@@ -210,7 +211,7 @@
                     <button @click="tab = 'or'" :class="tab === 'or' ? 'border-blue-600 text-blue-600 bg-white' : 'border-transparent text-gray-400 hover:text-gray-600'" class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] border-b-2 transition-all">Afaan Oromo</button>
                     <button @click="tab = 'config'" :class="tab === 'config' ? 'border-blue-600 text-blue-600 bg-white shadow-inner shadow-gray-50' : 'border-transparent text-gray-400'" class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] border-b-2 transition-all">Config</button>
                 </div>
- 
+
                 <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
                     <div x-show="tab === 'en'" class="space-y-6">
                         <div>
@@ -250,7 +251,7 @@
                         </div>
                     </div>
                 </div>
- 
+
                 <div class="border-t border-gray-50 px-8 py-8 flex justify-end gap-3 bg-gray-50/30">
                     <button wire:click="$set('showModal', false)" class="px-8 py-3 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gray-900 transition">Discard</button>
                     <button wire:click="save" class="px-12 py-4 bg-blue-600 text-white rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-blue-700 transition shadow-xl shadow-blue-500/30 active:scale-95">
@@ -260,16 +261,16 @@
             </div>
         </div>
     @endif
- 
+
     <style>
         .label-badge {
             @apply text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1.5;
         }
- 
+
         .admin-input {
             @apply w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 transition-all outline-none;
         }
- 
+
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }

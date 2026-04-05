@@ -1,3 +1,4 @@
+<div>
     <div class="flex items-center justify-between mb-8">
         <div>
             <h2 class="text-2xl font-black text-gray-900 tracking-tight text-left">Leadership Manager</h2>
@@ -81,7 +82,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
- 
+
                 <!-- Modal Tabs -->
                 <div class="flex border-b border-gray-50 bg-gray-50/50 px-8">
                     <button @click="tab = 'en'" :class="tab === 'en' ? 'border-blue-600 text-blue-600 bg-white' : 'border-transparent text-gray-400 hover:text-gray-600'" class="px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] border-b-2 transition-all">English</button>
@@ -115,7 +116,7 @@
                                     <div wire:loading wire:target="photo" class="mt-4 text-[8px] font-black text-blue-600 animate-pulse uppercase tracking-widest">Uploading...</div>
                                 </div>
                             </div>
- 
+
                             {{-- Info --}}
                             <div class="md:col-span-3 space-y-8">
                                 <div x-show="tab === 'en'" class="space-y-6">
@@ -142,7 +143,7 @@
                             </div>
                         </div>
                     </div>
- 
+
                     {{-- Config Tab Content --}}
                     <div x-show="tab === 'config'" class="space-y-8" style="display:none">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -170,7 +171,7 @@
                                     </div>
                                 </div>
                             </div>
- 
+
                             <div class="bg-gray-50 border-2 border-gray-100 rounded-[2.5rem] p-10 space-y-6">
                                 <h4 class="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-4">Contact Gateway</h4>
                                 <div class="grid grid-cols-2 gap-4">
@@ -185,7 +186,7 @@
                         </div>
                     </div>
                 </div>
- 
+
                 <div class="border-t border-gray-50 px-8 py-8 flex justify-end gap-3 bg-gray-50/30">
                     <button wire:click="$set('showModal', false)" class="px-8 py-3 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gray-900 transition">Discard</button>
                     <button wire:click="save" class="px-12 py-4 bg-blue-600 text-white rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-blue-700 transition shadow-xl shadow-blue-500/30 active:scale-95">
@@ -195,16 +196,16 @@
             </div>
         </div>
     @endif
- 
+
     <style>
         .label-badge {
             @apply text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1.5;
         }
- 
+
         .admin-input {
             @apply w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 transition-all outline-none;
         }
- 
+
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f8fafc; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
