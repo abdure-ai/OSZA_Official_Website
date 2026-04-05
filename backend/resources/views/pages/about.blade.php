@@ -65,14 +65,14 @@
             </div>
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-12 relative z-10">
                 @php
-                    $stats = [
+                    $statsData = [
                         ['label' => 'Total Residents', 'value' => number_format($stats['total_population']), 'icon' => '👥', 'text' => 'People'],
                         ['label' => 'Zone Territory', 'value' => number_format($stats['total_area']), 'icon' => '🗺️', 'text' => 'KM²'],
                         ['label' => 'Administration Units', 'value' => $stats['woreda_count'], 'icon' => '🏛️', 'text' => 'Woredas'],
                         ['label' => 'Established Since', 'value' => $stats['earliest_year'], 'icon' => '📜', 'text' => 'Heritage'],
                     ];
                 @endphp
-                @foreach($stats as $stat)
+                @foreach($statsData as $stat)
                     <div class="text-center group">
                         <div class="text-4xl mb-4 transform group-hover:scale-125 transition duration-500">{{ $stat['icon'] }}</div>
                         <div class="text-4xl font-black text-white tracking-tighter">{{ $stat['value'] }}</div>
