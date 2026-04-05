@@ -38,8 +38,8 @@
     <div class="bg-white rounded-[2rem] border-2 border-gray-50 shadow-sm overflow-hidden p-8">
         @if(in_array($activeTab, ['history', 'mission', 'vision']))
             <form wire:submit="save" class="space-y-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    <div class="lg:col-span-2 space-y-8">
+                <div class="space-y-10">
+                    <div class="space-y-8">
                         <div x-data="{ lang: 'en' }">
                             <div class="flex gap-4 border-b border-gray-100 mb-8 bg-gray-50/50 p-2 rounded-xl">
                                 <button type="button" @click="lang = 'en'"
@@ -86,9 +86,10 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </div>
 
-                    <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-10 border-t border-gray-50">
                         @if($activeTab === 'history')
                         <div class="bg-gray-50 p-8 rounded-[2rem] border-2 border-dashed border-gray-100">
                             <label class="label-badge mb-6 px-1">Background Image</label>
@@ -111,8 +112,8 @@
                         </div>
                         @endif
 
-                        <div class="bg-gray-50 p-8 rounded-[2rem] border-2 border-gray-100 flex items-center justify-between">
-                            <span class="text-xs font-black uppercase tracking-widest text-gray-400 font-bold">Visibility Control</span>
+                        <div class="bg-gray-50 p-8 rounded-[2rem] border-2 border-gray-100 flex flex-col items-center justify-center gap-4">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Visibility Status</span>
                             <label class="flex items-center gap-3 cursor-pointer group">
                                 <div class="relative w-12 h-6 bg-gray-200 rounded-full transition-colors group-hover:bg-gray-300">
                                     <input type="checkbox" wire:model="is_active" class="absolute inset-0 opacity-0 cursor-pointer peer">
@@ -122,8 +123,8 @@
                             </label>
                         </div>
 
-                        <div class="bg-blue-50/30 p-8 rounded-[2rem] border-2 border-blue-50/50 flex flex-col items-center justify-center text-center">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-6">Finalize Content</p>
+                        <div class="bg-blue-50/30 p-8 rounded-[2rem] border-2 border-blue-50/50 flex flex-col items-center justify-center text-center {{ $activeTab !== 'history' ? 'md:col-span-2' : '' }}">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-6 font-bold">Persistence Layer</p>
                             <button type="submit"
                                 class="w-full py-4 bg-blue-600 text-white rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-blue-700 transition shadow-xl shadow-blue-500/30 active:scale-95">
                                 <span wire:loading.remove>Save Changes</span>
@@ -268,7 +269,7 @@
         }
 
         .admin-input {
-            @apply w-full bg-gray-50 border-2 border-transparent focus:border-blue-500 focus:bg-white rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 transition-all outline-none;
+            @apply w-full bg-gray-50 border-2 border-gray-100 focus:border-blue-500 focus:bg-white rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 transition-all outline-none;
         }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
