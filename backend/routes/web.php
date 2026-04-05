@@ -72,5 +72,6 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/message', fn() => view('admin.message.index'))->name('message.index');
         Route::get('/users', fn() => view('admin.users.index'))->name('users.index');
         Route::get('/tourism', fn() => view('admin.tourism.index'))->name('tourism.index');
+        Route::get('/analytics', fn() => view('admin.analytics.index'))->name('analytics.index');
     });
 });

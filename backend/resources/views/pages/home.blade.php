@@ -365,6 +365,73 @@
         </div>
     </section>
 
+    {{-- ═══════════════════════════════════════════ VISITOR STATS ══ --}}
+    <section class="relative bg-blue-900 overflow-hidden py-16"
+        x-data="{
+            animated: false,
+            animateCount(el, target) {
+                let start = 0;
+                const duration = 1800;
+                const step = Math.ceil(target / (duration / 16));
+                const timer = setInterval(() => {
+                    start += step;
+                    if (start >= target) { el.textContent = target.toLocaleString(); clearInterval(timer); }
+                    else { el.textContent = start.toLocaleString(); }
+                }, 16);
+            }
+        }"
+        x-intersect.once="
+            animated = true;
+            $nextTick(() => {
+                document.querySelectorAll('[data-count]').forEach(el => {
+                    animateCount(el, parseInt(el.dataset.count));
+                });
+            });
+        ">
+
+        {{-- Background decoration --}}
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#f5a623]/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-[1440px] mx-auto px-4 relative z-10">
+            <div class="text-center mb-12">
+                <span class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-4 shadow-lg">Live Statistics</span>
+                <h2 class="text-3xl md:text-4xl font-black text-white">Visitors to Our Portal</h2>
+                <p class="text-blue-200 mt-2 text-sm font-medium">Real-time visitor data — updated continuously</p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                @php
+                    $statsCards = [
+                        ['label' => 'Today',     'value' => $visitorStats['daily'],   'period' => 'Daily visitors',   'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', 'color' => 'from-blue-400/20 to-blue-300/10'],
+                        ['label' => 'This Week', 'value' => $visitorStats['weekly'],  'period' => 'Weekly visitors',  'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', 'color' => 'from-indigo-400/20 to-indigo-300/10'],
+                        ['label' => 'This Month','value' => $visitorStats['monthly'], 'period' => 'Monthly visitors', 'icon' => 'M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', 'color' => 'from-violet-400/20 to-violet-300/10'],
+                        ['label' => 'This Year', 'value' => $visitorStats['annual'],  'period' => 'Annual visitors',  'icon' => 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', 'color' => 'from-amber-400/20 to-amber-300/10'],
+                    ];
+                @endphp
+
+                @foreach($statsCards as $card)
+                    <div class="relative bg-gradient-to-br {{ $card['color'] }} border border-white/10 rounded-3xl p-8 flex flex-col items-center text-center backdrop-blur-sm hover:border-[#f5a623]/40 transition-all duration-500 group">
+                        {{-- Icon --}}
+                        <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-[#f5a623]/20 transition-all duration-500">
+                            <svg class="w-7 h-7 text-[#f5a623]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $card['icon'] }}"/>
+                            </svg>
+                        </div>
+                        {{-- Animated Counter --}}
+                        <span class="text-5xl md:text-6xl font-black text-white tracking-tight leading-none"
+                            data-count="{{ $card['value'] }}">0</span>
+                        {{-- Labels --}}
+                        <p class="text-[#f5a623] font-black text-xs uppercase tracking-[0.2em] mt-3 mb-1">{{ $card['label'] }}</p>
+                        <p class="text-blue-300 text-[11px] font-medium">{{ $card['period'] }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     {{-- ═══════════════════════════════════════════ GALLERY PREVIEW ══ --}}
     @if($galleryAlbums->isNotEmpty() || $galleryItems->isNotEmpty())
         <section class="py-20 bg-gray-50 overflow-hidden">

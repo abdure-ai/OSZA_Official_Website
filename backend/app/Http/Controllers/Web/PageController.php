@@ -18,6 +18,7 @@ use App\Models\DirectoryRecord;
 use App\Models\ContactMessage;
 use App\Models\TouristSite;
 use App\Models\Album;
+use App\Models\VisitorLog;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -40,8 +41,14 @@ class PageController extends Controller
             ->limit(6)
             ->get();
         $adminMessage = AdminMessage::orderByDesc('created_at')->first();
+        $visitorStats = [
+            'daily' => VisitorLog::daily()->count(),
+            'weekly' => VisitorLog::weekly()->count(),
+            'monthly' => VisitorLog::monthly()->count(),
+            'annual' => VisitorLog::annual()->count(),
+        ];
 
-        return view('pages.home', compact('heroSlides', 'latestNews', 'woredas', 'galleryItems', 'galleryAlbums', 'adminMessage'));
+        return view('pages.home', compact('heroSlides', 'latestNews', 'woredas', 'galleryItems', 'galleryAlbums', 'adminMessage', 'visitorStats'));
     }
 
     // ── News ──────────────────────────────────────────────────────────────────
