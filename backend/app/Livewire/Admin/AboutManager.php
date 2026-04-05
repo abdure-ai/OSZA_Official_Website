@@ -119,6 +119,7 @@ class AboutManager extends Component
         }
 
         $this->dispatch('notify', message: 'About content updated successfully.', type: 'success');
+        session()->flash('message', 'Content saved successfully!');
     }
 
     public function delete($id)

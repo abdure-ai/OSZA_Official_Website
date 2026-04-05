@@ -196,7 +196,8 @@
                                 <div>
                                     <h4
                                         class="font-black text-gray-900 group-hover:text-blue-700 transition uppercase tracking-tighter">
-                                        {{ $obj->title_en }}</h4>
+                                        {{ $obj->title_en }}
+                                    </h4>
                                     <p class="text-xs text-gray-500 mt-2 font-medium line-clamp-3">{{ $obj->content_en }}</p>
                                 </div>
                             </div>
@@ -219,7 +220,8 @@
                     class="px-10 py-8 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur z-10">
                     <div>
                         <h3 class="text-xl font-black text-gray-900 uppercase tracking-tighter">
-                            {{ $editingId ? 'Edit' : 'Create' }} Strategic Objective</h3>
+                            {{ $editingId ? 'Edit' : 'Create' }} Strategic Objective
+                        </h3>
                         <div class="flex gap-4 mt-4">
                             <button @click="lang = 'en'"
                                 :class="lang === 'en' ? 'text-blue-600 bg-blue-50' : 'text-gray-400'"
@@ -249,6 +251,8 @@
                                 Title (EN)</label>
                             <input wire:model="title_en"
                                 class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            @error('title_en') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div>
                             <label
@@ -256,6 +260,8 @@
                                 (EN)</label>
                             <textarea wire:model="content_en" rows="5"
                                 class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
+                            @error('content_en') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
@@ -266,6 +272,8 @@
                                 Title (AM)</label>
                             <input wire:model="title_am"
                                 class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            @error('title_am') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div>
                             <label
@@ -273,6 +281,8 @@
                                 (AM)</label>
                             <textarea wire:model="content_am" rows="5"
                                 class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
+                            @error('content_am') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
@@ -283,6 +293,8 @@
                                 Title (OR)</label>
                             <input wire:model="title_or"
                                 class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            @error('title_or') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div>
                             <label
@@ -290,6 +302,8 @@
                                 (OR)</label>
                             <textarea wire:model="content_or" rows="5"
                                 class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
+                            @error('content_or') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
@@ -310,12 +324,20 @@
                     </div>
                 </div>
 
-                <div class="px-10 py-8 border-t border-gray-100 flex justify-end gap-4 sticky bottom-0 bg-white">
+                <div
+                    class="px-10 py-8 border-t border-gray-100 flex justify-end items-center gap-4 sticky bottom-0 bg-white">
+                    @if (session()->has('message'))
+                        <div class="text-green-600 font-bold text-xs uppercase tracking-widest animate-pulse">
+                            {{ session('message') }}
+                        </div>
+                    @endif
                     <button wire:click="$set('showModal', false)"
                         class="px-8 py-3 text-gray-500 font-bold uppercase tracking-widest text-[10px] hover:text-gray-900 transition">Cancel</button>
                     <button wire:click="save"
-                        class="bg-blue-600 text-white px-10 py-4 rounded-2xl text-sm font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-xl shadow-blue-100">
-                        {{ $editingId ? 'Update Objective' : 'Create Objective' }}
+                        class="bg-blue-600 text-white px-10 py-4 rounded-2xl text-sm font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-xl shadow-blue-100 flex items-center gap-2">
+                        <span wire:loading.remove
+                            wire:target="save">{{ $editingId ? 'Update Objective' : 'Create Objective' }}</span>
+                        <span wire:loading wire:target="save">Saving...</span>
                     </button>
                 </div>
             </div>
