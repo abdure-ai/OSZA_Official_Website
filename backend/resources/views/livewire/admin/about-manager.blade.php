@@ -269,7 +269,7 @@
         }
 
         .admin-input {
-            @apply w-full bg-gray-50 border-2 border-gray-100 focus:border-blue-500 focus:bg-white rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 transition-all outline-none;
+            @apply w-full bg-gray-50 border-2 border-gray-300 focus:border-blue-500 focus:bg-white rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 transition-all outline-none;
         }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
