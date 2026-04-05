@@ -41,6 +41,54 @@
         @endforeach
     </div>
 
+    {{-- Charts Row --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {{-- Daily Traffic --}}
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h3 class="text-sm font-bold text-gray-700 mb-4 uppercase tracking-widest">Recent Traffic (Last 7 Days)</h3>
+            <div id="dailyChart"></div>
+        </div>
+
+        {{-- Device Breakdown --}}
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h3 class="text-sm font-bold text-gray-700 mb-4 uppercase tracking-widest">Device Breakdown</h3>
+            <div id="deviceChart"></div>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Daily Line Chart
+                new ApexCharts(document.querySelector("#dailyChart"), {
+                    chart: { type: 'area', height: 240, toolbar: { show: false }, sparkline: { enabled: false } },
+                    series: [{ name: 'Visitors', data: @json($dailyData) }],
+                    xaxis: { categories: @json($dailyLabels), labels: { style: { fontSize: '10px', fontWeight: 600 } } },
+                    yaxis: { min: 0, labels: { style: { fontSize: '10px', fontWeight: 600 } } },
+                    colors: ['#1a56db'],
+                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.0 } },
+                    stroke: { curve: 'smooth', width: 3 },
+                    dataLabels: { enabled: false },
+                    grid: { borderColor: '#f1f5f9' },
+                    tooltip: { theme: 'light' }
+                }).render();
+
+                // Device Donut Chart
+                new ApexCharts(document.querySelector("#deviceChart"), {
+                    chart: { type: 'donut', height: 240 },
+                    series: @json($deviceData),
+                    labels: @json($deviceLabels),
+                    colors: ['#1a56db', '#f5a623', '#10b981'],
+                    legend: { position: 'bottom', fontSize: '12px', fontWeight: 600 },
+                    dataLabels: { enabled: false },
+                    plotOptions: { pie: { donut: { size: '75%' } } },
+                    tooltip: { theme: 'light' }
+                }).render();
+            });
+        </script>
+    @endpush
+
     <div class="grid md:grid-cols-2 gap-6">
         {{-- Recent News --}}
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
