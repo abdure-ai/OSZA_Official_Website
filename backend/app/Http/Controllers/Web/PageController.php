@@ -117,14 +117,14 @@ class PageController extends Controller
         $sections = \App\Models\AboutSection::where('is_active', 1)->orderBy('sort_order')->get();
         $leadership = Leadership::orderBy('rank_order')->get();
 
-        $woredaStats = [
-            'total_population' => Woreda::sum('population'),
-            'total_area' => Woreda::sum('area_km2'),
-            'woreda_count' => Woreda::count(),
-            'established_since' => Woreda::min('established_year') ?: 'N/A',
+        $stats = [
+            'total_population' => \App\Models\Woreda::sum('population'),
+            'total_area' => \App\Models\Woreda::sum('area_km2'),
+            'woreda_count' => \App\Models\Woreda::count(),
+            'earliest_year' => \App\Models\Woreda::min('established_year') ?: 'N/A',
         ];
 
-        return view('pages.about', compact('heroSlides', 'sections', 'leadership', 'woredaStats'));
+        return view('pages.about', compact('heroSlides', 'sections', 'leadership', 'stats'));
     }
 
     // ── Leadership ────────────────────────────────────────────────────────────
