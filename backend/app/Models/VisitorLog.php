@@ -9,6 +9,10 @@ class VisitorLog extends Model
 {
     protected $fillable = [
         'ip_address',
+        'country',
+        'country_code',
+        'city',
+        'region',
         'user_agent',
         'page',
         'referrer',

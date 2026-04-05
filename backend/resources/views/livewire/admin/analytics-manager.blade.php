@@ -168,10 +168,10 @@
                 <thead class="bg-gray-50 border-b border-gray-100">
                     <tr>
                         <th class="text-left px-4 py-3 text-gray-500 font-semibold">IP Address</th>
+                        <th class="text-left px-4 py-3 text-gray-500 font-semibold">Location</th>
                         <th class="text-left px-4 py-3 text-gray-500 font-semibold">Page</th>
                         <th class="text-left px-4 py-3 text-gray-500 font-semibold">Device</th>
                         <th class="text-left px-4 py-3 text-gray-500 font-semibold">Browser</th>
-                        <th class="text-left px-4 py-3 text-gray-500 font-semibold">Locale</th>
                         <th class="text-left px-4 py-3 text-gray-500 font-semibold">Visited At</th>
                     </tr>
                 </thead>
@@ -179,6 +179,19 @@
                     @forelse($recentVisitors as $log)
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-4 py-3 font-mono text-xs text-gray-700">{{ $log->ip_address }}</td>
+                                        <td class="px-4 py-3">
+                                            @if($log->country_code)
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-lg" title="{{ $log->country }}">{{ mb_convert_encoding('&#' . (127397 + ord($log->country_code[0])) . ';', 'UTF-8', 'HTML-ENTITIES') }}{{ mb_convert_encoding('&#' . (127397 + ord($log->country_code[1])) . ';', 'UTF-8', 'HTML-ENTITIES') }}</span>
+                                                    <div class="flex flex-col">
+                                                        <span class="text-xs font-bold text-gray-700 leading-none">{{ $log->city ?: 'Unknown' }}</span>
+                                                        <span class="text-[10px] text-gray-400 font-medium">{{ $log->country }}</span>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <span class="text-xs text-gray-400 italic">Unknown Location</span>
+                                            @endif
+                                        </td>
                                         <td class="px-4 py-3 text-gray-600 max-w-[180px] truncate">{{ $log->page }}</td>
                                         <td class="px-4 py-3">
                                             <span
@@ -188,10 +201,7 @@
                                                 {{ ucfirst($log->device) }}
                                             </span>
                                         </td>
-                                        <td class="px-4 py-3 text-gray-600">{{ $log->browser }}</td>
-                                        <td class="px-4 py-3">
-                                            <span class="uppercase text-xs font-bold text-gray-500">{{ $log->locale }}</span>
-                                        </td>
+                                        <td class="px-4 py-3 text-gray-600 truncate max-w-[100px]">{{ $log->browser }}</td>
                                         <td class="px-4 py-3 text-gray-500 text-xs">{{ $log->visited_at?->diffForHumans() }}</td>
                                     </tr>
                     @empty

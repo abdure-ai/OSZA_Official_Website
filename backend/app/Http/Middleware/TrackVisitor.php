@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\VisitorLog;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 
 class TrackVisitor
@@ -49,6 +50,7 @@ class TrackVisitor
             $ua = $request->userAgent() ?? '';
             $sessionId = $request->session()->getId();
             $page = '/' . ltrim($request->path(), '/');
+            $ip = $request->ip();
 
             // Deduplicate: one entry per session+page per hour
             $hourBucket = floor(time() / 3600);
@@ -59,8 +61,26 @@ class TrackVisitor
             }
             $request->session()->put($dedupKey, true);
 
-            VisitorLog::create([
-                'ip_address' => $request->ip(),
+            // Fetch Geolocation (Skip for local IPs)
+            $locationData = [];
+            if ($ip && !in_array($ip, ['127.0.0.1', '::1'])) {
+                try {
+                    $response = Http::timeout(2)->get("http://ip-api.com/json/{$ip}?fields=status,country,countryCode,regionName,city");
+                    if ($response->successful() && $response->json('status') === 'success') {
+                        $locationData = [
+                            'country' => $response->json('country'),
+                            'country_code' => $response->json('countryCode'),
+                            'city' => $response->json('city'),
+                            'region' => $response->json('regionName'),
+                        ];
+                    }
+                } catch (\Exception $e) {
+                    // Silently fail geolocation without breaking the log
+                }
+            }
+
+            VisitorLog::create(array_merge([
+                'ip_address' => $ip,
                 'user_agent' => substr($ua, 0, 500),
                 'page' => substr($page, 0, 512),
                 'referrer' => substr((string) $request->headers->get('referer', ''), 0, 512),
@@ -69,7 +89,7 @@ class TrackVisitor
                 'session_id' => $sessionId,
                 'locale' => session('locale', 'en'),
                 'visited_at' => now(),
-            ]);
+            ], $locationData));
         } catch (\Throwable) {
             // Never let tracking errors affect the user experience
         }
