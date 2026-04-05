@@ -72,7 +72,7 @@ class AboutManager extends Component
         $this->is_active = true;
     }
 
-    public function openCreateObjective()
+    public function openCreate()
     {
         $this->resetForm('objective');
         $this->showModal = true;
