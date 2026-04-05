@@ -11,9 +11,12 @@ class AboutManager extends Component
 {
     use WithPagination, WithFileUploads;
 
+    public $activeTab = 'history'; // history, mission_vision, objectives
     public $showModal = false;
     public $editingId = null;
-    public $type = 'general';
+
+    // Form fields
+    public $type = 'history';
     public $title_en, $title_am, $title_or;
     public $content_en, $content_am, $content_or;
     public $image, $image_url, $icon, $sort_order = 0, $is_active = true;
@@ -26,23 +29,55 @@ class AboutManager extends Component
         'sort_order' => 'integer|min:0',
     ];
 
-    public function openCreate()
+    public function setTab($tab)
     {
-        $this->reset(['editingId', 'type', 'title_en', 'title_am', 'title_or', 'content_en', 'content_am', 'content_or', 'image', 'image_url', 'icon', 'sort_order', 'is_active']);
-        $this->type = 'general';
+        $this->activeTab = $tab;
+        $this->resetErrorBag();
+        // If history, mission, or vision, we can preload them if they exist
+        if (in_array($tab, ['history', 'mission', 'vision'])) {
+            $section = AboutSection::where('type', $tab)->first();
+            if ($section) {
+                $this->loadSection($section->id);
+            } else {
+                $this->resetForm($tab);
+            }
+        }
+    }
+
+    public function loadSection($id)
+    {
+        $this->resetForm();
+        $s = AboutSection::findOrFail($id);
+        $this->editingId = $s->id;
+        $this->type = $s->type;
+        $this->title_en = $s->title_en;
+        $this->title_am = $s->title_am;
+        $this->title_or = $s->title_or;
+        $this->content_en = $s->content_en;
+        $this->content_am = $s->content_am;
+        $this->content_or = $s->content_or;
+        $this->image_url = $s->image_url;
+        $this->icon = $s->icon;
+        $this->sort_order = $s->sort_order;
+        $this->is_active = (bool) $s->is_active;
+    }
+
+    public function resetForm($type = 'objective')
+    {
+        $this->reset(['editingId', 'title_en', 'title_am', 'title_or', 'content_en', 'content_am', 'content_or', 'image', 'image_url', 'icon', 'sort_order', 'is_active']);
+        $this->type = $type;
         $this->is_active = true;
+    }
+
+    public function openCreateObjective()
+    {
+        $this->resetForm('objective');
         $this->showModal = true;
     }
 
-    public function openEdit($id)
+    public function editObjective($id)
     {
-        $this->reset(['editingId', 'type', 'title_en', 'title_am', 'title_or', 'content_en', 'content_am', 'content_or', 'image', 'image_url', 'icon', 'sort_order', 'is_active']);
-        $s = AboutSection::findOrFail($id);
-        foreach (['type', 'title_en', 'title_am', 'title_or', 'content_en', 'content_am', 'content_or', 'image_url', 'icon', 'sort_order'] as $f) {
-            $this->$f = $s->$f;
-        }
-        $this->editingId = $id;
-        $this->is_active = (bool) $s->is_active;
+        $this->loadSection($id);
         $this->showModal = true;
     }
 
@@ -65,8 +100,6 @@ class AboutManager extends Component
         if ($this->image) {
             $path = $this->image->store('uploads', 'public_uploads');
             $data['image_url'] = '/uploads/' . basename($path);
-        } else {
-            $data['image_url'] = $this->image_url;
         }
 
         if ($this->editingId) {
@@ -76,19 +109,33 @@ class AboutManager extends Component
         }
 
         $this->showModal = false;
-        $this->dispatch('notify', message: 'About section saved successfully.', type: 'success');
+        if (in_array($this->type, ['objective', 'general'])) {
+            $this->resetForm('objective');
+        } else {
+            // Keep the loaded data for static types
+            $section = AboutSection::where('type', $this->type)->first();
+            if ($section)
+                $this->loadSection($section->id);
+        }
+
+        $this->dispatch('notify', message: 'About content updated successfully.', type: 'success');
     }
 
     public function delete($id)
     {
         AboutSection::findOrFail($id)->delete();
-        $this->dispatch('notify', message: 'Section removed.', type: 'info');
+        $this->dispatch('notify', message: 'Entry removed.', type: 'info');
+    }
+
+    public function mount()
+    {
+        $this->setTab('history');
     }
 
     public function render()
     {
         return view('livewire.admin.about-manager', [
-            'sections' => AboutSection::orderBy('sort_order')->paginate(10)
+            'objectives' => AboutSection::whereIn('type', ['objective', 'general'])->orderBy('sort_order')->paginate(10)
         ]);
     }
 }

@@ -18,6 +18,23 @@ class Leadership extends Model
         'bio_am',
         'bio_or',
         'photo_url',
-        'rank_order'
+        'rank_order',
+        'parent_id',
+        'hierarchy_level',
+        'email',
+        'phone',
+        'office_location_en',
+        'office_location_am',
+        'office_location_or'
     ];
+
+    public function parent()
+    {
+        return $this->belongsTo(Leadership::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Leadership::class, 'parent_id')->orderBy('rank_order');
+    }
 }

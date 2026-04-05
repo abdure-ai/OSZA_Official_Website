@@ -20,12 +20,10 @@
                     @if($slide->media_type === 'video')
                         <div
                             class="w-20 h-14 rounded-lg bg-gray-900 flex items-center justify-center flex-shrink-0 border overflow-hidden">
-                            <video src="{{ asset($slide->media_url) }}" class="w-full h-full object-cover"
-                                muted></video>
+                            <video src="{{ asset($slide->media_url) }}" class="w-full h-full object-cover" muted></video>
                         </div>
                     @else
-                        <img src="{{ asset($slide->media_url) }}"
-                            class="w-20 h-14 rounded-lg object-cover flex-shrink-0 border">
+                        <img src="{{ asset($slide->media_url) }}" class="w-20 h-14 rounded-lg object-cover flex-shrink-0 border">
                     @endif
                 @endif
                 <div class="flex-1 min-w-0">
@@ -187,6 +185,10 @@
                                         :class="$wire.page === 'tourism' ? 'bg-white shadow-sm text-purple-600' : 'text-gray-500'"
                                         class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all">🌍
                                         Tourism</button>
+                                    <button type="button" @click="$wire.set('page', 'about')"
+                                        :class="$wire.page === 'about' ? 'bg-white shadow-sm text-purple-600' : 'text-gray-500'"
+                                        class="flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all">ℹ️
+                                        About</button>
                                 </div>
                             </div>
                             <div>
