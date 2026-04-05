@@ -207,7 +207,44 @@
                     </div>
 
                     {{-- Video Upload --}}
-                    <div class="border border-dashed border-gray-200 rounded-2xl p-5 bg-gray-50/50 space-y-3">
+                    <div class="border border-dashed border-gray-200 rounded-2xl p-5 bg-gray-50/50 space-y-3" x-data="{
+                                    uploading: false,
+                                    progress: 0,
+                                    done: false,
+                                    error: false,
+                                    statusText: '',
+                                    init() {
+                                        this.$el.addEventListener('livewire-upload-start', () => {
+                                            this.uploading = true;
+                                            this.done     = false;
+                                            this.error    = false;
+                                            this.progress = 0;
+                                            this.statusText = 'Uploading…';
+                                            // Lock the Save button
+                                            document.querySelectorAll('[data-video-save-btn]').forEach(b => b.disabled = true);
+                                        });
+                                        this.$el.addEventListener('livewire-upload-progress', e => {
+                                            this.progress = e.detail.progress;
+                                            this.statusText = 'Uploading… ' + this.progress + '%';
+                                        });
+                                        this.$el.addEventListener('livewire-upload-finish', () => {
+                                            this.uploading  = false;
+                                            this.done       = true;
+                                            this.progress   = 100;
+                                            this.statusText = 'Upload complete — ready to save!';
+                                            document.querySelectorAll('[data-video-save-btn]').forEach(b => b.disabled = false);
+                                        });
+                                        this.$el.addEventListener('livewire-upload-error', () => {
+                                            this.uploading  = false;
+                                            this.error      = true;
+                                            this.progress   = 0;
+                                            this.statusText = 'Upload failed. Please try again.';
+                                            document.querySelectorAll('[data-video-save-btn]').forEach(b => b.disabled = false);
+                                        });
+                                    }
+                                }">
+
+                        {{-- Header row --}}
                         <div class="flex items-center justify-between">
                             <label
                                 class="text-xs font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
@@ -229,20 +266,62 @@
                             @endif
                         </div>
 
-                        {{-- Preview current or newly uploaded video --}}
+                        {{-- Existing / newly staged video preview --}}
                         @if($video_file)
                             <video src="{{ $video_file->temporaryUrl() }}"
                                 class="w-full max-h-48 rounded-xl object-contain bg-black" controls muted></video>
-                            <p class="text-[10px] text-green-600 font-bold">✓ New video ready to upload</p>
                         @elseif($video_url)
                             <video src="{{ asset($video_url) }}" class="w-full max-h-48 rounded-xl object-contain bg-black"
                                 controls muted></video>
                         @endif
 
+                        {{-- File input --}}
                         <input type="file" wire:model="video_file" accept="video/mp4,video/webm,video/quicktime"
                             class="w-full text-xs text-gray-500 file:mr-2 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-blue-50 file:text-blue-600 file:font-bold">
-                        <p class="text-[10px] text-gray-400">Accepted: MP4, WebM, MOV — max 200 MB. This video will appear
-                            beside the description on the public detail page.</p>
+
+                        {{-- ── Upload Progress Bar ── --}}
+                        <div x-show="uploading || done || error" style="display:none" class="space-y-1.5">
+                            {{-- Bar track --}}
+                            <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full transition-all duration-300"
+                                    :class="error ? 'bg-red-500' : (done ? 'bg-green-500' : 'bg-[#1a56db]')"
+                                    :style="'width:' + progress + '%'">
+                                </div>
+                            </div>
+
+                            {{-- Status row --}}
+                            <div class="flex items-center justify-between">
+                                <p class="text-[11px] font-bold"
+                                    :class="error ? 'text-red-500' : (done ? 'text-green-600' : 'text-[#1a56db]')"
+                                    x-text="statusText"></p>
+                                <span class="text-[11px] font-black text-gray-500" x-show="uploading"
+                                    x-text="progress + '%'"></span>
+                            </div>
+
+                            {{-- Uploading spinner label --}}
+                            <div x-show="uploading" class="flex items-center gap-2 text-[11px] text-gray-400">
+                                <svg class="w-3.5 h-3.5 animate-spin text-[#1a56db]" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                                Please wait — Save is locked until upload finishes
+                            </div>
+
+                            {{-- Success tick --}}
+                            <div x-show="done" class="flex items-center gap-1.5 text-[11px] text-green-600 font-bold">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                Video uploaded — you can now save the destination
+                            </div>
+                        </div>
+
+                        <p class="text-[10px] text-gray-400">Accepted: MP4, WebM, MOV — max 200 MB. Appears beside the
+                            description on the public page.</p>
                         @error('video_file') <p class="text-red-500 text-xs">{{ $message }}</p> @enderror
                     </div>
 
@@ -276,8 +355,8 @@
                 <div class="border-t border-gray-100 px-6 py-4 flex justify-end gap-3 sticky bottom-0 bg-white">
                     <button wire:click="$set('showModal', false)"
                         class="px-4 py-2 border border-gray-200 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 transition">Cancel</button>
-                    <button wire:click="save"
-                        class="px-6 py-2 bg-[#1a56db] text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                    <button wire:click="save" data-video-save-btn
+                        class="px-6 py-2 bg-[#1a56db] disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
                         {{ $editingId ? 'Update' : 'Create' }} Destination
                     </button>
                 </div>
