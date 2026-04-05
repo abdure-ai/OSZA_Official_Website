@@ -34,9 +34,14 @@ class PageController extends Controller
         $latestNews = Post::where('status', 'published')->orderByDesc('published_at')->limit(3)->get();
         $woredas = Woreda::where('is_active', 1)->orderBy('name_en')->get();
         $galleryItems = GalleryItem::where('is_active', 1)->orderBy('sort_order')->limit(8)->get();
+        $galleryAlbums = Album::where('is_active', 1)
+            ->with(['items' => fn($q) => $q->where('is_active', 1)->orderBy('sort_order')])
+            ->orderBy('sort_order')
+            ->limit(6)
+            ->get();
         $adminMessage = AdminMessage::orderByDesc('created_at')->first();
 
-        return view('pages.home', compact('heroSlides', 'latestNews', 'woredas', 'galleryItems', 'adminMessage'));
+        return view('pages.home', compact('heroSlides', 'latestNews', 'woredas', 'galleryItems', 'galleryAlbums', 'adminMessage'));
     }
 
     // ── News ──────────────────────────────────────────────────────────────────
@@ -88,13 +93,13 @@ class PageController extends Controller
     {
         $categories = Album::where('is_active', 1)->distinct()->pluck('category')->filter();
         $activeCategory = $request->get('category');
-        
+
         $albums = Album::where('is_active', 1)
             ->when($activeCategory, fn($q) => $q->where('category', $activeCategory))
             ->with(['items' => fn($q) => $q->where('is_active', 1)->orderBy('sort_order')])
             ->orderBy('sort_order')
             ->get();
-            
+
         return view('pages.gallery', compact('categories', 'activeCategory', 'albums'));
     }
 

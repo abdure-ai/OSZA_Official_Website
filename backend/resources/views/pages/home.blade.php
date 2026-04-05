@@ -366,32 +366,116 @@
     </section>
 
     {{-- ═══════════════════════════════════════════ GALLERY PREVIEW ══ --}}
-    @if($galleryItems->isNotEmpty())
-        <section class="py-16 bg-gray-50">
+    @if($galleryAlbums->isNotEmpty() || $galleryItems->isNotEmpty())
+        <section class="py-20 bg-gray-50 overflow-hidden">
             <div class="max-w-[1440px] mx-auto px-4">
-                <div class="flex justify-between items-end mb-10">
+
+                {{-- Section Header --}}
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
                     <div>
-                        <h2 class="text-3xl font-bold text-gray-900 border-l-4 border-[#f5a623] pl-4">{{ __('photo_gallery') }}
-                        </h2>
-                        <p class="text-gray-500 mt-2 ml-5 text-sm">{{ __('gallery_subtitle') }}</p>
+                        <span class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-4 shadow-lg">{{ __('visual_archive') }}</span>
+                        <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-none">{{ __('photo_gallery') }}</h2>
+                        <p class="text-gray-500 mt-3 text-sm font-medium">{{ __('gallery_subtitle') }}</p>
                     </div>
                     <a href="{{ route('gallery.index') }}"
-                        class="text-[#1a56db] font-semibold hover:underline hidden md:block text-sm">{{ __('view_all') }} →</a>
+                        class="inline-flex items-center gap-2 bg-blue-900 text-white text-xs font-black uppercase tracking-widest px-7 py-3.5 rounded-full hover:bg-[#f5a623] hover:text-blue-900 transition-all duration-300 shadow-xl self-start md:self-auto">
+                        {{ __('view_all') }}
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    @foreach($galleryItems->take(8) as $item)
-                        <div class="relative h-44 rounded-xl overflow-hidden group">
-                            <img src="{{ asset($item->image_url) }}" alt="{{ $item->title }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            @if($item->title)
-                                <div
-                                    class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                    <p class="text-white text-xs font-medium truncate">{{ $item->title }}</p>
+
+                @if($galleryAlbums->isNotEmpty())
+                    {{-- Album Grid --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        @foreach($galleryAlbums as $album)
+                            @php
+                                $albumTitle = $album->{'title_' . $locale} ?? $album->title_en;
+                                $albumDesc  = $album->{'description_' . $locale} ?? $album->description_en;
+                            @endphp
+                            <a href="{{ route('gallery.index') }}"
+                                class="group bg-white rounded-[2.5rem] border-2 border-gray-50 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer block">
+                                {{-- Cover Image --}}
+                                <div class="aspect-[4/3] relative overflow-hidden">
+                                    @if($album->cover_image_url)
+                                        <img src="{{ asset($album->cover_image_url) }}" alt="{{ $albumTitle }}"
+                                            class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                                            <svg class="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                        </div>
+                                    @endif
+
+                                    {{-- Overlay --}}
+                                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition duration-500"></div>
+
+                                    {{-- Category Badge --}}
+                                    @if($album->category)
+                                        <div class="absolute top-5 left-5">
+                                            <span class="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-full border border-white/30">
+                                                {{ $album->category }}
+                                            </span>
+                                        </div>
+                                    @endif
+
+                                    {{-- Arrow CTA --}}
+                                    <div class="absolute bottom-5 right-5">
+                                        <div class="w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-xl group-hover:bg-blue-900 group-hover:text-white transition duration-500">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </div>
+                                    </div>
                                 </div>
-                            @endif
-                        </div>
-                    @endforeach
+
+                                {{-- Card Body --}}
+                                <div class="p-7">
+                                    <h3 class="text-lg font-black text-gray-900 uppercase tracking-tight mb-2 line-clamp-1">{{ $albumTitle }}</h3>
+                                    @if($albumDesc)
+                                        <p class="text-sm text-gray-500 font-medium line-clamp-2 leading-relaxed opacity-80 mb-5">{{ $albumDesc }}</p>
+                                    @endif
+
+                                    {{-- Footer: count + thumbnail strip --}}
+                                    <div class="flex items-center justify-between pt-5 border-t border-gray-50">
+                                        <span class="text-[10px] font-black text-blue-900 uppercase tracking-[0.2em]">
+                                            {{ $album->items->count() }} {{ __('captured_moments') ?? 'Captured Moments' }}
+                                        </span>
+                                        <div class="flex -space-x-2.5">
+                                            @foreach($album->items->take(3) as $thumb)
+                                                <img src="{{ asset($thumb->image_url) }}"
+                                                    class="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm"
+                                                    alt="">
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                @else
+                    {{-- Fallback: flat grid if no albums exist --}}
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        @foreach($galleryItems->take(8) as $item)
+                            <div class="relative h-44 rounded-xl overflow-hidden group">
+                                <img src="{{ asset($item->image_url) }}" alt="{{ $item->title }}"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                @if($item->title)
+                                    <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                                        <p class="text-white text-xs font-medium truncate">{{ $item->title }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                {{-- Mobile View All --}}
+                <div class="mt-10 text-center md:hidden">
+                    <a href="{{ route('gallery.index') }}"
+                        class="text-[#1a56db] font-semibold hover:underline">{{ __('view_all') }} →</a>
                 </div>
+
             </div>
         </section>
     @endif
