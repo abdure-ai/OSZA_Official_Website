@@ -232,11 +232,11 @@
 
     <style>
         .label-badge {
-            @apply text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2;
+            @apply text-[11px] font-black text-gray-500 uppercase tracking-widest block mb-2;
         }
 
         .admin-input {
-            @apply w-full bg-white border border-gray-100 rounded-2xl px-5 py-3 text-sm font-bold focus:ring-4 focus:ring-blue-100 transition duration-300;
+            @apply w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 focus:ring-4 focus:ring-blue-100 focus:border-blue-300 transition duration-300 shadow-sm outline-none;
         }
     </style>
 </div>

@@ -48,52 +48,34 @@
 
                             <div x-show="lang === 'en'" class="space-y-6">
                                 <div>
-                                    <label
-                                        class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Title
-                                        (EN)</label>
-                                    <input wire:model="title_en"
-                                        class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                                    <label class="label-badge">Title (EN)</label>
+                                    <input wire:model="title_en" class="admin-input">
                                 </div>
                                 <div>
-                                    <label
-                                        class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Content
-                                        (EN)</label>
-                                    <textarea wire:model="content_en" rows="8"
-                                        class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
+                                    <label class="label-badge">Content (EN)</label>
+                                    <textarea wire:model="content_en" rows="8" class="admin-input"></textarea>
                                 </div>
                             </div>
 
                             <div x-show="lang === 'am'" class="space-y-6" style="display:none">
                                 <div>
-                                    <label
-                                        class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Title
-                                        (AM)</label>
-                                    <input wire:model="title_am"
-                                        class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                                    <label class="label-badge">Title (AM)</label>
+                                    <input wire:model="title_am" class="admin-input">
                                 </div>
                                 <div>
-                                    <label
-                                        class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Content
-                                        (AM)</label>
-                                    <textarea wire:model="content_am" rows="8"
-                                        class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
+                                    <label class="label-badge">Content (AM)</label>
+                                    <textarea wire:model="content_am" rows="8" class="admin-input"></textarea>
                                 </div>
                             </div>
-
+ 
                             <div x-show="lang === 'or'" class="space-y-6" style="display:none">
                                 <div>
-                                    <label
-                                        class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Title
-                                        (OR)</label>
-                                    <input wire:model="title_or"
-                                        class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                                    <label class="label-badge">Title (OR)</label>
+                                    <input wire:model="title_or" class="admin-input">
                                 </div>
                                 <div>
-                                    <label
-                                        class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Content
-                                        (OR)</label>
-                                    <textarea wire:model="content_or" rows="8"
-                                        class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
+                                    <label class="label-badge">Content (OR)</label>
+                                    <textarea wire:model="content_or" rows="8" class="admin-input"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -228,34 +210,32 @@
                 <div class="p-10 space-y-8">
                     <div x-show="lang === 'en'" class="space-y-6">
                         <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective Title (EN)</label>
-                            <input wire:model="title_en" class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            <label class="label-badge">Objective Title (EN)</label>
+                            <input wire:model="title_en" class="admin-input">
                             @error('title_en') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div x-show="lang === 'am'" class="space-y-6" style="display:none">
                         <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective Title (AM)</label>
-                            <input wire:model="title_am" class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            <label class="label-badge">Objective Title (AM)</label>
+                            <input wire:model="title_am" class="admin-input">
                             @error('title_am') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div x-show="lang === 'or'" class="space-y-6" style="display:none">
                         <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective Title (OR)</label>
-                            <input wire:model="title_or" class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            <label class="label-badge">Objective Title (OR)</label>
+                            <input wire:model="title_or" class="admin-input">
                             @error('title_or') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-8">
                         <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Sort
-                                Order</label>
-                            <input wire:model="sort_order" type="number"
-                                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            <label class="label-badge">Sort Order</label>
+                            <input wire:model="sort_order" type="number" class="admin-input">
                         </div>
                         <div class="flex items-end bg-blue-50 p-3 px-6 rounded-2xl">
                             <label class="flex items-center gap-3 cursor-pointer">
@@ -286,4 +266,13 @@
             </div>
         </div>
     @endif
+    <style>
+        .label-badge {
+            @apply text-[11px] font-black text-gray-500 uppercase tracking-widest block mb-1;
+        }
+
+        .admin-input {
+            @apply w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 focus:ring-4 focus:ring-blue-100 focus:border-blue-300 transition duration-300 shadow-sm outline-none;
+        }
+    </style>
 </div>
