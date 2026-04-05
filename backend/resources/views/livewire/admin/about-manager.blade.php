@@ -56,33 +56,57 @@
                             <div x-show="lang === 'en'" class="space-y-6">
                                 <div>
                                     <label class="label-badge">Section Title (EN)</label>
-                                    <input wire:model="title_en" class="admin-input">
+                                    <input wire:model="title_en" class="admin-input" placeholder="Enter title in English...">
                                 </div>
-                                <div>
+                                <div wire:ignore x-data="{
+                                    content: @entangle('content_en'),
+                                    init() {
+                                        let q = new Quill(this.$refs.editor, { theme: 'snow', placeholder: 'Compose your narrative in English...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                        q.on('text-change', () => { this.content = q.root.innerHTML });
+                                        $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
+                                        setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
+                                    }
+                                }">
                                     <label class="label-badge">Main Content (EN)</label>
-                                    <textarea wire:model="content_en" rows="10" class="admin-input resize-none"></textarea>
+                                    <div x-ref="editor" class="bg-gray-50 rounded-2xl border-2 border-transparent min-h-[300px]"></div>
                                 </div>
                             </div>
 
                             <div x-show="lang === 'am'" class="space-y-6" style="display:none">
                                 <div>
                                     <label class="label-badge">Section Title (AM)</label>
-                                    <input wire:model="title_am" class="admin-input">
+                                    <input wire:model="title_am" class="admin-input" placeholder="ርዕስ እዚህ ያስገቡ...">
                                 </div>
-                                <div>
+                                <div wire:ignore x-data="{
+                                    content: @entangle('content_am'),
+                                    init() {
+                                        let q = new Quill(this.$refs.editor, { theme: 'snow', placeholder: 'ይዘቱን እዚህ ያስገቡ...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                        q.on('text-change', () => { this.content = q.root.innerHTML });
+                                        $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
+                                        setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
+                                    }
+                                }">
                                     <label class="label-badge">Main Content (AM)</label>
-                                    <textarea wire:model="content_am" rows="10" class="admin-input resize-none"></textarea>
+                                    <div x-ref="editor" class="bg-gray-50 rounded-2xl border-2 border-transparent min-h-[300px]" style="font-family: 'Noto Sans Ethiopic', sans-serif;"></div>
                                 </div>
                             </div>
 
                             <div x-show="lang === 'or'" class="space-y-6" style="display:none">
                                 <div>
                                     <label class="label-badge">Section Title (OR)</label>
-                                    <input wire:model="title_or" class="admin-input">
+                                    <input wire:model="title_or" class="admin-input" placeholder="Mata duree galchi...">
                                 </div>
-                                <div>
+                                <div wire:ignore x-data="{
+                                    content: @entangle('content_or'),
+                                    init() {
+                                        let q = new Quill(this.$refs.editor, { theme: 'snow', placeholder: 'Qabiyyee asitti barreessi...', modules: { toolbar: [ ['bold', 'italic', 'underline'], [{ 'header': [1, 2, 3, false] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'clean'] ] } });
+                                        q.on('text-change', () => { this.content = q.root.innerHTML });
+                                        $watch('content', val => { if(val !== q.root.innerHTML) q.root.innerHTML = val || '' });
+                                        setTimeout(() => { q.root.innerHTML = this.content || '' }, 100);
+                                    }
+                                }">
                                     <label class="label-badge">Main Content (OR)</label>
-                                    <textarea wire:model="content_or" rows="10" class="admin-input resize-none"></textarea>
+                                    <div x-ref="editor" class="bg-gray-50 rounded-2xl border-2 border-transparent min-h-[300px]"></div>
                                 </div>
                             </div>
                         </div>
@@ -269,7 +293,7 @@
         }
 
         .admin-input {
-            @apply w-full bg-gray-50 border-2 border-gray-300 focus:border-blue-500 focus:bg-white rounded-2xl px-5 py-3.5 text-sm font-bold text-gray-900 transition-all outline-none;
+            @apply w-full bg-gray-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl px-6 py-4 font-bold text-gray-900 transition-all outline-none;
         }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
