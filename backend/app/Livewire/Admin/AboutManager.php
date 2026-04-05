@@ -21,13 +21,16 @@ class AboutManager extends Component
     public $content_en, $content_am, $content_or;
     public $image, $image_url, $icon, $sort_order = 0, $is_active = true;
 
-    protected $rules = [
-        'type' => 'required|string|max:255',
-        'title_en' => 'required|string|max:255',
-        'content_en' => 'required|string',
-        'image' => 'nullable|image|max:10240',
-        'sort_order' => 'integer|min:0',
-    ];
+    protected function rules()
+    {
+        return [
+            'type' => 'required|string|max:255',
+            'title_en' => 'required|string|max:255',
+            'content_en' => $this->type === 'objective' ? 'nullable|string' : 'required|string',
+            'image' => 'nullable|image|max:10240',
+            'sort_order' => 'integer|min:0',
+        ];
+    }
 
     public function setTab($tab)
     {

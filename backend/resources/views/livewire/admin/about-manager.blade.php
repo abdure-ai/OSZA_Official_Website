@@ -99,52 +99,35 @@
                         </div>
                     </div>
 
+                    @if($activeTab === 'history')
                     <div class="space-y-8">
                         <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-4">Visual
-                                Representation / Badge</label>
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-4">Historical Background Image</label>
                             @if($image || $image_url)
-                                <div
-                                    class="relative group rounded-3xl overflow-hidden shadow-xl mb-4 h-48 border-4 border-white">
-                                    <img src="{{ $image ? $image->temporaryUrl() : asset($image_url) }}"
-                                        class="w-full h-full object-cover">
-                                    <div
-                                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                        <label
-                                            class="cursor-pointer bg-white text-gray-900 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest">Change
-                                            Image</label>
+                                <div class="relative group rounded-3xl overflow-hidden shadow-xl mb-4 h-48 border-4 border-white">
+                                    <img src="{{ $image ? $image->temporaryUrl() : asset($image_url) }}" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                        <label class="cursor-pointer bg-white text-gray-900 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest">Change Image</label>
                                     </div>
                                     <input type="file" wire:model="image" class="hidden">
                                 </div>
                             @else
-                                <label
-                                    class="flex flex-col items-center justify-center w-full h-48 bg-blue-50/50 rounded-3xl border-4 border-dashed border-blue-100 cursor-pointer hover:bg-blue-50 transition group">
-                                    <svg class="w-12 h-12 text-blue-200 group-hover:scale-110 transition duration-500"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    <span class="mt-4 text-[10px] font-black text-blue-300 uppercase tracking-widest">Upload
-                                        Image</span>
+                                <label class="flex flex-col items-center justify-center w-full h-48 bg-blue-50/50 rounded-3xl border-4 border-dashed border-blue-100 cursor-pointer hover:bg-blue-50 transition group">
+                                    <svg class="w-12 h-12 text-blue-200 group-hover:scale-110 transition duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    <span class="mt-4 text-[10px] font-black text-blue-300 uppercase tracking-widest">Upload Image</span>
                                     <input type="file" wire:model="image" class="hidden">
                                 </label>
                             @endif
                         </div>
+                    </div>
+                    @endif
 
-                        <div>
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Display
-                                Icon (Tag)</label>
-                            <input wire:model="icon" placeholder="e.g. history, mission, vision"
-                                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
-                        </div>
-
-                        <div class="pt-4 flex items-center justify-between bg-blue-50 p-6 rounded-3xl">
+                    <div class="space-y-4 {{ $activeTab === 'history' ? '' : 'pt-4' }}">
+                        <div class="flex items-center justify-between bg-blue-50 p-6 rounded-3xl">
                             <span class="text-sm font-bold text-blue-900 uppercase tracking-tighter">Status</span>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" wire:model="is_active" class="sr-only peer">
-                                <div
-                                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
-                                </div>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                             </label>
                         </div>
                     </div>
@@ -198,7 +181,6 @@
                                         class="font-black text-gray-900 group-hover:text-blue-700 transition uppercase tracking-tighter">
                                         {{ $obj->title_en }}
                                     </h4>
-                                    <p class="text-xs text-gray-500 mt-2 font-medium line-clamp-3">{{ $obj->content_en }}</p>
                                 </div>
                             </div>
                         </div>
@@ -246,64 +228,25 @@
                 <div class="p-10 space-y-8">
                     <div x-show="lang === 'en'" class="space-y-6">
                         <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective
-                                Title (EN)</label>
-                            <input wire:model="title_en"
-                                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
-                            @error('title_en') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Description
-                                (EN)</label>
-                            <textarea wire:model="content_en" rows="5"
-                                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
-                            @error('content_en') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
-                            @enderror
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective Title (EN)</label>
+                            <input wire:model="title_en" class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            @error('title_en') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div x-show="lang === 'am'" class="space-y-6" style="display:none">
                         <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective
-                                Title (AM)</label>
-                            <input wire:model="title_am"
-                                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
-                            @error('title_am') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Description
-                                (AM)</label>
-                            <textarea wire:model="content_am" rows="5"
-                                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
-                            @error('content_am') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
-                            @enderror
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective Title (AM)</label>
+                            <input wire:model="title_am" class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            @error('title_am') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div x-show="lang === 'or'" class="space-y-6" style="display:none">
                         <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective
-                                Title (OR)</label>
-                            <input wire:model="title_or"
-                                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
-                            @error('title_or') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div>
-                            <label
-                                class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Description
-                                (OR)</label>
-                            <textarea wire:model="content_or" rows="5"
-                                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-medium focus:ring-2 focus:ring-blue-600"></textarea>
-                            @error('content_or') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span>
-                            @enderror
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">Objective Title (OR)</label>
+                            <input wire:model="title_or" class="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-600">
+                            @error('title_or') <span class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
