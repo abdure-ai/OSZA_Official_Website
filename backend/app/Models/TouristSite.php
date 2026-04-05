@@ -22,6 +22,7 @@ class TouristSite extends Model
         'woreda_id',
         'location_name_en',
         'cover_image_url',
+        'video_url',
         'gallery_urls',
         'latitude',
         'longitude',

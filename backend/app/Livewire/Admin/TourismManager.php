@@ -18,8 +18,12 @@ class TourismManager extends Component
     public $name_en, $name_am, $name_or, $slug;
     public $description_en, $description_am, $description_or;
     public $category, $woreda_id, $location_name_en;
-    public $cover_image, $temp_gallery = [];
-    public $cover_image_url, $gallery_urls = [];
+    public $cover_image = null;
+    public $temp_gallery = [];
+    public $cover_image_url = '';
+    public $gallery_urls = [];
+    public $video_file = null;
+    public $video_url = '';
     public $latitude, $longitude;
     public $sort_order = 0;
     public $is_active = true;
@@ -31,6 +35,7 @@ class TourismManager extends Component
         'slug' => 'nullable|string|alpha_dash',
         'cover_image' => 'nullable|image|max:10240',
         'temp_gallery.*' => 'nullable|image|max:10240',
+        'video_file' => 'nullable|mimetypes:video/mp4,video/webm,video/quicktime,video/x-msvideo|max:204800',
         'latitude' => 'nullable|numeric',
         'longitude' => 'nullable|numeric',
     ];
@@ -58,9 +63,11 @@ class TourismManager extends Component
             'temp_gallery',
             'cover_image_url',
             'gallery_urls',
+            'video_file',
+            'video_url',
             'latitude',
             'longitude',
-            'sort_order'
+            'sort_order',
         ]);
         $this->is_active = true;
         $this->showModal = true;
@@ -82,10 +89,17 @@ class TourismManager extends Component
         $this->location_name_en = $site->location_name_en;
         $this->cover_image_url = $site->cover_image_url;
         $this->gallery_urls = $site->gallery_urls ?? [];
+        $this->video_url = $site->video_url ?? '';
         $this->latitude = $site->latitude;
         $this->longitude = $site->longitude;
         $this->sort_order = $site->sort_order;
         $this->is_active = (bool) $site->is_active;
+
+        // Always start fresh — no pending uploads when opening edit
+        $this->cover_image = null;
+        $this->temp_gallery = [];
+        $this->video_file = null;
+
         $this->showModal = true;
     }
 
@@ -114,18 +128,32 @@ class TourismManager extends Component
             'is_active' => $this->is_active ? 1 : 0,
         ];
 
+        // Cover image — only update if a new file was chosen
         if ($this->cover_image) {
             $path = $this->cover_image->store('uploads', 'public_uploads');
             $data['cover_image_url'] = '/uploads/' . basename($path);
+        } else {
+            $data['cover_image_url'] = $this->cover_image_url;
         }
 
+        // Video — only update if a new file was chosen
+        if ($this->video_file) {
+            $path = $this->video_file->store('uploads/videos', 'public_uploads');
+            $data['video_url'] = '/uploads/videos/' . basename($path);
+        } else {
+            $data['video_url'] = $this->video_url;
+        }
+
+        // Gallery — only append freshly uploaded photos; never re-append existing
         if ($this->temp_gallery) {
-            $newGallery = $this->gallery_urls;
+            $newGallery = $this->gallery_urls; // existing paths (already stored)
             foreach ($this->temp_gallery as $photo) {
                 $path = $photo->store('uploads', 'public_uploads');
                 $newGallery[] = '/uploads/' . basename($path);
             }
             $data['gallery_urls'] = $newGallery;
+        } else {
+            $data['gallery_urls'] = $this->gallery_urls;
         }
 
         if ($this->editingId) {
@@ -134,8 +162,23 @@ class TourismManager extends Component
             TouristSite::create($data);
         }
 
+        // ── Reset file inputs after save so re-opening doesn't re-upload ──
+        $this->cover_image = null;
+        $this->temp_gallery = [];
+        $this->video_file = null;
+
         $this->showModal = false;
         $this->dispatch('notify', message: 'Tourism site saved successfully.', type: 'success');
+    }
+
+    public function removeVideo()
+    {
+        $this->video_url = '';
+        $this->video_file = null;
+        if ($this->editingId) {
+            TouristSite::findOrFail($this->editingId)->update(['video_url' => null]);
+            $this->dispatch('notify', message: 'Video removed.', type: 'info');
+        }
     }
 
     public function delete($id)

@@ -179,8 +179,7 @@
                                 <img src="{{ $cover_image->temporaryUrl() }}"
                                     class="w-full h-48 object-cover rounded-xl border-2 border-dashed border-gray-100">
                             @elseif($cover_image_url)
-                                <img src="{{ asset($cover_image_url) }}"
-                                    class="w-full h-48 object-cover rounded-xl border">
+                                <img src="{{ asset($cover_image_url) }}" class="w-full h-48 object-cover rounded-xl border">
                             @endif
                             <input type="file" wire:model="cover_image"
                                 class="w-full text-xs text-gray-500 file:mr-2 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-blue-50 file:text-blue-600 font-bold">
@@ -205,6 +204,46 @@
                             <input type="file" wire:model="temp_gallery" multiple
                                 class="w-full text-xs text-gray-500 file:mr-2 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-blue-50 file:text-blue-600 font-bold">
                         </div>
+                    </div>
+
+                    {{-- Video Upload --}}
+                    <div class="border border-dashed border-gray-200 rounded-2xl p-5 bg-gray-50/50 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label
+                                class="text-xs font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                Destination Video
+                            </label>
+                            @if($video_url)
+                                <button wire:click="removeVideo" type="button"
+                                    class="text-xs text-red-500 hover:text-red-700 font-bold flex items-center gap-1 transition">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Remove Video
+                                </button>
+                            @endif
+                        </div>
+
+                        {{-- Preview current or newly uploaded video --}}
+                        @if($video_file)
+                            <video src="{{ $video_file->temporaryUrl() }}"
+                                class="w-full max-h-48 rounded-xl object-contain bg-black" controls muted></video>
+                            <p class="text-[10px] text-green-600 font-bold">✓ New video ready to upload</p>
+                        @elseif($video_url)
+                            <video src="{{ asset($video_url) }}" class="w-full max-h-48 rounded-xl object-contain bg-black"
+                                controls muted></video>
+                        @endif
+
+                        <input type="file" wire:model="video_file" accept="video/mp4,video/webm,video/quicktime"
+                            class="w-full text-xs text-gray-500 file:mr-2 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-blue-50 file:text-blue-600 file:font-bold">
+                        <p class="text-[10px] text-gray-400">Accepted: MP4, WebM, MOV — max 200 MB. This video will appear
+                            beside the description on the public detail page.</p>
+                        @error('video_file') <p class="text-red-500 text-xs">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Location & Settings --}}

@@ -87,26 +87,90 @@
                     </div>
                 </div>
 
-                {{-- Hero Media Beside Description --}}
-                <div
-                    class="sticky top-24 rounded-3xl overflow-hidden shadow-2xl h-[400px] md:h-[600px] border-4 border-white">
-                    @if($site->cover_image_url && preg_match('/\.(mp4|mov|webm)$/i', $site->cover_image_url))
-                        <video src="{{ asset($site->cover_image_url) }}" class="w-full h-full object-cover"
-                            autoplay muted loop playsinline></video>
-                    @elseif($site->cover_image_url)
-                        <img src="{{ asset($site->cover_image_url) }}"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                            alt="{{ $site->name_en }}">
-                    @else
-                        <div
-                            class="w-full h-full bg-gray-100 flex items-center justify-center border-4 border-dashed border-gray-200">
-                            <div class="text-center">
-                                <svg class="w-20 h-20 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                {{-- ── Video / Image beside Description ── --}}
+                <div x-data="{ videoOpen: false }"
+                     @keydown.escape.window="videoOpen = false"
+                     class="sticky top-24">
+
+                    @if($site->video_url)
+                        {{-- ── Inline Video Player ── --}}
+                        <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-black h-[400px] md:h-[560px] group">
+                            <video id="tourism-inline-video"
+                                src="{{ asset($site->video_url) }}"
+                                class="w-full h-full object-cover"
+                                autoplay muted loop playsinline>
+                            </video>
+
+                            {{-- Gradient overlay --}}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+
+                            {{-- Expand to fullscreen button --}}
+                            <button @click="videoOpen = true; $nextTick(() => { let v = document.getElementById('tourism-fs-video'); v.src = '{{ asset($site->video_url) }}'; v.currentTime = 0; v.muted = false; v.play(); })"
+                                class="absolute bottom-6 right-6 flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/30 text-white text-xs font-black uppercase tracking-widest px-4 py-2.5 rounded-full hover:bg-[#f5a623] hover:text-blue-900 hover:border-[#f5a623] transition-all duration-300 shadow-xl">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                                 </svg>
-                                <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Media Pending</p>
+                                Watch Full Screen
+                            </button>
+
+                            {{-- Play icon badge (center, shows briefly) --}}
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                                <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
+                                    <svg class="w-10 h-10 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- ── Fullscreen Video Overlay ── --}}
+                        <div x-show="videoOpen"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             style="display:none"
+                             class="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-sm flex flex-col items-center justify-center"
+                             @click.self="videoOpen = false; document.getElementById('tourism-fs-video').pause()">
+
+                            {{-- Close button --}}
+                            <button @click="videoOpen = false; document.getElementById('tourism-fs-video').pause()"
+                                class="absolute top-6 right-6 w-12 h-12 bg-white/10 text-white rounded-full flex items-center justify-center hover:bg-white hover:text-black hover:rotate-90 transition-all duration-500 z-10 border border-white/20">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+
+                            {{-- Title --}}
+                            <div class="absolute top-6 left-8 text-white">
+                                <p class="text-[10px] font-black text-[#f5a623] uppercase tracking-[0.3em] mb-1">{{ $site->category }}</p>
+                                <h3 class="text-xl font-black">{{ $site->{'name_' . $locale} ?? $site->name_en }}</h3>
+                            </div>
+
+                            {{-- Fullscreen video --}}
+                            <video id="tourism-fs-video"
+                                class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain"
+                                controls
+                                @ended="videoOpen = false">
+                            </video>
+                        </div>
+
+                    @elseif($site->cover_image_url)
+                        {{-- Fallback: cover image --}}
+                        <div class="rounded-3xl overflow-hidden shadow-2xl h-[400px] md:h-[600px] border-4 border-white">
+                            <img src="{{ asset($site->cover_image_url) }}"
+                                class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                alt="{{ $site->name_en }}">
+                        </div>
+                    @else
+                        <div class="rounded-3xl h-[400px] md:h-[600px] bg-gray-100 flex items-center justify-center border-4 border-dashed border-gray-200">
+                            <div class="text-center">
+                                <svg class="w-20 h-20 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">No Video Uploaded</p>
                             </div>
                         </div>
                     @endif
