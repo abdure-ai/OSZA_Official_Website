@@ -197,34 +197,81 @@
     </section>
     @endif
 
-    {{-- ═══════════════════════════════════════════ LEADERSHIP COUNCIL ══ --}}
+    {{-- ═══════════════════════════════════════════ LEADERSHIP ORGANOGRAM ══ --}}
     @if($leadership->isNotEmpty())
-        <section class="py-24 bg-gray-900">
+        <section class="py-32 bg-gray-900 overflow-hidden">
             <div class="max-w-[1440px] mx-auto px-4">
                 <div class="text-center mb-20">
-                    <span class="text-blue-400 font-black uppercase tracking-widest text-[10px]">Governance</span>
-                    <h2 class="text-4xl font-black text-white tracking-tighter uppercase mt-4">Leadership Council</h2>
+                    <span class="text-blue-400 font-black uppercase tracking-widest text-[10px]">Governance Structure</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase mt-4">Leadership Council</h2>
+                    <p class="text-gray-400 mt-4 text-sm font-medium max-w-2xl mx-auto">Organized by administrative hierarchy to ensure transparent governance and clear reporting lines.</p>
                 </div>
                 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    @foreach($leadership as $leader)
-                        <div class="group flex flex-col items-center text-center">
-                            <div class="w-40 h-40 md:w-56 md:h-56 rounded-3xl overflow-hidden shadow-2xl mb-6 grayscale hover:grayscale-0 transition-all duration-500 border-4 border-gray-800 group-hover:border-blue-500">
-                                @if($leader->photo_url)
-                                    <img src="{{ asset($leader->photo_url) }}" alt="{{ $leader->name_en }}" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full bg-gray-800 flex items-center justify-center text-blue-400">
-                                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
-                                    </div>
-                                @endif
-                            </div>
-                            <h3 class="font-black text-white text-lg tracking-tight leading-tight uppercase">{{ $leader->{'name_' . $locale} ?? $leader->name_en }}</h3>
-                            <p class="text-[9px] font-black text-blue-400 uppercase tracking-widest mt-2 px-3 py-1 bg-blue-900/50 rounded-full">
-                                {{ $leader->{'position_' . $locale} ?? $leader->position_en }}
-                            </p>
+                {{-- Level 1: Centered Top Executive --}}
+                <div class="flex justify-center mb-24 relative">
+                    @foreach($leadership as $top)
+                        <div class="relative z-10" x-data="{ hover: false }">
+                            @include('pages.partials.leadership-card', ['leader' => $top, 'large' => true])
+                            
+                            {{-- Connecting Line Down --}}
+                            @if($top->children->isNotEmpty())
+                                <div class="absolute top-full left-1/2 w-px h-24 bg-gradient-to-b from-blue-500 to-transparent -translate-x-1/2"></div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
+
+                {{-- Level 2 & Below --}}
+                @php 
+                    $level2 = $leadership->flatMap->children;
+                @endphp
+                @if($level2->isNotEmpty())
+                    <div class="relative">
+                        {{-- Horizontal line for Level 2 --}}
+                        <div class="absolute -top-12 left-0 right-0 h-px bg-blue-500/30 hidden md:block"></div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pt-12">
+                            @foreach($level2 as $member)
+                                <div class="flex flex-col items-center">
+                                    {{-- Vert line from horizontal --}}
+                                    <div class="w-px h-12 bg-blue-500/30 -mt-24 mb-12 hidden md:block"></div>
+                                    @include('pages.partials.leadership-card', ['leader' => $member])
+                                    
+                                    {{-- Level 3 recursive list --}}
+                                    @if($member->children->isNotEmpty())
+                                        <div class="mt-8 space-y-4 w-full">
+                                            @foreach($member->children as $child)
+                                                <div class="bg-gray-800/50 rounded-2xl p-4 border border-white/5 flex items-center gap-4 group transition hover:bg-gray-800" x-data="{ hover: false }" @mouseenter="hover = true" @mouseleave="hover = false">
+                                                    <div class="w-12 h-12 rounded-xl overflow-hidden grayscale group-hover:grayscale-0 transition">
+                                                        <img src="{{ $child->photo_url ? asset($child->photo_url) : asset('images/user-placeholder.jpg') }}" class="w-full h-full object-cover">
+                                                    </div>
+                                                    <div class="flex-grow">
+                                                        <h4 class="text-white text-xs font-black uppercase leading-none">{{ $child->{'name_'.$locale} ?? $child->name_en }}</h4>
+                                                        <p class="text-blue-400 text-[9px] font-bold uppercase mt-1">{{ $child->{'position_'.$locale} ?? $child->position_en }}</p>
+                                                    </div>
+                                                    
+                                                    {{-- Quick Contact Icon --}}
+                                                    <div class="relative">
+                                                        <button class="w-8 h-8 rounded-full bg-white/5 text-blue-400 flex items-center justify-center hover:bg-blue-600 hover:text-white transition">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                                        </button>
+                                                        
+                                                        {{-- Tiny contact float for Level 3 --}}
+                                                        <div x-show="hover" class="absolute bottom-full right-0 mb-2 w-48 bg-white rounded-xl p-3 shadow-2xl z-20" x-transition>
+                                                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Direct Contact</p>
+                                                            <p class="text-[10px] font-bold text-gray-900 truncate">{{ $child->email }}</p>
+                                                            <p class="text-[10px] font-bold text-blue-600 mt-1">{{ $child->phone }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
         </section>
     @endif

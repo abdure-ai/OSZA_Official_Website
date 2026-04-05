@@ -115,7 +115,7 @@ class PageController extends Controller
     {
         $heroSlides = HeroSlide::where('is_active', 1)->where('page', 'about')->orderBy('sort_order')->get();
         $sections = \App\Models\AboutSection::where('is_active', 1)->orderBy('sort_order')->get();
-        $leadership = Leadership::orderBy('rank_order')->get();
+        $leadership = Leadership::with('children')->whereNull('parent_id')->orderBy('rank_order')->get();
 
         $stats = [
             'total_population' => \App\Models\Woreda::sum('population'),
