@@ -59,33 +59,49 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            function renderDashboardCharts() {
+                const dailyData = @json($dailyData);
+                const deviceData = @json($deviceData);
+
                 // Daily Line Chart
-                new ApexCharts(document.querySelector("#dailyChart"), {
-                    chart: { type: 'area', height: 240, toolbar: { show: false }, sparkline: { enabled: false } },
-                    series: [{ name: 'Visitors', data: @json($dailyData) }],
-                    xaxis: { categories: @json($dailyLabels), labels: { style: { fontSize: '10px', fontWeight: 600 } } },
-                    yaxis: { min: 0, labels: { style: { fontSize: '10px', fontWeight: 600 } } },
-                    colors: ['#1a56db'],
-                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.0 } },
-                    stroke: { curve: 'smooth', width: 3 },
-                    dataLabels: { enabled: false },
-                    grid: { borderColor: '#f1f5f9' },
-                    tooltip: { theme: 'light' }
-                }).render();
+                const dailyEl = document.querySelector("#dailyChart");
+                if (dailyEl) {
+                    dailyEl.innerHTML = '';
+                    new ApexCharts(dailyEl, {
+                        chart: { type: 'area', height: 240, toolbar: { show: false } },
+                        series: [{ name: 'Visitors', data: dailyData }],
+                        xaxis: { categories: @json($dailyLabels), labels: { style: { fontSize: '10px', fontWeight: 600 } } },
+                        yaxis: { min: 0, labels: { style: { fontSize: '10px', fontWeight: 600 } } },
+                        colors: ['#1a56db'],
+                        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.0 } },
+                        stroke: { curve: 'smooth', width: 3 },
+                        dataLabels: { enabled: false },
+                        tooltip: { theme: 'light' }
+                    }).render();
+                }
 
                 // Device Donut Chart
-                new ApexCharts(document.querySelector("#deviceChart"), {
-                    chart: { type: 'donut', height: 240 },
-                    series: @json($deviceData),
-                    labels: @json($deviceLabels),
-                    colors: ['#1a56db', '#f5a623', '#10b981'],
-                    legend: { position: 'bottom', fontSize: '12px', fontWeight: 600 },
-                    dataLabels: { enabled: false },
-                    plotOptions: { pie: { donut: { size: '75%' } } },
-                    tooltip: { theme: 'light' }
-                }).render();
-            });
+                const deviceEl = document.querySelector("#deviceChart");
+                if (deviceEl) {
+                    deviceEl.innerHTML = '';
+                    if (deviceData.some(v => v > 0)) {
+                        new ApexCharts(deviceEl, {
+                            chart: { type: 'donut', height: 240 },
+                            series: deviceData,
+                            labels: @json($deviceLabels),
+                            colors: ['#1a56db', '#f5a623', '#10b981'],
+                            legend: { position: 'bottom', fontSize: '11px', fontWeight: 600 },
+                            dataLabels: { enabled: false },
+                            plotOptions: { pie: { donut: { size: '70%' } } },
+                            tooltip: { theme: 'light' }
+                        }).render();
+                    } else {
+                        deviceEl.innerHTML = '<div class="h-full flex items-center justify-center text-gray-300 text-[10px] font-black uppercase tracking-widest">No Traffic Data Yet</div>';
+                    }
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => setTimeout(renderDashboardCharts, 50));
         </script>
     @endpush
 

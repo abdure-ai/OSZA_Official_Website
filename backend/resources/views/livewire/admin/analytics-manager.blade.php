@@ -222,61 +222,70 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script>
-            document.addEventListener('livewire:navigated', initCharts);
-            document.addEventListener('DOMContentLoaded', initCharts);
+            function initAnalyticsCharts() {
+                const dailyData = @json($dailyData);
+                const dailyLabels = @json($dailyLabels);
+                const deviceData = @json($deviceData);
+                const deviceLabels = @json($deviceLabels);
+                const hourlyData = @json($hourlyData);
+                const hourlyLabels = @json($hourlyLabels);
 
-            function initCharts() {
                 // Daily Line Chart
                 const dailyEl = document.querySelector("#dailyChart");
-                if (dailyEl && !dailyEl._chart) {
-                    dailyEl._chart = new ApexCharts(dailyEl, {
-                        chart: { type: 'area', height: 220, toolbar: { show: false }, sparkline: { enabled: false } },
-                        series: [{ name: 'Visitors', data: @json($dailyData) }],
-                        xaxis: { categories: @json($dailyLabels), labels: { rotate: -30, style: { fontSize: '10px' } } },
+                if (dailyEl) {
+                    dailyEl.innerHTML = '';
+                    new ApexCharts(dailyEl, {
+                        chart: { type: 'area', height: 220, toolbar: { show: false } },
+                        series: [{ name: 'Visitors', data: dailyData }],
+                        xaxis: { categories: dailyLabels, labels: { rotate: -30, style: { fontSize: '10px' } } },
                         yaxis: { min: 0, labels: { style: { fontSize: '11px' } } },
                         colors: ['#1a56db'],
                         fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.0 } },
                         stroke: { curve: 'smooth', width: 2 },
                         dataLabels: { enabled: false },
-                        grid: { borderColor: '#f3f4f6' },
                         tooltip: { theme: 'light' }
-                    });
-                    dailyEl._chart.render();
+                    }).render();
                 }
 
                 // Device Donut Chart
                 const deviceEl = document.querySelector("#deviceChart");
-                if (deviceEl && !deviceEl._chart) {
-                    deviceEl._chart = new ApexCharts(deviceEl, {
-                        chart: { type: 'donut', height: 180 },
-                        series: @json($deviceData),
-                        labels: @json($deviceLabels),
-                        colors: ['#1a56db', '#f5a623', '#10b981'],
-                        legend: { show: false },
-                        dataLabels: { enabled: false },
-                        plotOptions: { pie: { donut: { size: '70%' } } },
-                        tooltip: { theme: 'light' }
-                    });
-                    deviceEl._chart.render();
+                if (deviceEl) {
+                    deviceEl.innerHTML = '';
+                    if (deviceData.some(v => v > 0)) {
+                        new ApexCharts(deviceEl, {
+                            chart: { type: 'donut', height: 180 },
+                            series: deviceData,
+                            labels: deviceLabels,
+                            colors: ['#1a56db', '#f5a623', '#10b981'],
+                            legend: { show: false },
+                            dataLabels: { enabled: false },
+                            plotOptions: { pie: { donut: { size: '70%' } } },
+                            tooltip: { theme: 'light' }
+                        }).render();
+                    } else {
+                        deviceEl.innerHTML = '<div class="h-[180px] flex items-center justify-center text-gray-300 text-[10px] font-black uppercase tracking-widest">No Device Info</div>';
+                    }
                 }
 
                 // Hourly Bar Chart
                 const hourlyEl = document.querySelector("#hourlyChart");
-                if (hourlyEl && !hourlyEl._chart) {
-                    hourlyEl._chart = new ApexCharts(hourlyEl, {
+                if (hourlyEl) {
+                    hourlyEl.innerHTML = '';
+                    new ApexCharts(hourlyEl, {
                         chart: { type: 'bar', height: 160, toolbar: { show: false } },
-                        series: [{ name: 'Visitors', data: @json($hourlyData) }],
-                        xaxis: { categories: @json($hourlyLabels), labels: { style: { fontSize: '9px' } } },
+                        series: [{ name: 'Visitors', data: hourlyData }],
+                        xaxis: { categories: hourlyLabels, labels: { style: { fontSize: '9px' } } },
                         yaxis: { min: 0, labels: { style: { fontSize: '10px' } } },
                         colors: ['#1a56db'],
                         plotOptions: { bar: { borderRadius: 4, columnWidth: '60%' } },
                         dataLabels: { enabled: false },
-                        grid: { borderColor: '#f3f4f6' },
                         tooltip: { theme: 'light' }
-                    });
-                    hourlyEl._chart.render();
+                    }).render();
                 }
             }
+
+            document.addEventListener('livewire:navigated', () => setTimeout(initAnalyticsCharts, 50));
+            document.addEventListener('DOMContentLoaded', () => setTimeout(initAnalyticsCharts, 50));
         </script>
     @endpush
 </div>
