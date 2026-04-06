@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Visit Oromo Special Zone') . ' — Tourism')
+@section('title', __('visit_osza_tourism'))
 
 @section('content')
     @php 
@@ -60,20 +60,21 @@
                     class="max-w-4xl w-full">
                     <span
                         class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6 shadow-xl"
-                        x-text="slide['cta_text_label'] || 'Discover Our Heritage'"></span>
+                        x-text="slide['cta_text_label'] || '{{ __('discover_heritage') }}'"></span>
                     <h1 class="text-4xl md:text-7xl font-black mb-6 leading-tight drop-shadow-2xl antialiased"
-                        x-html="(slide['title_{{ $locale }}'] || slide.title_en || 'Visit Oromo<br><span class=\'text-[#f5a623]\'>Special Zone</span>')">
+                        x-html="(slide['title_{{ $locale }}'] || slide.title_en || '{{ __('visit_osza_html') }}')">
                     </h1>
                     <p class="text-lg md:text-2xl mb-10 text-gray-100/90 leading-relaxed font-medium drop-shadow-lg"
-                        x-text="slide['subtitle_{{ $locale }}'] || slide.subtitle_en || 'Experience the breathtaking landscapes, ancient history, and vibrant culture of the heart of Ethiopia. Your journey into the extraordinary begins here.'">
+                        x-text="slide['subtitle_{{ $locale }}'] || slide.subtitle_en || '{{ __('tourism_hero_subtitle') }}'">
                     </p>
                     <div class="flex flex-wrap gap-5">
                         <a :href="slide.cta_url || '#destinations'"
                             class="bg-white text-blue-900 font-bold py-4 px-10 rounded-full hover:bg-[#f5a623] hover:text-white transition transform hover:scale-105 shadow-xl"
-                            x-text="slide['cta_text_{{ $locale }}'] || slide.cta_text || 'Explore Destinations'"></a>
+                            x-text="slide['cta_text_{{ $locale }}'] || slide.cta_text || '{{ __('explore_destinations') }}'"></a>
                         <a href="{{ route('contact.index') }}"
-                            class="bg-transparent border-2 border-white/50 text-white font-bold py-4 px-10 rounded-full hover:bg-white/10 transition transform hover:scale-105 backdrop-blur-sm">Plan
-                            Your Trip</a>
+                            class="bg-transparent border-2 border-white/50 text-white font-bold py-4 px-10 rounded-full hover:bg-white/10 transition transform hover:scale-105 backdrop-blur-sm">
+                            {{ __('plan_your_trip') }}
+                        </a>
                     </div>
                 </div>
             </template>
@@ -111,14 +112,14 @@
             {{-- Filter Bar --}}
             <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-16">
                 <div>
-                    <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-3">{{ __('Major Destinations') }}</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-3">{{ __('major_destinations') }}</h2>
                     <div class="h-1.5 w-24 bg-[#f5a623] rounded-full"></div>
                 </div>
 
                 <div class="flex flex-wrap justify-center gap-2">
                     <a href="{{ route('tourism.index') }}"
                         class="px-6 py-2 rounded-full text-sm font-bold transition-all {{ !request('category') ? 'bg-blue-900 text-white shadow-lg shadow-blue-200' : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-100' }}">
-                        All
+                        {{ __('all') }}
                     </a>
                     @foreach($categories as $cat)
                         <a href="{{ route('tourism.index', ['category' => $cat]) }}"
@@ -150,7 +151,7 @@
                                 class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 pt-20">
                                 <span
                                     class="bg-[#f5a623] text-blue-900 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-2 inline-block">
-                                    {{ $site->category ?: 'Explore' }}
+                                    {{ $site->category ?: __('explore') }}
                                 </span>
                                 <h3 class="text-white text-2xl font-black mb-1 leading-tight">
                                     {{ $site->{'name_' . $locale} ?? $site->name_en }}</h3>
@@ -161,7 +162,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-                                    {{ $site->woreda?->name_en ?: 'Visit OSZA' }}
+                                    {{ $site->woreda?->{'name_' . $locale} ?? $site->woreda?->name_en ?? __('visit_osza') }}
                                 </div>
                             </div>
                         </div>
@@ -172,7 +173,7 @@
                             <div class="mt-auto flex items-center justify-between">
                                 <span
                                     class="text-[#1a56db] font-black text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform">
-                                    Learn More →
+                                    {{ __('learn_more') }} →
                                 </span>
                                 <div class="flex -space-x-2">
                                     <div
@@ -196,8 +197,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4M12 4v16" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">No Destinations Found</h3>
-                        <p class="text-gray-500">We are currently cataloging more breathtaking sites. Check back soon!</p>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ __('no_destinations_found') }}</h3>
+                        <p class="text-gray-500">{{ __('no_destinations_desc') }}</p>
                     </div>
                 @endforelse
             </div>
@@ -221,9 +222,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-gray-900 mb-2">Best Time to Visit</h4>
-                        <p class="text-gray-500 text-sm leading-relaxed">September to March offers the most pleasant climate
-                            for outdoor adventure and cultural festivals.</p>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">{{ __('best_time_visit') }}</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">{{ __('best_time_desc') }}</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-5">
@@ -235,9 +235,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-gray-900 mb-2">Local Guides</h4>
-                        <p class="text-gray-500 text-sm leading-relaxed">We recommend certified local guides to enrich your
-                            experience with deep historical context and hidden gems.</p>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">{{ __('local_guides') }}</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">{{ __('local_guides_desc') }}</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-5">
@@ -249,9 +248,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-gray-900 mb-2">Travel Safety</h4>
-                        <p class="text-gray-500 text-sm leading-relaxed">Oromo Special Zone is known for its hospitality and
-                            peace. We provide 24/7 travel support for all registered visitors.</p>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">{{ __('travel_safety') }}</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">{{ __('travel_safety_desc') }}</p>
                     </div>
                 </div>
             </div>

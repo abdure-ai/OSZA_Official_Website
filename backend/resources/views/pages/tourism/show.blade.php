@@ -19,9 +19,9 @@
 
         <div class="max-w-[1440px] mx-auto px-4 relative z-20 w-full text-white">
             <nav class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-300 mb-6">
-                <a href="{{ route('tourism.index') }}" class="hover:text-[#f5a623] transition">Tourism</a>
+                <a href="{{ route('tourism.index') }}" class="hover:text-[#f5a623] transition">{{ __('tourism') }}</a>
                 <span>/</span>
-                <span class="text-[#f5a623]">{{ $site->category ?: 'Explore' }}</span>
+                <span class="text-[#f5a623]">{{ $site->category ?: __('explore') }}</span>
             </nav>
             <h1 class="text-5xl md:text-8xl font-black mb-4 leading-none antialiased">
                 {{ $site->{'name_' . $locale} ?? $site->name_en }}
@@ -34,14 +34,12 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <span>{{ $site->woreda?->name_en ?? 'Oromo Special Zone' }}</span>
+                    <span>{{ $site->woreda?->{'name_' . $locale} ?? $site->woreda?->name_en ?? __('title_short') }}</span>
                 </div>
                 <div class="w-px h-6 bg-white/20 hidden md:block"></div>
                 <div class="flex items-center gap-4">
-                    <span class="text-sm font-medium border border-white/30 px-3 py-1 rounded-full backdrop-blur-sm">Open
-                        24/7</span>
-                    <span class="text-sm font-medium border border-white/30 px-3 py-1 rounded-full backdrop-blur-sm">Entry:
-                        Free</span>
+                    <span class="text-sm font-medium border border-white/30 px-3 py-1 rounded-full backdrop-blur-sm">{{ __('open_24_7') }}</span>
+                    <span class="text-sm font-medium border border-white/30 px-3 py-1 rounded-full backdrop-blur-sm">{{ __('entry_free') }}</span>
                 </div>
             </div>
         </div>
@@ -52,7 +50,7 @@
         {{-- Floating Badge --}}
         <div
             class="absolute -top-12 right-12 hidden lg:flex items-center justify-center w-24 h-24 bg-[#f5a623] rounded-full shadow-2xl animate-bounce">
-            <span class="text-blue-900 text-[10px] font-black uppercase text-center leading-tight">Heritage<br>Site</span>
+            <span class="text-blue-900 text-[10px] font-black uppercase text-center leading-tight">{{ __('heritage_site') }}</span>
         </div>
 
         <div class="max-w-[1440px] mx-auto px-4">
@@ -60,10 +58,10 @@
                 <div class="space-y-8">
                     <div
                         class="inline-block px-5 py-2 bg-blue-50 text-[#1a56db] text-xs font-black uppercase tracking-widest rounded-full">
-                        Introduction
+                        {{ __('introduction') }}
                     </div>
                     <h2 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">
-                        Experience the Essence of {{ $site->{'name_' . $locale} ?? $site->name_en }}
+                        {{ __('experience_essence') }} {{ $site->{'name_' . $locale} ?? $site->name_en }}
                     </h2>
                     <div
                         class="prose prose-xl text-gray-600 font-medium leading-relaxed max-w-none antialiased translate-y-0 opacity-100">
@@ -71,17 +69,17 @@
                     </div>
 
                     <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 mt-12">
-                        <h4 class="text-lg font-black text-gray-900 mb-4">Location Details</h4>
+                        <h4 class="text-lg font-black text-gray-900 mb-4">{{ __('location_details') }}</h4>
                         <ul class="space-y-4 text-sm text-gray-600 font-bold">
                             <li class="flex items-center gap-3">
                                 <span
                                     class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#f5a623] shadow-sm">📍</span>
-                                <span>{{ $site->location_name_en ?: 'Located in ' . ($site->woreda?->name_en ?? 'Special Zone') }}</span>
+                                <span>{{ $site->location_name_en ?: __('located_in') . ' ' . ($site->woreda?->{'name_' . $locale} ?? $site->woreda?->name_en ?? __('title_short')) }}</span>
                             </li>
                             <li class="flex items-center gap-3">
                                 <span
                                     class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-blue-600 shadow-sm">🗺️</span>
-                                <span>Coordinates: {{ $site->latitude ?? 'N/A' }}, {{ $site->longitude ?? 'N/A' }}</span>
+                                <span>{{ __('coordinates') }}: {{ $site->latitude ?? 'N/A' }}, {{ $site->longitude ?? 'N/A' }}</span>
                             </li>
                         </ul>
                     </div>
@@ -110,7 +108,7 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                                 </svg>
-                                Watch Full Screen
+                                {{ __('watch_full_screen') }}
                             </button>
 
                             {{-- Play icon badge (center, shows briefly) --}}
@@ -170,7 +168,7 @@
                                 <svg class="w-20 h-20 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                                 </svg>
-                                <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">No Video Uploaded</p>
+                                <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">{{ __('no_video_uploaded') }}</p>
                             </div>
                         </div>
                     @endif
@@ -208,8 +206,8 @@
             @keydown.arrow-left.window="lightboxOpen && prevImage()">
 
             <div class="max-w-[1440px] mx-auto px-4 mb-12 text-center">
-                <h3 class="text-3xl font-black text-gray-900 mb-2">Photo Gallery</h3>
-                <p class="text-gray-500 font-bold uppercase tracking-widest text-xs">Visual Exploration</p>
+                <h3 class="text-3xl font-black text-gray-900 mb-2">{{ __('photo_gallery') }}</h3>
+                <p class="text-gray-500 font-bold uppercase tracking-widest text-xs">{{ __('visual_exploration') }}</p>
             </div>
 
             <div class="max-w-[1440px] mx-auto px-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -296,7 +294,7 @@
         <section class="py-24 bg-white">
             <div class="max-w-[1440px] mx-auto px-4">
                 <h3 class="text-3xl font-black text-gray-900 mb-12 flex items-center gap-4">
-                    Explore Nearby
+                    {{ __('explore_nearby') }}
                     <div class="h-1 flex-grow bg-gray-100 rounded-full"></div>
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -309,7 +307,7 @@
                             <h4 class="text-xl font-black text-gray-900 group-hover:text-blue-600 transition">
                                 {{ $rel->{'name_' . $locale} ?? $rel->name_en }}</h4>
                             <p class="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1">
-                                {{ $rel->category ?: 'Explore' }}</p>
+                                {{ $rel->category ?: __('explore') }}</p>
                         </a>
                     @endforeach
                 </div>
