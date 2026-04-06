@@ -14,14 +14,13 @@
             <div class="max-w-3xl">
                 <span
                     class="inline-block px-4 py-1.5 bg-[#f5a623] text-blue-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6 shadow-xl">
-                    Get in Touch
+                    {{ __('get_in_touch') }}
                 </span>
                 <h1
                     class="text-5xl md:text-7xl font-black mb-4 leading-none antialiased drop-shadow-2xl italic tracking-tight">
                     {{ __('contact') }}
                 </h1>
-                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">We are here to listen and serve. Reach
-                    out to the Administration for inquiries, support, or feedback.</p>
+                <p class="text-lg md:text-xl text-gray-200 font-medium opacity-90">{{ __('contact_subtitle') }}</p>
             </div>
         </div>
         {{-- Bottom fade --}}
@@ -35,8 +34,7 @@
                 <div
                     class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl shadow-gray-200/50 border border-gray-100 h-full">
                     <div class="mb-10">
-                        <span class="text-[#1a56db] font-bold text-xs uppercase tracking-[0.2em] mb-2 block">Reach
-                            Out</span>
+                        <span class="text-[#1a56db] font-bold text-xs uppercase tracking-[0.2em] mb-2 block">{{ __('reach_out') }}</span>
                         <h2 class="text-3xl md:text-4xl font-black text-gray-900">{{ __('send_message') }}</h2>
                         <div class="h-1 w-20 bg-[#f5a623] rounded-full mt-4"></div>
                     </div>
@@ -50,7 +48,7 @@
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <div>
-                                <h4 class="font-bold">Message Sent!</h4>
+                                <h4 class="font-bold">{{ __('message_sent_title') }}</h4>
                                 <p class="text-sm mt-1 opacity-90">{{ session('success') }}</p>
                             </div>
                         </div>
@@ -82,10 +80,10 @@
 
                         <div class="group">
                             <label
-                                class="block text-[11px] font-black uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-[#1a56db] transition-colors">Subject</label>
+                                class="block text-[11px] font-black uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-[#1a56db] transition-colors">{{ __('subject') }}</label>
                             <input type="text" name="subject" value="{{ old('subject') }}"
                                 class="w-full px-5 py-4 bg-gray-50 border-2 border-transparent focus:bg-white focus:border-[#1a56db] rounded-2xl transition-all duration-300 outline-none text-gray-900 font-medium shadow-inner"
-                                placeholder="How can we help you?">
+                                placeholder="{{ __('subject_placeholder') }}">
                         </div>
 
                         <div class="group">
@@ -94,7 +92,7 @@
                                 <span class="text-red-500">*</span></label>
                             <textarea name="message" rows="5" required
                                 class="w-full px-5 py-4 bg-gray-50 border-2 border-transparent focus:bg-white focus:border-[#1a56db] rounded-2xl transition-all duration-300 outline-none text-gray-900 font-medium shadow-inner resize-none @error('message') border-red-400 bg-red-50 @enderror"
-                                placeholder="Write your message here...">{{ old('message') }}</textarea>
+                                placeholder="{{ __('message_placeholder') }}">{{ old('message') }}</textarea>
                             @error('message')<p class="text-red-500 text-xs mt-2 font-semibold">{{ $message }}</p>@enderror
                         </div>
 
@@ -122,7 +120,7 @@
                     </div>
 
                     <div class="relative z-10">
-                        <h2 class="text-3xl font-black mb-10">Contact Information</h2>
+                        <h2 class="text-3xl font-black mb-10">{{ __('contact_info') }}</h2>
 
                         <div class="space-y-8">
                             {{-- Address --}}
@@ -137,8 +135,7 @@
                                     </svg>
                                 </div>
                                 <div class="pt-1">
-                                    <p class="font-bold text-gray-300 text-xs uppercase tracking-widest mb-1">Office
-                                        Location</p>
+                                    <p class="font-bold text-gray-300 text-xs uppercase tracking-widest mb-1">{{ __('office_location') }}</p>
                                     <p class="font-medium text-lg leading-snug">
                                         {!! nl2br(e($settings->address ?? 'Oromo Special Zone Administration, Kemise')) !!}
                                     </p>
@@ -155,7 +152,7 @@
                                     </svg>
                                 </div>
                                 <div class="pt-1">
-                                    <p class="font-bold text-gray-300 text-xs uppercase tracking-widest mb-1">Phone Number
+                                    <p class="font-bold text-gray-300 text-xs uppercase tracking-widest mb-1">{{ __('phone_number') }}
                                     </p>
                                     <p class="font-medium text-lg">{{ $settings->phone ?? '+251 33 111 2222' }}</p>
                                 </div>
@@ -171,7 +168,7 @@
                                     </svg>
                                 </div>
                                 <div class="pt-1">
-                                    <p class="font-bold text-gray-300 text-xs uppercase tracking-widest mb-1">Email Address
+                                    <p class="font-bold text-gray-300 text-xs uppercase tracking-widest mb-1">{{ __('email_address') }}
                                     </p>
                                     <p class="font-medium text-lg break-all">{{ $settings->email ??
                                         'info@oromospecialzone.gov.et' }}</p>
@@ -187,7 +184,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Working Hours
+                            {{ __('working_hours') }}
                         </h4>
                         <div class="font-medium text-sm text-gray-300 mb-2 leading-relaxed">
                             {!! nl2br(e($settings->working_hours ?? "Monday - Friday: 8:00 AM - 5:30 PM\nSaturday - Sunday: Closed")) !!}

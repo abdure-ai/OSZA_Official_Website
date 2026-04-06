@@ -4,7 +4,7 @@
     $locale = session('locale', 'en');
 @endphp
 
-@section('title', 'About Oromo Special Zone')
+@section('title', __('about_oz_title'))
 
 @section('content')
 <div class="bg-white overflow-hidden">
@@ -96,10 +96,10 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                 @php
                     $statsItems = [
-                        ['label' => 'Total Residents', 'value' => number_format($stats['total_population'] ?? 0), 'icon' => '👥'],
-                        ['label' => 'Zone Territory', 'value' => number_format($stats['total_area'] ?? 0), 'icon' => '🗺️'],
-                        ['label' => 'Administration Units', 'value' => $stats['woreda_count'] ?? 0, 'icon' => '🏛️'],
-                        ['label' => 'Established Since', 'value' => $stats['earliest_year'] ?? 'N/A', 'icon' => '📜'],
+                        ['label' => __('total_residents'), 'value' => number_format($stats['total_population'] ?? 0), 'icon' => '👥'],
+                        ['label' => __('zone_territory'), 'value' => number_format($stats['total_area'] ?? 0), 'icon' => '🗺️'],
+                        ['label' => __('admin_units'), 'value' => $stats['woreda_count'] ?? 0, 'icon' => '🏛️'],
+                        ['label' => __('est_since'), 'value' => $stats['earliest_year'] ?? 'N/A', 'icon' => '📜'],
                     ];
                 @endphp
                 @foreach($statsItems as $item)
@@ -120,7 +120,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
                     <div class="space-y-8">
                         <div class="inline-block px-5 py-2 bg-blue-50 text-blue-600 text-xs font-black uppercase tracking-widest rounded-full">
-                            Historical Background
+                            {{ __('historical_background') }}
                         </div>
                         <h2 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">
                             {{ $history->{'title_'.$locale} ?? $history->title_en }}
@@ -180,8 +180,8 @@
     @if($objectives->count() > 0)
     <section class="py-24 max-w-[1440px] mx-auto px-4">
         <div class="text-center mb-16">
-            <span class="text-blue-600 font-black uppercase tracking-widest text-[10px]">Development Roadmap</span>
-            <h2 class="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase mt-4">Strategic Objectives</h2>
+            <span class="text-blue-600 font-black uppercase tracking-widest text-[10px]">{{ __('development_roadmap') }}</span>
+            <h2 class="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase mt-4">{{ __('strategic_objectives') }}</h2>
         </div>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -202,9 +202,9 @@
         <section class="py-32 bg-gray-900 overflow-hidden">
             <div class="max-w-[1440px] mx-auto px-4">
                 <div class="text-center mb-20">
-                    <span class="text-blue-400 font-black uppercase tracking-widest text-[10px]">Governance Structure</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase mt-4">Leadership Council</h2>
-                    <p class="text-gray-400 mt-4 text-sm font-medium max-w-2xl mx-auto">Organized by administrative hierarchy to ensure transparent governance and clear reporting lines.</p>
+                    <span class="text-blue-400 font-black uppercase tracking-widest text-[10px]">{{ __('governance_structure') }}</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase mt-4">{{ __('leadership_council') }}</h2>
+                    <p class="text-gray-400 mt-4 text-sm font-medium max-w-2xl mx-auto">{{ __('leadership_subtitle') }}</p>
                 </div>
                 
                 {{-- Level 1: Centered Top Executive --}}
@@ -258,7 +258,7 @@
                                                         
                                                         {{-- Tiny contact float for Level 3 --}}
                                                         <div x-show="hover" class="absolute bottom-full right-0 mb-2 w-48 bg-white rounded-xl p-3 shadow-2xl z-20" x-transition>
-                                                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Direct Contact</p>
+                                                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">{{ __('direct_contact') }}</p>
                                                             <p class="text-[10px] font-bold text-gray-900 truncate">{{ $child->email }}</p>
                                                             <p class="text-[10px] font-bold text-blue-600 mt-1">{{ $child->phone }}</p>
                                                         </div>
