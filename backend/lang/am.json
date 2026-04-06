@@ -155,5 +155,8 @@
     "phone_number": "ስልክ ቁጥር",
     "email_address": "ኢሜል አድራሻ",
     "working_hours": "የስራ ሰዓታት",
-    "message_sent_title": "መልዕክቱ ተልኳል!"
+    "message_sent_title": "መልዕክቱ ተልኳል!",
+    "footer_branding_subtitle": "የኦሮሞ ልዩ ዞንን ወደ ዘላቂ ልማት፣ ግልጽ አስተዳደር እና የጋራ ብልጽግና መምራት።",
+    "official_portal": "ኦፊሴላዊ ፖርታል",
+    "footer_newsletter_desc": "የቅርብ ጊዜ የአስተዳደር ሪፖርቶችን እና ዜናዎችን በቀጥታ በኢሜልዎ ያግኙ።"
 }

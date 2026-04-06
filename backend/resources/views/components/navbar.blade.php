@@ -15,9 +15,13 @@
 
             {{-- Logo --}}
             <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <div
-                    class="w-10 h-10 bg-[#1a56db] rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-                    O</div>
+                @if($settings->header_logo)
+                    <img src="{{ asset('storage/' . $settings->header_logo) }}" class="h-10 w-auto" alt="Header Logo">
+                @else
+                    <div
+                        class="w-10 h-10 bg-[#1a56db] rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                        O</div>
+                @endif
                 <div class="flex flex-col leading-tight">
                     <span class="font-bold text-lg text-gray-800">{{ __('title_main') }}</span>
                     <span class="text-xs text-gray-500 font-medium">{{ __('title_sub') }}</span>

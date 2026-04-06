@@ -4,14 +4,19 @@ namespace App\Livewire\Admin;
 
 use App\Models\OfficeSetting;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class SettingsManager extends Component
 {
+    use WithFileUploads;
+
     public $showSuccess = false;
     public $phone, $email;
     public $address, $address_am, $address_or;
     public $working_hours, $working_hours_am, $working_hours_or;
     public $map_url, $facebook_url, $twitter_url, $linkedin_url, $youtube_url;
+    public $header_logo, $footer_logo;
+    public $current_header_logo, $current_footer_logo;
 
     protected $rules = [
         'phone' => 'nullable|string|max:255',
@@ -27,6 +32,8 @@ class SettingsManager extends Component
         'twitter_url' => 'nullable|url|max:1024',
         'linkedin_url' => 'nullable|url|max:1024',
         'youtube_url' => 'nullable|url|max:1024',
+        'header_logo' => 'nullable|image|max:2048',
+        'footer_logo' => 'nullable|image|max:2048',
     ];
 
     public function mount()
@@ -46,11 +53,15 @@ class SettingsManager extends Component
                 'facebook_url',
                 'twitter_url',
                 'linkedin_url',
-                'youtube_url'
+                'youtube_url',
+                'header_logo' => 'current_header_logo',
+                'footer_logo' => 'current_footer_logo'
             ];
-            foreach ($fields as $f) {
+            foreach ($fields as $key => $val) {
+                $f = is_numeric($key) ? $val : $key;
+                $target = is_numeric($key) ? $val : $val;
                 if (isset($s->$f)) {
-                    $this->$f = $s->$f;
+                    $this->$target = $s->$f;
                 }
             }
         }
@@ -75,6 +86,14 @@ class SettingsManager extends Component
             'linkedin_url' => $this->linkedin_url,
             'youtube_url' => $this->youtube_url,
         ];
+
+        if ($this->header_logo && !is_string($this->header_logo)) {
+            $data['header_logo'] = $this->header_logo->store('logos', 'public');
+        }
+
+        if ($this->footer_logo && !is_string($this->footer_logo)) {
+            $data['footer_logo'] = $this->footer_logo->store('logos', 'public');
+        }
 
         OfficeSetting::updateOrCreate(['id' => 1], $data);
         $this->dispatch('notify', message: 'Settings updated successfully!', type: 'success');

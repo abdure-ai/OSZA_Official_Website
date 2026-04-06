@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class OfficeSetting extends Model
 {
     protected $fillable = [
+        'header_logo',
+        'footer_logo',
         'phone',
         'email',
         'address',

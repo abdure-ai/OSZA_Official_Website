@@ -8,6 +8,68 @@
 
 
         <div class="grid xl:grid-cols-2 gap-8">
+                {{-- Branding & Appearance --}}
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/40 p-8 col-span-full">
+                        <h3 class="text-lg font-black text-gray-900 mb-6 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-[#1a56db]">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                </div>
+                                Branding & Appearance
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-8">
+                                {{-- Header Logo --}}
+                                <div class="group">
+                                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-[#1a56db] transition-colors">Header Logo</label>
+                                        <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 group-hover:border-blue-400 transition-all">
+                                                <div class="w-20 h-20 bg-white rounded-xl flex items-center justify-center border border-gray-100 shadow-sm overflow-hidden">
+                                                        @if ($header_logo && !is_string($header_logo))
+                                                                <img src="{{ $header_logo->temporaryUrl() }}" class="max-w-full max-h-full object-contain">
+                                                        @elseif ($current_header_logo)
+                                                                <img src="{{ asset('storage/' . $current_header_logo) }}" class="max-w-full max-h-full object-contain">
+                                                        @else
+                                                                <span class="text-gray-300 text-xs">No Logo</span>
+                                                        @endif
+                                                </div>
+                                                <div class="flex-1">
+                                                        <input type="file" wire:model="header_logo" class="hidden" id="header_logo_input">
+                                                        <label for="header_logo_input" class="bg-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-600 border border-gray-200 shadow-sm hover:bg-gray-50 cursor-pointer transition-all inline-block">
+                                                                Choose Header Logo
+                                                        </label>
+                                                        <p class="text-[9px] text-gray-400 mt-2 font-medium">PNG, JPG or SVG (Max 2MB)</p>
+                                                        <div wire:loading wire:target="header_logo" class="text-xs text-blue-600 font-bold mt-1">Uploading...</div>
+                                                </div>
+                                        </div>
+                                        @error('header_logo') <span class="text-xs text-red-500 font-semibold mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+
+                                {{-- Footer Logo --}}
+                                <div class="group">
+                                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-[#1a56db] transition-colors">Footer Logo</label>
+                                        <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 group-hover:border-blue-400 transition-all">
+                                                <div class="w-20 h-20 bg-gray-900 rounded-xl flex items-center justify-center border border-gray-800 shadow-sm overflow-hidden">
+                                                        @if ($footer_logo && !is_string($footer_logo))
+                                                                <img src="{{ $footer_logo->temporaryUrl() }}" class="max-w-full max-h-full object-contain">
+                                                        @elseif ($current_footer_logo)
+                                                                <img src="{{ asset('storage/' . $current_footer_logo) }}" class="max-w-full max-h-full object-contain">
+                                                        @else
+                                                                <span class="text-gray-700 text-xs">No Logo</span>
+                                                        @endif
+                                                </div>
+                                                <div class="flex-1">
+                                                        <input type="file" wire:model="footer_logo" class="hidden" id="footer_logo_input">
+                                                        <label for="footer_logo_input" class="bg-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-600 border border-gray-200 shadow-sm hover:bg-gray-50 cursor-pointer transition-all inline-block">
+                                                                Choose Footer Logo
+                                                        </label>
+                                                        <p class="text-[9px] text-gray-400 mt-2 font-medium">Best on dark background (Max 2MB)</p>
+                                                        <div wire:loading wire:target="footer_logo" class="text-xs text-blue-600 font-bold mt-1">Uploading...</div>
+                                                </div>
+                                        </div>
+                                        @error('footer_logo') <span class="text-xs text-red-500 font-semibold mt-1 block">{{ $message }}</span> @enderror
+                                </div>
+                        </div>
+                </div>
 
                 {{-- Contact Details --}}
                 <div class="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/40 p-8">

@@ -7,18 +7,20 @@
             {{-- Column 1: Branding --}}
             <div class="lg:col-span-1">
                 <div class="flex items-center gap-3 mb-8">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Coat_of_arms_of_Ethiopia.svg"
-                        class="h-12 w-auto brightness-0 invert" alt="National Emblem">
+                    @if($settings->footer_logo)
+                        <img src="{{ asset('storage/' . $settings->footer_logo) }}" class="h-12 w-auto" alt="Footer Logo">
+                    @else
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Coat_of_arms_of_Ethiopia.svg"
+                            class="h-12 w-auto brightness-0 invert" alt="National Emblem">
+                    @endif
                     <div class="border-l-2 border-white/10 pl-3">
-                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-[#f5a623]">Official Portal
+                        <div class="text-[10px] font-black uppercase tracking-[0.2em] text-[#f5a623]">{{ __('official_portal') }}
                         </div>
-                        <div class="text-sm font-black uppercase tracking-tighter leading-tight italic">Oromo
-                            Special<br>Zone Administration</div>
+                        <div class="text-sm font-black uppercase tracking-tighter leading-tight italic">{{ __('title_main') }}<br>{{ __('title_sub') }}</div>
                     </div>
                 </div>
                 <p class="text-gray-500 text-sm leading-relaxed font-medium mb-8">
-                    Leading the Oromo Special Zone towards a future of sustainable development, transparent governance,
-                    and communal prosperity.
+                    {{ __('footer_branding_subtitle') }}
                 </p>
                 <div class="flex gap-4">
                     @php
@@ -52,7 +54,7 @@
                     <ul class="space-y-4">
                         @php
                             $links = [
-                                ['route' => 'about.index', 'label' => __('strategic_plan')],
+                                ['route' => 'projects.index', 'label' => __('projects')],
                                 ['route' => 'tenders.index', 'label' => __('tenders')],
                                 ['route' => 'vacancies.index', 'label' => __('vacancies')],
                                 ['route' => 'directory.index', 'label' => __('contact_directory')],
@@ -105,8 +107,7 @@
                 <h3 class="text-xs font-black uppercase tracking-[0.3em] text-[#f5a623] mb-8">
                     {{ __('subscribe_updates') }}
                 </h3>
-                <p class="text-gray-500 text-sm leading-relaxed font-medium mb-8">Receive the latest governance reports
-                    and news directly in your inbox.</p>
+                <p class="text-gray-500 text-sm leading-relaxed font-medium mb-8">{{ __('footer_newsletter_desc') }}</p>
                 <div class="relative group">
                     <input type="email" placeholder="{{ __('enter_email') }}"
                         class="w-full bg-white/5 border-2 border-white/5 text-white pl-4 pr-16 py-4 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-[#1a56db] focus:border-[#1a56db] outline-none transition-all placeholder:text-gray-600 shadow-inner">
@@ -124,10 +125,10 @@
         {{-- Bottom Copyright --}}
         <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600">
-                &copy; {{ date('Y') }} Oromo Special Zone Administration. {{ __('all_rights') }}.
+                &copy; {{ date('Y') }} {{ __('title_main') }} {{ __('title_sub') }}. {{ __('all_rights') }}.
             </div>
             <div class="flex items-center gap-2">
-                <span class="text-[10px] font-black uppercase tracking-[.2em] text-gray-700">Powered by</span>
+                <span class="text-[10px] font-black uppercase tracking-[.2em] text-gray-700">{{ __('powered_by') }}</span>
                 <span class="text-[10px] font-black uppercase tracking-[0.2em] text-[#1a56db]">AgriStack OS</span>
             </div>
         </div>
